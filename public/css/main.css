@@ -1,0 +1,84 @@
+/*GERAL*/
+.btn-lg{
+	font-size: 1.5rem;
+}
+.navbar-brand{
+	width: 150px;
+}
+.navbar-ofertz{
+	position: fixed;
+	width: 100vw;
+	z-index: 1000;
+}
+.teatro{
+	padding-top: 106px;
+}
+/*Danger: Vermelhos: #8d1913 / #9e1916 / #ad1c1c */
+.bg-danger{
+	background-color: #ad1c1c !important;
+}
+.btn-danger {
+    background-color: #ad1c1c;
+    border-color: #ad1c1c;
+}
+.btn-danger:hover {
+    background-color: #8d1913;
+    border-color: #8d1913;
+}
+.btn-outline-danger {
+    color: #ad1c1c;
+    border-color: #ad1c1c;
+}
+.btn-outline-danger:hover {
+    background-color: #ad1c1c;
+    border-color: #ad1c1c;
+}
+.nav-btn{
+	color: #1d2124 !important;
+}
+.nav-btn:hover, .nav-btn:focus{
+	color: #9e1916 !important;
+	text-decoration: none!important;
+}
+.text-danger{
+	color: #9e1916 !important;
+}
+/*END GERAL*/
+/**/
+/*LOGIN / CADASTRO*/
+.btn-facebook{
+	background-color: #4267b2;
+	border-color: #4267b2;
+	color: #fff;
+}
+.btn-facebook:hover{
+	background-color: #4267b2;
+	border-color: #4267b2;
+	color: #fff;
+}
+/*END LOGIN / CADASTRO*/
+/**/
+/*RESPONSIVE*/
+/*Tablet*/
+@media only screen and (max-width: 767px) {
+	/*GERAL*/
+	.navbar-brand{
+		width: 110px;
+	}
+	.teatro{
+		padding-top: 170px;
+	}
+}
+/*END Tablet*/
+/**/
+/*Phone*/
+@media only screen and (max-width: 575px) {
+	/*GERAL*/
+	.btn-lg{
+		font-size: 1.3rem;
+	}
+	.select-cidade{
+		max-width: 152px;
+	}
+}
+/*END Phone*/
