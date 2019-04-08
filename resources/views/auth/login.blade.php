@@ -27,7 +27,7 @@
                 <a href=""><p class="form-text text-muted">Esqueceu a senha?</p></a>
             </div>
             <button type="submit" class="btn btn-danger btn-block">Login</button>
-            <a href="/register" type="submit" class="btn btn-dark btn-block">Cadastrar</a>
+            <a href="/cadastro" type="submit" class="btn btn-dark btn-block">Cadastrar</a>
             <hr class="mx-5">
             <a href="" type="submit" class="btn btn-facebook btn-block"><i class="fab fa-facebook fa-lg mr-2"></i>Login com Facebook</a>
         </form> 

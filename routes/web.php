@@ -17,6 +17,17 @@ Route::get('/', function () {
 Route::get('/teste', function () {
     return view('teste');
 });
+/*Cadastro*/
+Route::get('/cadastro', function () {
+    return view('auth/cadastro');
+});
+Route::get('/cadastro-empresa', function () {
+    return view('auth/cadastro-empresa');
+});
+Route::get('/cadastro-usuario', function () {
+    return view('auth/cadastro-usuario');
+});
+/**/
 
 Auth::routes();
 
