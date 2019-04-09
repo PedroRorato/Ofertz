@@ -18,7 +18,7 @@
 		<form class="py-5 col-lg-6 col-md-8 mx-auto" method="POST" action="{{ route('register') }}">
 			<h2 class="text-center pb-2">Cadastro de Usuário</h2>
 			<p class="text-center mb-2">Crie sua conta rápido e fácil com o Facebook</p>
-			<a href="" type="submit" class="btn btn-facebook btn-block"><i class="fab fa-facebook fa-lg mr-2"></i>Cadastrar com Facebook</a>
+			<a href="" class="btn btn-facebook btn-block"><i class="fab fa-facebook fa-lg mr-2"></i>Cadastrar com Facebook</a>
 			<hr class="mx-5">
 			@csrf
 			<input type="hidden" name="tipo" value="USUARIO" required>
@@ -32,9 +32,9 @@
                     <option value="4">Uruguaiana-RS</option>
 				</select>
 				<small class="form-text text-muted">Cidade que você deseja receber ofertas. Pode ser alterada a qualquer momento!</small>
-			    @if ($errors->has('sobrenome'))
+			    @if ($errors->has('cidade'))
                     <span class="invalid-feedback" role="alert">
-                        <strong>{{ $errors->first('genero') }}</strong>
+                        <strong>{{ $errors->first('cidade') }}</strong>
                     </span>
                 @endif
 		  	</div>
@@ -50,7 +50,7 @@
 		  	<div class="form-group">
 			    <label for="surname">Sobrenome</label>
 			    <input type="text" class="form-control{{ $errors->has('surname') ? ' is-invalid' : '' }}" id="surname" name="surname" value="{{ old('surname') }}" placeholder="Digite seu sobrenome..." required autofocus>
-			    @if ($errors->has('sobrenome'))
+			    @if ($errors->has('surname'))
                     <span class="invalid-feedback" role="alert">
                         <strong>{{ $errors->first('surname') }}</strong>
                     </span>
@@ -67,16 +67,19 @@
 		  	</div>
 		  	<div class="form-group">
 		    	<label for="password">Senha</label>
-		    	<input type="password" class="form-control" id="password" class="form-control{{ $errors->has('password') ? ' is-invalid' : '' }}" name="password" placeholder="Digite sua senha..." required>
-		    	@if ($errors->has('password'))
+		    	<input type="password" class="form-control{{ $errors->has('password') ? ' is-invalid' : '' }}" id="password" name="password" placeholder="Digite sua senha..." required>
+
+                @if ($errors->has('password'))
                     <span class="invalid-feedback" role="alert">
                         <strong>{{ $errors->first('password') }}</strong>
-                    </span>                	
+                    </span>
+                @else
+                	<small class="form-text text-muted">Deve conter pelo menos 5 caracteres!</small>
                 @endif
 		  	</div>
 		  	<div class="form-group">
-		    	<label for="password_confirmation">Confirmar senha</label>
-		    	<input type="password" class="form-control" id="password_confirmation" class="form-control" name="password_confirmation" placeholder="Confirme sua senha..." required>
+		    	<label for="password-confirm">Confirmar senha</label>
+		    	<input type="password" class="form-control" id="password-confirm" class="form-control" name="password_confirmation" placeholder="Confirme sua senha..." required>
 		  	</div>
 		  	<div class="form-group">
 			    <label for="genero">Gênero</label>

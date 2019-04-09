@@ -13,12 +13,26 @@ class RedirecionaLogin extends Controller
     {
     	if(Auth::check()) 
     	{
-    		echo "logado";
+    		echo "logado ";
     		$user = Auth::user();
-    		if ($user->tipo == "pedro") {
-    			echo "pedro";
-    		} else{
-    			echo "outro";
+    		if ($user->tipo == "USUARIO") 
+            {
+    			echo "USUARIO";
+    		} 
+            elseif ($user->tipo == "EMPRESA") 
+            {
+                echo "EMPRESA";
+            }
+            elseif ($user->tipo == "FRANQUEADO") 
+            {
+                echo "FRANQUEADO";
+            }
+            elseif ($user->tipo == "ADMIN") 
+            {
+                echo "ADMIN";
+            }
+            else{
+    			echo " ERRO";
     		}
     	} 
     	else
