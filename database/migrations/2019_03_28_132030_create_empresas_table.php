@@ -15,11 +15,21 @@ class CreateEmpresasTable extends Migration
     {
         Schema::create('empresas', function (Blueprint $table) {
             $table->bigIncrements('id');
-            $table->string('nome');
-            $table->string('cnpj');
-            $table->string('descricao');
+            $table->string('name');
+            $table->string('surname');
+            $table->string('status');
+            $table->string('genero');
             $table->string('telefone');
-            $table->integer('users_id')->unsigned();
+            $table->string('foto')->nullable();
+            $table->string('nascimento');
+            $table->string('email')->unique();
+            $table->timestamp('email_verified_at')->nullable();
+            $table->string('password');
+            $table->rememberToken();
+            $table->string('empresa');
+            $table->string('cnpj');
+            $table->string('descricao')->nullable();
+            $table->integer('cidade_id')->unsigned()->nullable();
             $table->timestamps();
         });
     }

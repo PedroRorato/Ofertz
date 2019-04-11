@@ -17,9 +17,8 @@ class CreateUsersTable extends Migration
             $table->bigIncrements('id');
             $table->string('name');
             $table->string('surname');
-            $table->string('tipo');
             $table->string('status')->nullable();
-            $table->string('genero')->nullable();
+            $table->string('genero');
             $table->string('foto')->nullable();
             $table->string('nascimento')->nullable();
             $table->string('email')->unique();

@@ -5,7 +5,7 @@
 <div class="container">
     <div class="row ">
         <form class="py-5 col-lg-6 col-md-8 mx-auto" method="POST" action="{{ route('login') }}">
-            <h2 class="text-center pb-2">Login</h2>
+            <h2 class="text-center pb-2">Login Usuário</h2>
             @csrf
             <div class="form-group">
                 <label for="email">Email</label>
@@ -27,9 +27,11 @@
                 <a href=""><p class="form-text text-muted">Esqueceu a senha?</p></a>
             </div>
             <button type="submit" class="btn btn-danger btn-block">Login</button>
+            <a href="" class="btn btn-facebook btn-block"><i class="fab fa-facebook fa-lg mr-2"></i>Login com Facebook</a>
             <a href="/cadastro" class="btn btn-dark btn-block">Cadastrar</a>
             <hr class="mx-5">
-            <a href="" class="btn btn-facebook btn-block"><i class="fab fa-facebook fa-lg mr-2"></i>Login com Facebook</a>
+            <a href="/cadastro" class="btn btn-dark btn-block"><i class="fas fa-store d-inline mr-2"></i>Login/Cadastro Empresas</a>
+            <a href="/cadastro" class="btn btn-dark btn-block"><i class="fas fa-handshake d-inline mr-2"></i>Login/Cadastro Franqueados</a>
         </form> 
     </div>
 </div>

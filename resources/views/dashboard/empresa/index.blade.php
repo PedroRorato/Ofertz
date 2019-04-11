@@ -7,7 +7,7 @@
             <div class="card">
 
 
-                <div class="card-header">Dashboard USER</div>
+                <div class="card-header">Dashboard EMPRESA</div>
 
                 <div class="card-body">
                     @if (session('status'))
@@ -16,7 +16,7 @@
                         </div>
                     @endif
 
-                    You are logged in <strong>USER</strong>!
+                    You are logged in <strong>EMPRESA</strong>!
                 </div>
             </div>
         </div>

@@ -21,7 +21,6 @@
 			<a href="" class="btn btn-facebook btn-block"><i class="fab fa-facebook fa-lg mr-2"></i>Cadastrar com Facebook</a>
 			<hr class="mx-5">
 			@csrf
-			<input type="hidden" name="tipo" value="USUARIO" required>
 			<p class="text-center mb-2">Ou preencha o formulário abaixo</p>
 			<div class="form-group">
 			    <label for="cidade">Cidade</label>

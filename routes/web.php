@@ -33,3 +33,6 @@ Auth::routes();
 
 Route::get('/home', 'HomeController@index')->name('home');
 Route::get('/redireciona', 'RedirecionaLogin@index')->name('redireciona');
+
+
+Route::get('/empresa', 'EmpresaController@index');
