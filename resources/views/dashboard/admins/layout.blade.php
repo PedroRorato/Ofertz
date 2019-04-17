@@ -28,25 +28,21 @@
             $("@yield('button')").addClass("text-danger");
         });
 
-        var lastScrollTop = 0;
-        /*Efeito Header*/
-        $(window).on('scroll', function () {
-            var st = $(this).scrollTop();
-            if (st > lastScrollTop){
-                // downscroll code
-                $("#nav-menu").addClass("d-none");
-            } else {
-                // upscroll code
-                $("#nav-menu").removeClass("d-none");
-            }
-            lastScrollTop = st;
-        });
+        function showMenu(){
+            $('#menu').css('top', '0');
+        }
+        function hiddeMenu(){
+            $('#menu').css('top', '-100vh');
+        }
     </script>
 </head>
 <body class="dash-body">
-    <div id="menu" class="bg-dark px-0">
-        <div class="row mx-0 px-5 menu-logo">
+    <div id="menu" class="bg-dark px-0 pb-5">
+        <div class="row mx-0 px-5 menu-logo d-none d-md-block">
             <img src="{{ asset('img/logo.svg') }}" alt="..." class="img-fluid menu-logo-img">
+        </div>
+        <div class="row mx-0 px-5 menu-logo d-block d-md-none py-2 text-center" onclick="hiddeMenu()">
+            <button class="btn btn-outline-light d-md-none"><i class="fas fa-times"></i></button>
         </div>
         <div class="accordion" id="menu-accordion">
             <div class="card card-menu-profile">
@@ -60,7 +56,6 @@
                     <div class="col-1 px-0">
                         <i class="fas fa-chevron-down pt-1"></i>
                     </div>
-
                 </div>
                 <div id="collapseProfile" class="collapse" aria-labelledby="headingThree" data-parent="#menu-accordion">
                     <ul class="nav flex-column menu-options">
@@ -258,6 +253,7 @@
             <header  class="shadow-sm" >
                 <nav class="navbar navbar-light bg-white pb-0">
                     <h2 class="mb-1 pt-2">Inicial</h2>
+                    <button class="btn btn-outline-dark d-md-none" onclick="showMenu()"><i class="fas fa-bars"></i></button>
                 </nav>
                 <nav aria-label="breadcrumb ">
                     <ol class="breadcrumb py-1">
@@ -272,14 +268,12 @@
                 <div class="card">
                     <div class="card-body">
                         @yield('content')
-
-
-
                     </div>
                 </div>
             </div>
             <!-- END DASH CONTENT -->
         </div>
+        Copyright Bergard Company © 2019
     </div>
     <!-- END DASH -->
 
