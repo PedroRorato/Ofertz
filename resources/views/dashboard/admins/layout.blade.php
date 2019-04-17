@@ -68,13 +68,18 @@
                             <a class="nav-link" href="#"><i class="fas fa-user mr-2"></i>Conta</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" href="#"><i class="fas fa-sign-out-alt mr-2"></i>Logout</a>
+                            <a class="nav-link" href="{{ route('logout') }}" onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
+                                <i class="fas fa-sign-out-alt mr-2"></i>Sair
+                            </a>
+                            <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
+                                @csrf
+                            </form>
                         </li>
                     </ul>
                 </div>
             </div>
             <div class="card card-menu">
-                <a href="" class="card-header card-header-menu nav-link">
+                <a href="" id="dash-menu-inicial" class="card-header card-header-menu color-menu">
                     <i class="fas fa-home mr-2"></i>Inicial
                 </a>
             </div>
@@ -266,121 +271,7 @@
             <div class="px-3 pt-1 pb-3">
                 <div class="card">
                     <div class="card-body">
-                        <button type="button" class="btn btn-primary"><i class="fas fa-plus mr-2"></i>Adicionar Usuário</button>
-                        <hr>
-                        <h4><i class="fas fa-filter mr-2"></i>Filtros</h4>
-                        <div class="form-group">
-                            <label for="exampleFormControlInput1">Email, nome ou sobrenome</label>
-                            <input type="email" class="form-control" id="exampleFormControlInput1" placeholder="Digite o email, nome ou sobrenome">
-                        </div>
-                        <div class="row">
-                            <div class="form-group col-3">
-                                <select class="custom-select my-1 mr-sm-2" id="inlineFormCustomSelectPref">
-                                    <option selected>--Cidades--</option>
-                                    <option value="1">Alegrete-RS</option>
-                                    <option value="1">Erechim-RS</option>
-                                    <option value="1">Santa Maria-RS</option>
-                                    <option value="2">Uruguaiana-RS</option>
-                                </select>
-                            </div>
-                            <div class="form-group col-3">
-                                <select class="custom-select my-1 mr-sm-2" id="inlineFormCustomSelectPref">
-                                    <option selected>--Status--</option>
-                                    <option value="1">One</option>
-                                    <option value="2">Two</option>
-                                    <option value="3">Three</option>
-                                </select>
-                            </div>
-                            <div class="form-group col-3">
-                                <select class="custom-select my-1 mr-sm-2" id="inlineFormCustomSelectPref">
-                                    <option selected>--Gêneros--</option>
-                                    <option value="1">One</option>
-                                    <option value="2">Two</option>
-                                    <option value="3">Three</option>
-                                </select>
-                            </div>
-                            <div class="form-group col-3">
-                                <select class="custom-select my-1 mr-sm-2" id="inlineFormCustomSelectPref">
-                                    <option selected>--Faixa Etária--</option>
-                                    <option value="1">One</option>
-                                    <option value="2">Two</option>
-                                    <option value="3">Three</option>
-                                </select>
-                            </div>
-                        </div>
-                        <button type="button" class="btn btn-primary mr-3"><i class="fas fa-filter mr-2"></i>Filtrar</button>
-                        <button type="button" class="btn btn-success"><i class="fas fa-file-excel mr-2"></i>Download</button>
-                        <hr>
-                        <div class="table-responsive" style="border: 1px solid lightgrey">
-                            <table class="table " >
-                                <thead>
-                                    <tr>
-                                      <th scope="col">Nome</th>
-                                      <th scope="col">Email</th>
-                                      <th scope="col">Cidade</th>
-                                      <th scope="col">Ações</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    <tr>
-                                        <td>Mark Otto</td>
-                                        <td>markotto@gmail.com</td>
-                                        <td>Santa Maria-RS</td>
-                                        <td>
-                                            <button type="button" class="btn btn-primary"><i class="fas fa-edit mr-2"></i>Painel</button>
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td>Larry Bird</td>
-                                        <td>larrybird@outlook.com</td>
-                                        <td>Porto Alegre-RS</td>
-                                        <td>
-                                            <button type="button" class="btn btn-primary"><i class="fas fa-edit mr-2"></i>Painel</button>
-                                        </td>
-                                    </tr>
-                                    <tr class="table-secondary">
-                                        <td>Jacob Thornton</td>
-                                        <td>jacobthornton@hotmail.com</td>
-                                        <td>Bagé-RS</td>
-                                        <td>
-                                            <button type="button" class="btn btn-primary"><i class="fas fa-edit mr-2"></i>Painel</button>
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td>Larry Bird</td>
-                                        <td>larrybird@outlook.com</td>
-                                        <td>Porto Alegre-RS</td>
-                                        <td>
-                                            <button type="button" class="btn btn-primary"><i class="fas fa-edit mr-2"></i>Painel</button>
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td>Mark Otto</td>
-                                        <td>markotto@gmail.com</td>
-                                        <td>Santa Maria-RS</td>
-                                        <td>
-                                            <button type="button" class="btn btn-primary"><i class="fas fa-edit mr-2"></i>Painel</button>
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td>Larry Bird</td>
-                                        <td>larrybird@outlook.com</td>
-                                        <td>Porto Alegre-RS</td>
-                                        <td>
-                                            <button type="button" class="btn btn-primary"><i class="fas fa-edit mr-2"></i>Painel</button>
-                                        </td>
-                                    </tr>
-                                    <tr class="table-danger">
-                                        <td>Jacob Thornton</td>
-                                        <td>jacobthornton@hotmail.com</td>
-                                        <td>Bagé-RS</td>
-                                        <td>
-                                            <button type="button" class="btn btn-primary"><i class="fas fa-edit mr-2"></i>Painel</button>
-                                        </td>
-                                    </tr>
-                                </tbody>
-                            </table>
-                        </div>
+                        @yield('content')
 
 
 

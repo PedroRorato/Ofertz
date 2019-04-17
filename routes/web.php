@@ -28,11 +28,18 @@ Route::get('/cadastro-usuario', function () {
     return view('auth/cadastro-usuario');
 });
 /**/
+/*PAINEIS*/
+/*Admin*/
+Route::prefix('/admin')->group(function(){
+	Route::get('/login', 'Auth\AdminLoginController@showLoginForm')->name('admin.login');
+	Route::post('/login', 'Auth\AdminLoginController@login')->name('admin.login.submit');
+	Route::get('/', 'AdminController@index')->name('admin.dashboard');
+});
+/**/
 
 Auth::routes();
 
 Route::get('/home', 'HomeController@index')->name('home');
-Route::get('/redireciona', 'RedirecionaLogin@index')->name('redireciona');
-
 
 Route::get('/empresa', 'EmpresaController@index');
+
