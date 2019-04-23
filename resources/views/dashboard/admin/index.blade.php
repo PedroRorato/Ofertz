@@ -1,6 +1,6 @@
 @extends('dashboard.admin.layout')
 @section('title') Painel de Controle @endsection
-@section('menuG') #inicial-menu @endsection
+@section('menu') #inicial-menu @endsection
 @section('breadcrumbs') 
 <li class="breadcrumb-item"><a href="/admin">Inicial</a></li>
 @endsection

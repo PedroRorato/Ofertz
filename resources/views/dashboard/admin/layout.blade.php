@@ -26,10 +26,8 @@
     <script type="text/javascript">
         $(window).on('load', function() {
             $("@yield('collapse')").addClass("show");
-            $("@yield('menuG')").css("border-left", "4px solid #3490dc");
-            $("@yield('menuG')").css("background-color", "#22262a");
-            $("@yield('menuP')").css("background-color", "#171a1c");
-            $("@yield('menuP') .nav-link").css("color", "white");
+            $("@yield('menu')").css("border-left", "4px solid #3490dc");
+            $("@yield('menu')").css("background-color", "#22262a");
         });
 
         function showMenu(){
@@ -51,207 +49,53 @@
         <div class="row mx-0 px-5 menu-logo d-block d-md-none py-2 text-center" onclick="hiddeMenu()">
             <button class="btn btn-outline-light d-md-none"><i class="fas fa-times"></i></button>
         </div>
+        <!-- PROFILE -->
         <div class="accordion" id="menu-accordion">
             <div class="card card-menu-profile">
-                <div class="card-header card-header-menu row mx-0" data-toggle="collapse" data-target="#collapseProfile" aria-expanded="false">
-                    <div class="col-3 px-0">
+                <div class="card-header row mx-0 align-items-center px-3" data-toggle="collapse" data-target="#collapseProfile" aria-expanded="false">
+                    <div class="col-2 px-0">
                         <img src="{{ asset('img/profile.jpg') }}" alt="..." class="rounded-circle img-fluid">
                     </div>
-                    <div class="col-8 pr-0">
-                        {{ Auth::user()->name . ' ' . Auth::user()->surname }}
+                    <div class="col-9 pr-0">
+                        {{ Auth::user()->name  }}
                     </div>
                     <div class="col-1 px-0">
-                        <i class="fas fa-chevron-down pt-1"></i>
+                        <i class="fas fa-chevron-down"></i>
                     </div>
                 </div>
                 <div id="collapseProfile" class="collapse" aria-labelledby="headingThree" data-parent="#menu-accordion">
-                    <ul class="nav flex-column menu-options">
+                    <ul class="nav flex-column">
                         <li class="nav-item">
-                            <a class="nav-link" href="#"><i class="fas fa-user mr-2"></i>Conta</a>
+                            <a class="nav-link" href="#">
+                                <i class="fas fa-user mr-2"></i>Conta
+                            </a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" href="{{ route('logout') }}" onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
+                            <a class="nav-link" href="#">
                                 <i class="fas fa-sign-out-alt mr-2"></i>Sair
                             </a>
-                            <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
-                                @csrf
-                            </form>
                         </li>
                     </ul>
                 </div>
             </div>
-            <div class="card card-menu" id="inicial-menu">
-                <a href="/admin" id="dash-menu-inicial" class="card-header card-header-menu color-menu">
-                    <i class="fas fa-home mr-2"></i>Inicial
-                </a>
-            </div>
-            <div class="card card-menu" id="administradores-menu">
-                <div class="card-header card-header-menu" data-toggle="collapse" data-target="#collapseAdministradores" aria-expanded="false">
-                    <i class="fas fa-gavel mr-2"></i>Administradores<i class="fas fa-chevron-down pt-1"></i>
-                </div>
-                <div id="collapseAdministradores" class="collapse" aria-labelledby="headingThree" data-parent="#menu-accordion">
-                    <ul class="nav flex-column menu-options">
-                        <li class="nav-item" id="administradores-adicionar">
-                            <a class="nav-link" href="/admin/admins/create"><i class="fas fa-plus mr-2"></i>Adicionar</a>
-                        </li>
-                        <li class="nav-item" id="administradores-listagem">
-                            <a class="nav-link" href="/admin/admins"><i class="fas fa-list mr-2"></i>Listagem</a>
-                        </li>
-                    </ul>
-                </div>
-            </div>
-            <div class="card card-menu">
-                <div class="card-header card-header-menu" data-toggle="collapse" data-target="#collapseCategorias" aria-expanded="false">
-                    <i class="fas fa-th mr-2"></i>Categorias<i class="fas fa-chevron-down pt-1"></i>
-                </div>
-                <div id="collapseCategorias" class="collapse" aria-labelledby="headingThree" data-parent="#menu-accordion">
-                    <ul class="nav flex-column menu-options">
-                        <li class="nav-item">
-                            <a class="nav-link" href="#"><i class="fas fa-plus mr-2"></i>Adicionar</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" href="#"><i class="fas fa-list mr-2"></i>Listagem</a>
-                        </li>
-                    </ul>
-                </div>
-            </div>
-            <div class="card card-menu">
-                <div class="card-header card-header-menu" data-toggle="collapse" data-target="#collapseCidades" aria-expanded="false">
-                    <i class="fas fa-city mr-2"></i>Cidades<i class="fas fa-chevron-down pt-1"></i>
-                </div>
-                <div id="collapseCidades" class="collapse" aria-labelledby="headingThree" data-parent="#menu-accordion">
-                    <ul class="nav flex-column menu-options">
-                        <li class="nav-item">
-                            <a class="nav-link" href="#"><i class="fas fa-plus mr-2"></i>Adicionar</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" href="#"><i class="fas fa-list mr-2"></i>Listagem</a>
-                        </li>
-                    </ul>
-                </div>
-            </div>
-            <div class="card card-menu">
-                <div class="card-header card-header-menu" data-toggle="collapse" data-target="#collapseCompras" aria-expanded="false">
-                    <i class="fas fa-shopping-cart mr-2"></i>Compras<i class="fas fa-chevron-down pt-1"></i>
-                </div>
-                <div id="collapseCompras" class="collapse" aria-labelledby="headingThree" data-parent="#menu-accordion">
-                    <ul class="nav flex-column menu-options">
-                        <li class="nav-item">
-                            <a class="nav-link" href="#"><i class="fas fa-plus mr-2"></i>Adicionar</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" href="#"><i class="fas fa-list mr-2"></i>Listagem</a>
-                        </li>
-                    </ul>
-                </div>
-            </div>
-            <div class="card card-menu">
-                <div class="card-header card-header-menu dropdown" data-toggle="collapse" data-target="#collapseEmpresas" aria-expanded="false">
-                    <i class="fas fa-store mr-2"></i>Empresas<i class="fas fa-chevron-down pt-1"></i>
-                </div>
-                <div id="collapseEmpresas" class="collapse" aria-labelledby="headingThree" data-parent="#menu-accordion">
-                    <ul class="nav flex-column menu-options">
-                        <li class="nav-item">
-                            <a class="nav-link" href="#"><i class="fas fa-plus mr-2"></i>Adicionar</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" href="#"><i class="fas fa-list mr-2"></i>Listagem</a>
-                        </li>
-                    </ul>
-                </div>
-            </div>
-            <div class="card card-menu">
-                <div class="card-header card-header-menu dropdown" data-toggle="collapse" data-target="#collapseEventos" aria-expanded="false">
-                    <i class="fas fa-glass-cheers mr-2"></i>Eventos<i class="fas fa-chevron-down pt-1"></i>
-                </div>
-                <div id="collapseEventos" class="collapse" aria-labelledby="headingThree" data-parent="#menu-accordion">
-                    <ul class="nav flex-column menu-options">
-                        <li class="nav-item">
-                            <a class="nav-link" href="#"><i class="fas fa-plus mr-2"></i>Adicionar</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" href="#"><i class="fas fa-list mr-2"></i>Listagem</a>
-                        </li>
-                    </ul>
-                </div>
-            </div>
-            <div class="card card-menu">
-                <div class="card-header card-header-menu dropdown" data-toggle="collapse" data-target="#collapseFotos" aria-expanded="false">
-                    <i class="fas fa-image mr-2"></i>Fotos<i class="fas fa-chevron-down pt-1"></i>
-                </div>
-                <div id="collapseFotos" class="collapse" aria-labelledby="headingThree" data-parent="#menu-accordion">
-                    <ul class="nav flex-column menu-options">
-                        <li class="nav-item">
-                            <a class="nav-link" href="#"><i class="fas fa-plus mr-2"></i>Adicionar</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" href="#"><i class="fas fa-list mr-2"></i>Listagem</a>
-                        </li>
-                    </ul>
-                </div>
-            </div>
-            <div class="card card-menu">
-                <div class="card-header card-header-menu dropdown" data-toggle="collapse" data-target="#collapseFranqueados" aria-expanded="false">
-                    <i class="fas fa-handshake mr-2"></i>Franqueados<i class="fas fa-chevron-down pt-1"></i>
-                </div>
-                <div id="collapseFranqueados" class="collapse" aria-labelledby="headingThree" data-parent="#menu-accordion">
-                    <ul class="nav flex-column menu-options">
-                        <li class="nav-item">
-                            <a class="nav-link" href="#"><i class="fas fa-plus mr-2"></i>Adicionar</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" href="#"><i class="fas fa-list mr-2"></i>Listagem</a>
-                        </li>
-                    </ul>
-                </div>
-            </div>
-            <div class="card card-menu">
-                <div class="card-header card-header-menu dropdown" data-toggle="collapse" data-target="#collapseOfertas" aria-expanded="false">
-                    <i class="fas fa-tag mr-2"></i>Ofertas<i class="fas fa-chevron-down pt-1"></i>
-                </div>
-                <div id="collapseOfertas" class="collapse" aria-labelledby="headingThree" data-parent="#menu-accordion">
-                    <ul class="nav flex-column menu-options">
-                        <li class="nav-item">
-                            <a class="nav-link" href="#"><i class="fas fa-plus mr-2"></i>Adicionar</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" href="#"><i class="fas fa-list mr-2"></i>Listagem</a>
-                        </li>
-                    </ul>
-                </div>
-            </div>
-            <div class="card card-menu">
-                <div class="card-header card-header-menu dropdown" data-toggle="collapse" data-target="#collapseProdutos" aria-expanded="false">
-                    <i class="fas fa-gifts mr-2"></i>Produtos<i class="fas fa-chevron-down pt-1"></i>
-                </div>
-                <div id="collapseProdutos" class="collapse" aria-labelledby="headingThree" data-parent="#menu-accordion">
-                    <ul class="nav flex-column menu-options">
-                        <li class="nav-item">
-                            <a class="nav-link" href="#"><i class="fas fa-plus mr-2"></i>Adicionar</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" href="#"><i class="fas fa-list mr-2"></i>Listagem</a>
-                        </li>
-                    </ul>
-                </div>
-            </div>
-            <div class="card card-menu">
-                <div class="card-header card-header-menu dropdown" data-toggle="collapse" data-target="#collapseUsuarios" aria-expanded="false">
-                    <i class="fas fa-users mr-2"></i>Usuários<i class="fas fa-chevron-down pt-1"></i>
-                </div>
-                <div id="collapseUsuarios" class="collapse" aria-labelledby="headingThree" data-parent="#menu-accordion">
-                    <ul class="nav flex-column menu-options">
-                        <li class="nav-item">
-                            <a class="nav-link" href="#"><i class="fas fa-plus mr-2"></i>Adicionar</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" href="#"><i class="fas fa-list mr-2"></i>Listagem</a>
-                        </li>
-                    </ul>
-                </div>
-            </div> 
-            <!-- COPYRIGHT -->
-        <div class="text-center text-white pt-5">Copyright Bergard © 2019</div>
+        </div>
+        <!-- END PROFILE -->
+        <!-- MENU -->
+        <a href="/admin" id="inicial-menu" class="btn btn-block btn-menu"><i class="fas fa-home mr-2"></i>Inicial</a>
+        <a href="/admin/admins" id="administradores-menu" class="btn btn-block btn-menu"><i class="fas fa-gavel mr-2"></i>Administradores</a>
+        <a href="/admin/categorias" id="categorias-menu" class="btn btn-block btn-menu"><i class="fas fa-th mr-2"></i>Categorias</a>
+        <a href="/admin/cidades" id="cidades-menu" class="btn btn-block btn-menu"><i class="fas fa-city mr-2"></i>Cidades</a>
+        <a href="/admin/compras" id="compras-menu" class="btn btn-block btn-menu"><i class="fas fa-shopping-cart mr-2"></i>Compras</a>
+        <a href="/admin/empresas" id="empresas-menu" class="btn btn-block btn-menu"><i class="fas fa-store mr-2"></i>Empresas</a>
+        <a href="/admin/eventos" id="eventos-menu" class="btn btn-block btn-menu"><i class="fas fa-glass-cheers mr-2"></i>Eventos</a>
+        <a href="/admin/fotos" id="fotos-menu" class="btn btn-block btn-menu"><i class="fas fa-image mr-2"></i>Fotos</a>
+        <a href="/admin/franqueados" id="franqueados-menu" class="btn btn-block btn-menu"><i class="fas fa-handshake mr-2"></i>Franqueados</a>
+        <a href="/admin/ofertas" id="ofertas-menu" class="btn btn-block btn-menu"><i class="fas fa-tag mr-2"></i>Ofertas</a>
+        <a href="/admin/produtos" id="produtos-menu" class="btn btn-block btn-menu"><i class="fas fa-gifts mr-2"></i>Produtos</a>
+        <a href="/admin/usuarios" id="usuarios-menu" class="btn btn-block btn-menu"><i class="fas fa-users mr-2"></i>Usuários</a>
+        <!-- END MENU -->
+        <!-- COPYRIGHT -->
+        <div class="text-center text-white pt-4">Copyright Bergard © 2019</div>
         <!-- END COPYRIGHT -->               
         </div>
     </div>

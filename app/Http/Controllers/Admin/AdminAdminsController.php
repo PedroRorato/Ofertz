@@ -75,12 +75,6 @@ class AdminAdminsController extends Controller
     }
 
 
-    public function edit($id){
-        $admin = Admin::findOrFail($id);
-        return view('dashboard.admin.admins.edit', compact('admin'));
-    }
-
-
     public function update(Request $request, $id){
         
         $admin = Admin::findOrFail($id);
@@ -127,7 +121,7 @@ class AdminAdminsController extends Controller
         $admin->save();
 
         //Redirect
-        return redirect('/admin/admins')->withMessage("Elemento excluído com sucesso!");
+        return redirect('/admin/admins')->withMessage("Administrador excluído com sucesso!");
         
     }
 }

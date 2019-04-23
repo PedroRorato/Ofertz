@@ -1,8 +1,6 @@
 @extends('dashboard.admin.layout')
 @section('title') Administradores @endsection
-@section('collapse') #collapseAdministradores @endsection
-@section('menuG') #administradores-menu @endsection
-@section('menuP') #administradores-listagem @endsection
+@section('menu') #administradores-menu @endsection
 @section('breadcrumbs') 
 <li class="breadcrumb-item"><a href="/admin/admins">Listagem</a></li>
 @endsection
@@ -32,8 +30,7 @@
                     <select class="custom-select" id="status" name="status">
                         <option value="%">TODOS</option>
                         <option value="ATIVO">ATIVO</option>
-                        <option value="INATIVO">INATIVO</option>
-                        <option value="NATIVO">NATIVO</option>
+                        <option value="EXCLUIDO">EXCLUIDO</option>
                     </select>
                 </div>
             </div>
@@ -63,20 +60,7 @@
                 </thead>
                 <tbody>
                     @foreach($admins as $admin)
-                        @if($admin->status == 'INATIVO')
-                        <tr class="table-secondary">
-                            <td>{{ $admin->name . ' ' . $admin->surname }}</td>
-                            <td>{{ $admin->email }}</td>
-                            <td>
-                                <a href="/admin/admins/{{ $admin->id }}" class="btn btn-primary shadow" data-toggle="tooltip" title="Editar">
-                                    <i class="fas fa-edit"></i>
-                                </a>
-                                <button type="button" class="btn btn-danger shadow" data-toggle="modal" title="Excluir" data-target="#modalDelete{{ $admin->id }}"> 
-                                    <i class="fas fa-trash-alt"></i>
-                                </button>
-                            </td>
-                        </tr>
-                        @elseif($admin->status == 'EXCLUIDO')
+                        @if($admin->status == 'EXCLUIDO')
                         <tr class="table-danger">
                             <td>{{ $admin->name . ' ' . $admin->surname }}</td>
                             <td>{{ $admin->email }}</td>
