@@ -1,8 +1,6 @@
-@extends('dashboard.admin.layout')
+@extends('dashboard.layout')
 @section('title') Administradores @endsection
-@section('collapse') #collapseAdministradores @endsection
-@section('menuG') #administradores-menu @endsection
-@section('menuP') #administradores-adicionar @endsection
+@section('menu') #administradores-menu @endsection
 @section('breadcrumbs') 
 <li class="breadcrumb-item"><a href="/admin/admins">Listagem</a></li>
 <li class="breadcrumb-item"><a href="/admin/admins/{{ $admin->id }}">Painel do Administrador</a></li>

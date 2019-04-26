@@ -1,9 +1,8 @@
-@extends('dashboard.admin.layout')
+@extends('dashboard.layout')
 @section('title') Administradores @endsection
-@section('collapse') #collapseAdministradores @endsection
-@section('menuG') #administradores-menu @endsection
-@section('menuP') #administradores-adicionar @endsection
+@section('menu') #administradores-menu @endsection
 @section('breadcrumbs') 
+<li class="breadcrumb-item"><a href="/admin/admins">Listagem</a></li>
 <li class="breadcrumb-item"><a href="/admin/admins/create">Adicionar</a></li>
 @endsection
 @section('content')
@@ -55,7 +54,7 @@
                 </div>
             </div>
             <hr>
-            <button type="submit" class="btn btn-primary shadow"><i class="fas fa-plus mr-2"></i>Adicionar Administrador</button>
+            <button type="submit" class="btn btn-primary shadow"><i class="fas fa-plus mr-2"></i>Adicionar</button>
         </form>
     </div>
 </div>

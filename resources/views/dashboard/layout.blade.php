@@ -83,7 +83,8 @@
         <!-- MENU -->
         <a href="/admin" id="inicial-menu" class="btn btn-block btn-menu"><i class="fas fa-home mr-2"></i>Inicial</a>
         <a href="/admin/admins" id="administradores-menu" class="btn btn-block btn-menu"><i class="fas fa-gavel mr-2"></i>Administradores</a>
-        <a href="/admin/categorias" id="categorias-menu" class="btn btn-block btn-menu"><i class="fas fa-th mr-2"></i>Categorias</a>
+        <a href="/admin/categorias-eventos" id="categorias-evento-menu" class="btn btn-block btn-menu"><i class="fas fa-th mr-2"></i>Categorias Evento</a>
+        <a href="/admin/categorias-produto" id="categorias-produto-menu" class="btn btn-block btn-menu"><i class="fas fa-th mr-2"></i>Categorias Produto</a>
         <a href="/admin/cidades" id="cidades-menu" class="btn btn-block btn-menu"><i class="fas fa-city mr-2"></i>Cidades</a>
         <a href="/admin/compras" id="compras-menu" class="btn btn-block btn-menu"><i class="fas fa-shopping-cart mr-2"></i>Compras</a>
         <a href="/admin/empresas" id="empresas-menu" class="btn btn-block btn-menu"><i class="fas fa-store mr-2"></i>Empresas</a>

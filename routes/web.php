@@ -37,6 +37,8 @@ Route::prefix('/admin')->group(function(){
 	/*Dashboard*/
 	Route::get('/', 'AdminController@index')->name('admin.dashboard');
 	Route::resource('/admins', 'Admin\AdminAdminsController');
+	Route::resource('/categorias-produto', 'Admin\AdminCategoriasProdutoController');
+	Route::resource('/categorias-evento', 'Admin\AdminCategoriasEventoController');
 });
 /**/
 

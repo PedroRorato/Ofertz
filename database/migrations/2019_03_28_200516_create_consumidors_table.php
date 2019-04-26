@@ -15,6 +15,7 @@ class CreateConsumidorsTable extends Migration
     {
         Schema::create('consumidors', function (Blueprint $table) {
             $table->integer('id')->unsigned();
+            $table->string('status')->default('ATIVO');
             $table->timestamps();
         });
     }

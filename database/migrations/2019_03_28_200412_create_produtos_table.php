@@ -17,6 +17,7 @@ class CreateProdutosTable extends Migration
             $table->bigIncrements('id');
             $table->string('nome');
             $table->string('descricao');
+            $table->string('status')->default('ATIVO');
             $table->integer('users_id')->unsigned();
             $table->timestamps();
         });

@@ -17,6 +17,7 @@ class CreateFotosTable extends Migration
             $table->bigIncrements('id');
             $table->string('nome');
             $table->string('url');
+            $table->string('status')->default('ATIVO');
             $table->timestamps();
         });
     }

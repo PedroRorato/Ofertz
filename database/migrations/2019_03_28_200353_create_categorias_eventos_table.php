@@ -18,6 +18,7 @@ class CreateCategoriasEventosTable extends Migration
             $table->string('nome');
             $table->string('descricao');
             $table->string('foto');
+            $table->string('status')->default('ATIVO');
             $table->integer('users_id')->unsigned();
             $table->timestamps();
         });

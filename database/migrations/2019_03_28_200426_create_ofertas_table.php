@@ -18,6 +18,7 @@ class CreateOfertasTable extends Migration
             $table->decimal('preco', 8, 2);
             $table->dateTime('validade');
             $table->integer('users_id')->unsigned();
+            $table->string('status')->default('ATIVO');
             $table->integer('produto_id')->unsigned();
             $table->timestamps();
         });

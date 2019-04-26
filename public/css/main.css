@@ -36,6 +36,15 @@
     background-color: #ad1c1c;
     border-color: #ad1c1c;
 }
+#foto{
+	background: lightgrey;
+    border: 5px solid lightgrey;
+    border-radius: .25rem;
+    max-width: 300px;
+}
+.invalid-feedback{
+	display: block;
+}
 .nav-btn{
 	color: #1d2124 !important;
 }
@@ -200,6 +209,9 @@
 /*Phone*/
 @media only screen and (max-width: 575px) {
 	/*GERAL*/
+	h2 {
+	    font-size: 1.7rem;
+	}
 	.btn-lg{
 		font-size: 1.3rem;
 	}
