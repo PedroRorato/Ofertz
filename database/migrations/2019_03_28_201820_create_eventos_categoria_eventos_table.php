@@ -14,8 +14,8 @@ class CreateEventosCategoriaEventosTable extends Migration
     public function up()
     {
         Schema::create('eventos_categoria_eventos', function (Blueprint $table) {
-            $table->integer('eventos_id')->unsigned();
-            $table->integer('categorias_eventos_id')->unsigned();
+            $table->unsignedInteger('eventos_id')->references('id')->on('eventos');
+            $table->unsignedInteger('categorias_eventos_id')->references('id')->on('categorias_eventos');
             $table->string('status');
             $table->timestamps();
         });

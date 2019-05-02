@@ -22,20 +22,20 @@
             @method('PATCH')
             <div class="row">
                 <div class="form-group col-md-6">
-                    <label for="name">Nome</label>
-                    <input type="text" class="form-control{{ $errors->has('name') ? ' is-invalid' : '' }}" id="name" name="name" placeholder="Digite o nome..." value="{{ $admin->name }}" required autofocus>
-                    @if ($errors->has('name'))
+                    <label for="nome">Nome</label>
+                    <input type="text" class="form-control{{ $errors->has('nome') ? ' is-invalid' : '' }}" id="nome" name="nome" placeholder="Digite o nome..." value="{{ $admin->nome }}" required autofocus>
+                    @if ($errors->has('nome'))
                         <span class="invalid-feedback" role="alert">
-                            <strong>{{ $errors->first('name') }}</strong>
+                            <strong>{{ $errors->first('nome') }}</strong>
                         </span>
                     @endif
                 </div>
                 <div class="form-group col-md-6">
-                    <label for="surname">Sobrenome</label>
-                    <input type="text" class="form-control{{ $errors->has('surname') ? ' is-invalid' : '' }}" id="surname" name="surname" placeholder="Digite o sobrenome..." value="{{ $admin->surname }}" required>
-                    @if ($errors->has('surname'))
+                    <label for="sobrenome">Sobrenome</label>
+                    <input type="text" class="form-control{{ $errors->has('sobrenome') ? ' is-invalid' : '' }}" id="sobrenome" name="sobrenome" placeholder="Digite o sobrenome..." value="{{ $admin->sobrenome }}" required>
+                    @if ($errors->has('sobrenome'))
                         <span class="invalid-feedback" role="alert">
-                            <strong>{{ $errors->first('surname') }}</strong>
+                            <strong>{{ $errors->first('sobrenome') }}</strong>
                         </span>
                     @endif
                 </div>
@@ -59,7 +59,7 @@
             <hr>
             <button type="submit" class="btn btn-primary shadow mr-3 mt-3 mt-sm-0"><i class="fas fa-save mr-2"></i>Salvar</button>
             <button type="button" class="btn btn-warning shadow mr-3 mt-3 mt-sm-0" data-toggle="modal" data-target="#modalSenha">
-            <i class="fas fa-key mr-2"></i>Alterar senha
+                <i class="fas fa-key mr-2"></i>Alterar senha
             </button>
             @if($admin->status != 'EXCLUIDO')
             <button type="button" class="btn btn-danger shadow mt-3 mt-sm-0" data-toggle="modal" data-target="#modalDelete">

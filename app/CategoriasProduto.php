@@ -9,6 +9,6 @@ class CategoriasProduto extends Model
     protected $guard = 'admin';
 
     protected $fillable = [
-        'nome', 'descricao', 'foto', 'users_id'
+        'nome', 'descricao', 'foto', 'user_id'
     ];
 }

@@ -23,22 +23,15 @@
     <link href="{{ asset('css/main.css') }}" rel="stylesheet">
     
     <!-- Scripts Custom -->
+    <script src="{{ asset('js/jquery.mask.min.js') }}" defer></script>
+    <script src="{{ asset('js/dashboard.js') }}" defer></script>
     <script type="text/javascript">
+        //Menu
         $(window).on('load', function() {
             $("@yield('collapse')").addClass("show");
             $("@yield('menu')").css("border-left", "4px solid #3490dc");
             $("@yield('menu')").css("background-color", "#22262a");
         });
-
-        function showMenu(){
-            $('#menu').css('top', '0');
-        }
-        function hiddeMenu(){
-            $('#menu').css('top', '-100vh');
-        }
-        function hiddeAlert(){
-            $('.alert').addClass("d-none");
-        }
     </script>
 </head>
 <body class="dash-body">
@@ -57,7 +50,7 @@
                         <img src="{{ asset('img/profile.jpg') }}" alt="..." class="rounded-circle img-fluid">
                     </div>
                     <div class="col-9 pr-0">
-                        {{ Auth::user()->name  }}
+                        {{ Auth::user()->nome  }}
                     </div>
                     <div class="col-1 px-0">
                         <i class="fas fa-chevron-down"></i>
@@ -67,13 +60,31 @@
                     <ul class="nav flex-column">
                         <li class="nav-item">
                             <a class="nav-link" href="#">
-                                <i class="fas fa-user mr-2"></i>Conta
+                                <i class="fas fa-user-edit mr-2"></i>Conta
                             </a>
                         </li>
                         <li class="nav-item">
                             <a class="nav-link" href="#">
+                                <i class="fas fa-handshake mr-2"></i>Painel Franqueado
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="#">
+                                <i class="fas fa-store mr-2"></i>Painel Empresa
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="#">
+                                <i class="fas fa-user mr-2"></i>Painel Usuário
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="{{ route('logout') }}" onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
                                 <i class="fas fa-sign-out-alt mr-2"></i>Sair
                             </a>
+                            <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
+                                @csrf
+                            </form>
                         </li>
                     </ul>
                 </div>
@@ -83,10 +94,10 @@
         <!-- MENU -->
         <a href="/admin" id="inicial-menu" class="btn btn-block btn-menu"><i class="fas fa-home mr-2"></i>Inicial</a>
         <a href="/admin/admins" id="administradores-menu" class="btn btn-block btn-menu"><i class="fas fa-gavel mr-2"></i>Administradores</a>
-        <a href="/admin/categorias-eventos" id="categorias-evento-menu" class="btn btn-block btn-menu"><i class="fas fa-th mr-2"></i>Categorias Evento</a>
+        <a href="/admin/categorias-evento" id="categorias-evento-menu" class="btn btn-block btn-menu"><i class="fas fa-th mr-2"></i>Categorias Evento</a>
         <a href="/admin/categorias-produto" id="categorias-produto-menu" class="btn btn-block btn-menu"><i class="fas fa-th mr-2"></i>Categorias Produto</a>
         <a href="/admin/cidades" id="cidades-menu" class="btn btn-block btn-menu"><i class="fas fa-city mr-2"></i>Cidades</a>
-        <a href="/admin/compras" id="compras-menu" class="btn btn-block btn-menu"><i class="fas fa-shopping-cart mr-2"></i>Compras</a>
+        <a href="/admin/compras" id="compras-menu" class="btn btn-block btn-menu disabled" ><i class="fas fa-shopping-cart mr-2"></i>Compras</a>
         <a href="/admin/empresas" id="empresas-menu" class="btn btn-block btn-menu"><i class="fas fa-store mr-2"></i>Empresas</a>
         <a href="/admin/eventos" id="eventos-menu" class="btn btn-block btn-menu"><i class="fas fa-glass-cheers mr-2"></i>Eventos</a>
         <a href="/admin/fotos" id="fotos-menu" class="btn btn-block btn-menu"><i class="fas fa-image mr-2"></i>Fotos</a>

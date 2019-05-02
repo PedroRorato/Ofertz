@@ -14,8 +14,8 @@ class CreateFotosProdutosTable extends Migration
     public function up()
     {
         Schema::create('fotos_produtos', function (Blueprint $table) {
-            $table->integer('fotos_id')->unsigned();
-            $table->integer('produtos_id')->unsigned();
+            $table->unsignedInteger('fotos_id')->references('id')->on('fotos');
+            $table->unsignedInteger('produtos_id')->references('id')->on('produtos');
             $table->string('status');
             $table->timestamps();
         });

@@ -37,8 +37,39 @@ Route::prefix('/admin')->group(function(){
 	/*Dashboard*/
 	Route::get('/', 'AdminController@index')->name('admin.dashboard');
 	Route::resource('/admins', 'Admin\AdminAdminsController');
-	Route::resource('/categorias-produto', 'Admin\AdminCategoriasProdutoController');
 	Route::resource('/categorias-evento', 'Admin\AdminCategoriasEventoController');
+	Route::resource('/categorias-produto', 'Admin\AdminCategoriasProdutoController');
+	Route::resource('/cidades', 'Admin\AdminCidadesController');
+	Route::resource('/empresas', 'Admin\AdminEmpresasController');
+	Route::resource('/eventos', 'Admin\AdminEventosController');
+});
+/*Franqueado*/
+Route::prefix('/franqueado')->group(function(){
+	/*Login
+	Route::get('/login', 'Auth\FranqueadoLoginController@showLoginForm')->name('admin.login');
+	Route::post('/login', 'Auth\FranqueadoLoginController@login')->name('admin.login.submit');
+	/*Dashboard
+	Route::get('/', 'FranqueadoController@index')->name('admin.dashboard');
+	Route::resource('/admins', 'Admin\AdminAdminsController');
+	Route::resource('/categorias-evento', 'Admin\AdminCategoriasEventoController');
+	Route::resource('/categorias-produto', 'Admin\AdminCategoriasProdutoController');
+	Route::resource('/cidades', 'Admin\AdminCidadesController');
+	Route::resource('/empresas', 'Admin\AdminEmpresasController');
+	*/
+});
+/*Empresa*/
+Route::prefix('/empresa')->group(function(){
+	/*Login
+	Route::get('/login', 'Auth\FranqueadoLoginController@showLoginForm')->name('admin.login');
+	Route::post('/login', 'Auth\FranqueadoLoginController@login')->name('admin.login.submit');
+	/*Dashboard
+	Route::get('/', 'FranqueadoController@index')->name('admin.dashboard');
+	Route::resource('/admins', 'Admin\AdminAdminsController');
+	Route::resource('/categorias-evento', 'Admin\AdminCategoriasEventoController');
+	Route::resource('/categorias-produto', 'Admin\AdminCategoriasProdutoController');
+	Route::resource('/cidades', 'Admin\AdminCidadesController');
+	Route::resource('/empresas', 'Admin\AdminEmpresasController');
+	*/
 });
 /**/
 

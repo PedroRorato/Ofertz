@@ -62,7 +62,7 @@
                     @foreach($admins as $admin)
                         @if($admin->status == 'EXCLUIDO')
                         <tr class="table-danger">
-                            <td>{{ $admin->name . ' ' . $admin->surname }}</td>
+                            <td>{{ $admin->nome . ' ' . $admin->sobrenome }}</td>
                             <td>{{ $admin->email }}</td>
                             <td>
                                 <a href="/admin/admins/{{ $admin->id }}" class="btn btn-primary shadow" data-toggle="tooltip" title="Editar">
@@ -72,7 +72,7 @@
                         </tr>
                         @else
                         <tr>
-                            <td>{{ $admin->name . ' ' . $admin->surname }}</td>
+                            <td>{{ $admin->nome . ' ' . $admin->sobrenome }}</td>
                             <td>{{ $admin->email }}</td>
                             <td>
                                 <a href="/admin/admins/{{ $admin->id }}" class="btn btn-primary shadow" data-toggle="tooltip" title="Editar">
@@ -102,7 +102,7 @@
     </div>
 </div>
 @foreach($admins as $admin)
-    @if($admin->status != 'INATIVO')
+    @if($admin->status != 'EXCLUIDO')
         <!-- Modal DELETE -->
         <div class="modal fade" id="modalDelete{{$admin->id}}" tabindex="-1" role="dialog" aria-hidden="true">
             <div class="modal-dialog" role="document">

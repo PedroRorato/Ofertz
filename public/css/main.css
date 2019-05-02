@@ -42,6 +42,16 @@
     border-radius: .25rem;
     max-width: 300px;
 }
+.foto-dash{
+	max-height: 300px;
+	width: auto;
+}
+.foto-mobile-dash{
+	height: 300px;
+}
+.foto-bg-dash{
+	background-color: #555555;
+}
 .invalid-feedback{
 	display: block;
 }

@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Admin;
 
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use App\Http\Controllers\AuxiliarController;
 use App\CategoriasProduto;
 use Illuminate\Support\Facades\Storage;
 use Auth;
@@ -34,7 +35,7 @@ class AdminCategoriasProdutoController extends Controller
             $categorias = $categorias->whereRaw(" (`nome` like ? or `descricao` like ? ) ",[request('busca')."%","%".request('busca')."%"]);
             $queries['busca'] = request('busca');
         }
-        
+        //Contagem
         $amount = $categorias->get()->count();
         $categorias = $categorias->orderBy('nome', 'asc')->paginate(25)->appends($queries,
             ['amount' => $amount]
@@ -42,6 +43,7 @@ class AdminCategoriasProdutoController extends Controller
         
         return view('dashboard.admin.categorias-produto.index', compact('categorias', 'amount', 'columns', 'queries'));
     }
+
 
     public function create(){
         return view('dashboard.admin.categorias-produto.create');
@@ -53,32 +55,21 @@ class AdminCategoriasProdutoController extends Controller
         ////Validation
         request()->validate([
             'nome' => ['required', 'string', 'min:2', 'max:32'],
-            'descricao' => ['required', 'string', 'max:255'],
+            'descricao' => ['string', 'max:255'],
             'foto' => ['required', 'max:10000'],
         ]);
 
-
-        ////S3
-        //get filename with extension
-        $filenamewithextension = $request->file('foto')->getClientOriginalName();
-        //get filename without extension
-        $filename = pathinfo($filenamewithextension, PATHINFO_FILENAME);
-        //get file extension
-        $extension = $request->file('foto')->getClientOriginalExtension();
-        //filename to store
-        $filenametostore = 'ofertz/categorias-produto/'.md5(time()).'.'.$extension;
-        //Upload File to s3
-        Storage::disk('s3')->put($filenametostore, fopen($request->file('foto'), 'r+'), 'public');
+        //S3
+        $s3 = new AuxiliarController;
+        $filename = $s3->s3($request->file('foto'), 'ofertz/categorias-produto/');
      
-
         ////Create
         CategoriasProduto::create([
             'nome' => request('nome'),
             'descricao' => request('descricao'),
-            'foto' => $filenametostore,
-            'users_id' => Auth::user()->id,
+            'foto' => $filename,
+            'user_id' => Auth::user()->id,
         ]);
-
 
         ////Return
         return redirect('/admin/categorias-produto')->withMessage("Categoria de produto criada com sucesso!");
@@ -98,26 +89,19 @@ class AdminCategoriasProdutoController extends Controller
             //Validation
             request()->validate([
                 'nome' => ['required', 'string', 'min:2', 'max:32'],
-                'descricao' => ['required', 'string', 'max:255'],
+                'descricao' => ['string', 'max:255'],
                 'foto' => ['required', 'max:10000'],
                 'status' => ['required', 'alpha', 'min:3', 'max:20'],
             ]);
-
-            //get filename with extension
-            $filenamewithextension = $request->file('foto')->getClientOriginalName();
-            //get filename without extension
-            $filename = pathinfo($filenamewithextension, PATHINFO_FILENAME);
-            //get file extension
-            $extension = $request->file('foto')->getClientOriginalExtension();
-            //filename to store
-            $filenametostore = 'ofertz/categorias-produto/'.md5(time()).'.'.$extension;
-            //Upload File to s3
-            Storage::disk('s3')->put($filenametostore, fopen($request->file('foto'), 'r+'), 'public');
+            
+            //S3
+            $s3 = new AuxiliarController;
+            $filename = $s3->s3($request->file('foto'), 'ofertz/categorias-produto/');
 
             //Update
             $categoria->nome = request('nome');
             $categoria->descricao = request('descricao');
-            $categoria->foto = $filenametostore;
+            $categoria->foto = $filename;
             $categoria->status = request('status');
             $categoria->save();
 
@@ -127,7 +111,7 @@ class AdminCategoriasProdutoController extends Controller
             //Validation
             request()->validate([
                 'nome' => ['required', 'string', 'min:2', 'max:32'],
-                'descricao' => ['required', 'string', 'max:255'],
+                'descricao' => ['string', 'max:255'],
                 'status' => ['required', 'alpha', 'min:3', 'max:20'],
             ]);
 
@@ -152,7 +136,7 @@ class AdminCategoriasProdutoController extends Controller
         $categoria->save();
 
         //Redirect
-        return redirect('/admin/categorias-produto')->withMessage("Administrador excluído com sucesso!");
+        return redirect('/admin/categorias-produto')->withMessage("Categoria excluída com sucesso!");
         
     }
 }

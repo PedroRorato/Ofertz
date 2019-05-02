@@ -19,7 +19,8 @@ class CreateOfertasTable extends Migration
             $table->dateTime('validade');
             $table->integer('users_id')->unsigned();
             $table->string('status')->default('ATIVO');
-            $table->integer('produto_id')->unsigned();
+            $table->unsignedInteger('produto_id')->references('id')->on('produtos');
+            $table->unsignedInteger('cidade_id')->references('id')->on('cidades');
             $table->timestamps();
         });
     }

@@ -44,6 +44,10 @@ return [
             'driver' => 'session',
             'provider' => 'admins',
         ],
+        'franqueado' => [
+            'driver' => 'session',
+            'provider' => 'franqueados',
+        ],
         'empresa' => [
             'driver' => 'session',
             'provider' => 'empresas',
@@ -91,6 +95,10 @@ return [
             'driver' => 'eloquent',
             'model' => App\Admin::class,
         ],
+        'franqueados' => [
+            'driver' => 'eloquent',
+            'model' => App\Franqueado::class,
+        ],
         'empresas' => [
             'driver' => 'eloquent',
             'model' => App\Empresa::class,
@@ -120,6 +128,11 @@ return [
         ],
         'admins' => [
             'provider' => 'admins',
+            'table' => 'password_resets',
+            'expire' => 60,
+        ],
+        'franqueados' => [
+            'provider' => 'franqueados',
             'table' => 'password_resets',
             'expire' => 60,
         ],

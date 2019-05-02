@@ -14,8 +14,8 @@ class CreateFollowMsgCategoriasProdutosTable extends Migration
     public function up()
     {
         Schema::create('follow_msg_categorias_produtos', function (Blueprint $table) {
-            $table->integer('consumidors_id')->unsigned();
-            $table->integer('categorias_produtos_id')->unsigned();
+            $table->unsignedInteger('user_id')->references('id')->on('users');
+            $table->unsignedInteger('categorias_produtos_id')->references('id')->on('categorias_produtos');
             $table->string('status');
             $table->timestamps();
         });

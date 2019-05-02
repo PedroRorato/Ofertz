@@ -13,20 +13,20 @@
             @csrf
             <div class="row">
                 <div class="form-group col-md-6">
-                    <label for="name">Nome</label>
-                    <input type="text" class="form-control{{ $errors->has('name') ? ' is-invalid' : '' }}" id="name" name="name" placeholder="Digite o nome..." value="{{ old('name') }}" required autofocus>
-                    @if ($errors->has('name'))
+                    <label for="nome">Nome</label>
+                    <input type="text" class="form-control{{ $errors->has('nome') ? ' is-invalid' : '' }}" id="nome" name="nome" placeholder="Digite o nome..." value="{{ old('nome') }}" required autofocus>
+                    @if ($errors->has('nome'))
                         <span class="invalid-feedback" role="alert">
-                            <strong>{{ $errors->first('name') }}</strong>
+                            <strong>{{ $errors->first('nome') }}</strong>
                         </span>
                     @endif
                 </div>
                 <div class="form-group col-md-6">
-                    <label for="surname">Sobrenome</label>
-                    <input type="text" class="form-control{{ $errors->has('surname') ? ' is-invalid' : '' }}" id="surname" name="surname" placeholder="Digite o sobrenome..." value="{{ old('surname') }}" required>
-                    @if ($errors->has('surname'))
+                    <label for="sobrenome">Sobrenome</label>
+                    <input type="text" class="form-control{{ $errors->has('sobrenome') ? ' is-invalid' : '' }}" id="sobrenome" name="sobrenome" placeholder="Digite o sobrenome..." value="{{ old('sobrenome') }}" required>
+                    @if ($errors->has('sobrenome'))
                         <span class="invalid-feedback" role="alert">
-                            <strong>{{ $errors->first('surname') }}</strong>
+                            <strong>{{ $errors->first('sobrenome') }}</strong>
                         </span>
                     @endif
                 </div>

@@ -19,7 +19,7 @@ class CreateCategoriasProdutosTable extends Migration
             $table->string('descricao');
             $table->string('foto');
             $table->string('status')->default('ATIVO');
-            $table->integer('users_id')->unsigned();
+            $table->unsignedInteger('user_id')->references('id')->on('admins');
             $table->timestamps();
         });
     }

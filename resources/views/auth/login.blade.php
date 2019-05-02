@@ -1,38 +1,16 @@
 @extends('layouts.app')
-@section('title') Login @endsection
+@section('title') Cadastrar @endsection
 @section('button') #nav-login @endsection
 @section('content')
 <div class="container">
-    <div class="row ">
-        <form class="py-5 col-lg-6 col-md-8 mx-auto" method="POST" action="{{ route('login') }}">
-            <h2 class="text-center pb-2">Login Usuário</h2>
-            @csrf
-            <div class="form-group">
-                <label for="email">Email</label>
-                <input type="email" class="form-control{{ $errors->has('email') ? ' is-invalid' : '' }}" id="email" aria-describedby="emailHelp" name="email" value="{{ old('email') }}" placeholder="Digite seu email..." required autofocus>
-                @if ($errors->has('email'))
-                    <span class="invalid-feedback" role="alert">
-                        <strong>{{ $errors->first('email') }}</strong>
-                    </span>
-                @endif
-            </div>
-            <div class="form-group">
-                <label for="password">Senha</label>
-                <input type="password" class="form-control" id="password" class="form-control{{ $errors->has('password') ? ' is-invalid' : '' }}" name="password" placeholder="Digite sua senha..." required>
-                @if ($errors->has('password'))
-                    <span class="invalid-feedback" role="alert">
-                        <strong>{{ $errors->first('password') }}</strong>
-                    </span>
-                @endif
-                <a href=""><p class="form-text text-muted">Esqueceu a senha?</p></a>
-            </div>
-            <button type="submit" class="btn btn-danger btn-block">Login</button>
-            <a href="" class="btn btn-facebook btn-block"><i class="fab fa-facebook fa-lg mr-2"></i>Login com Facebook</a>
-            <a href="/cadastro" class="btn btn-dark btn-block">Cadastrar</a>
-            <hr class="mx-5">
-            <a href="/cadastro" class="btn btn-dark btn-block"><i class="fas fa-store d-inline mr-2"></i>Login/Cadastro Empresas</a>
-            <a href="/cadastro" class="btn btn-dark btn-block"><i class="fas fa-handshake d-inline mr-2"></i>Login/Cadastro Franqueados</a>
-        </form> 
+    <br/>
+    <h2 class="text-center pt-5">Qual espaço você deseja acessar?</h2>
+    <div class="row justify-content-center">
+        <div class="py-5 col-lg-6 col-md-8 col-12 text-center">
+            <a href="/usuario/login" class="btn btn-outline-danger btn-lg btn-block mb-4"><i class="fas fa-lg fa-user d-inline mr-2"></i>Usuário</a>
+            <a href="/cadastro-empresa" class="btn btn-outline-danger btn-lg btn-block mb-4"><i class="fas fa-lg fa-store d-inline mr-2"></i>Empresa</a>
+            <a href="/cadastro-franqueado" class="btn btn-outline-danger btn-lg btn-block mb-4"><i class="fas fa-lg fa-handshake d-inline mr-2"></i>Franqueado</a>
+        </div>  
     </div>
 </div>
 @endsection

@@ -18,7 +18,8 @@ class CreateProdutosTable extends Migration
             $table->string('nome');
             $table->string('descricao');
             $table->string('status')->default('ATIVO');
-            $table->integer('users_id')->unsigned();
+            $table->unsignedInteger('empresa_id')->references('id')->on('empresas');
+            $table->unsignedInteger('cidade_id')->references('id')->on('cidades');
             $table->timestamps();
         });
     }

@@ -31,12 +31,12 @@ class AdminAdminsController extends Controller
             }
         }
         if (request()->has('busca') && request('busca') != null) {
-            $admins = $admins->whereRaw(" (`name` like ? or `surname` like ? or `email` like ? ) ",[request('busca')."%",request('busca')."%",request('busca')."%"]);
+            $admins = $admins->whereRaw(" (`nome` like ? or `sobrenome` like ? or `email` like ? ) ",[request('busca')."%",request('busca')."%",request('busca')."%"]);
             $queries['busca'] = request('busca');
         }
         
         $amount = $admins->get()->count();
-        $admins = $admins->orderBy('name', 'asc')->paginate(25)->appends($queries,
+        $admins = $admins->orderBy('nome', 'asc')->paginate(25)->appends($queries,
             ['amount' => $amount]
         );
         
@@ -51,16 +51,16 @@ class AdminAdminsController extends Controller
     public function store(Request $request){
         //Validation
         request()->validate([
-            'name' => ['required', 'min:2', 'max:255'],
-            'surname' => ['required', 'string', 'min:3', 'max:255'],
+            'nome' => ['required', 'min:2', 'max:255'],
+            'sobrenome' => ['required', 'string', 'min:3', 'max:255'],
             'email' => ['required', 'email', 'min:3', 'max:255', 'unique:admins'],
             'password' => ['required', 'string', 'min:5', 'confirmed'],
         ]);
 
         //Create
         Admin::create([
-            'name' => request('name'),
-            'surname' => request('surname'),
+            'nome' => request('nome'),
+            'sobrenome' => request('sobrenome'),
             'email' => request('email'),
             'password' => Hash::make(request('password')),
         ]);
@@ -90,18 +90,18 @@ class AdminAdminsController extends Controller
 
             //Redirect
             return redirect('/admin/admins/'.$id)->withMessage("Senha alterada com sucesso!");
-        }else{
+        } else{
             //Validation
             $attributes = request()->validate([
-                'name' => ['required', 'min:2', 'max:255'],
-                'surname' => ['required', 'string', 'min:3', 'max:255'],
+                'nome' => ['required', 'min:2', 'max:255'],
+                'sobrenome' => ['required', 'string', 'min:3', 'max:255'],
                 'email' => ['required', 'email', 'min:3', 'max:255'],
                 'status' => ['required', 'alpha', 'min:3', 'max:20'],
             ]);
 
             //Update
-            $admin->name = request('name');
-            $admin->surname = request('surname');
+            $admin->nome = request('nome');
+            $admin->sobrenome = request('sobrenome');
             $admin->email = request('email');
             $admin->status = request('status');
             $admin->save();

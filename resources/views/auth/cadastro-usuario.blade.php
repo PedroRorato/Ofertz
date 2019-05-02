@@ -2,9 +2,6 @@
 @section('title') Cadastrar Usuário @endsection
 @section('button') #nav-login @endsection
 @section('content')
-<head>
-	<script src="{{ asset('js/jquery.mask.min.js') }}" defer></script>
-</head>
 <script type="text/javascript">
     $(document).ready(function () {
     	$('#nascimento').mask('00/00/0000', {placeholder: "dd/mm/aaaa"});

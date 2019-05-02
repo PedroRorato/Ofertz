@@ -23,6 +23,7 @@
     <link href="{{ asset('css/main.css') }}" rel="stylesheet">
     
     <!-- Scripts Custom -->
+    <script src="{{ asset('js/jquery.mask.min.js') }}" defer></script>
     <script type="text/javascript">
         $(window).on('load', function() {
             $("@yield('button')").addClass("text-danger");
@@ -78,7 +79,7 @@
                     <a href="/empresas" id="nav-empresas" class="nav-btn col px-2 px-sm-3"><i class="fas fa-store d-inline mr-md-2"></i><strong class="d-none d-md-inline">Empresas</strong></a>
                     <a href="/eventos" id="nav-eventos" class="nav-btn col px-2 px-sm-3"><i class="fas fa-glass-cheers d-inline mr-md-2"></i><strong class="d-none d-md-inline">Eventos</strong></a>
                     @guest
-                        <a href="/login" id="nav-login" class="nav-btn col px-2 px-sm-3"><i class="fas fa-sign-in-alt d-inline mr-md-2"></i><strong class="d-none d-md-inline">Login</strong></a>
+                        <a href="/login" id="nav-login" class="nav-btn col px-2 px-sm-3"><i class="fas fa-sign-in-alt d-inline mr-md-2"></i><strong class="d-none d-md-inline">Login/Cadastro</strong></a>
                     @else
                         <div class="nav-btn col dropdown d-inline px-2 px-sm-3">
                             <button class="nav-btn btn btn-link dropdown-toggle p-0" type="button" id="navbarDropdown1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
