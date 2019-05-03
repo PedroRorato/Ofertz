@@ -5,8 +5,8 @@ namespace App\Http\Controllers\Admin;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Http\Controllers\AuxiliarController;
-use App\Empresa;
 use App\Cidade;
+use App\Empresa;
 use Illuminate\Support\Facades\Storage;
 use Auth;
 use Illuminate\Support\Facades\Hash;
@@ -43,9 +43,11 @@ class AdminEmpresasController extends Controller
         $empresas = $empresas->orderBy('nome', 'asc')->paginate(25)->appends($queries,
             ['amount' => $amount]
         );
+
         //Lista de cidades
         $cidades = Cidade::where('status', '=', 'ATIVO')->get();
-        
+
+        //Return
         return view('dashboard.admin.empresas.index', compact('empresas', 'amount', 'columns', 'queries', 'cidades'));
     }
 
@@ -53,6 +55,7 @@ class AdminEmpresasController extends Controller
     public function create(){
         //Lista de cidades
         $cidades = Cidade::where('status', '=', 'ATIVO')->get();
+        //Return
         return view('dashboard.admin.empresas.create', compact('cidades'));
     }
 
@@ -79,8 +82,7 @@ class AdminEmpresasController extends Controller
         $s3 = new AuxiliarController;
         $filename = $s3->s3($request->file('foto'), 'ofertz/e/');
 
-
-        ////Create
+        //Create
         Empresa::create([
             'foto' => $filename,
             'empresa' => request('empresa'),
@@ -97,7 +99,7 @@ class AdminEmpresasController extends Controller
             'status' => 'ATIVO',
         ]);
 
-        ////Return
+        //Return
         return redirect('/admin/empresas')->withMessage("Empresa criada com sucesso!");
     }
 

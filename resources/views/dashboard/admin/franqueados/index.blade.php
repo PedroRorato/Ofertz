@@ -1,8 +1,8 @@
 @extends('dashboard.layout')
-@section('title') Administradores @endsection
-@section('menu') #administradores-menu @endsection
+@section('title') Franqueados @endsection
+@section('menu') #franqueados-menu @endsection
 @section('breadcrumbs') 
-<li class="breadcrumb-item"><a href="/admin/admins">Listagem</a></li>
+<li class="breadcrumb-item"><a href="/admin/franqueados">Listagem</a></li>
 @endsection
 @section('content')
 <script type="text/javascript">
@@ -15,13 +15,13 @@
         
     });
 </script>
-<a href="/admin/admins/create" class="btn btn-primary shadow mb-3"><i class="fas fa-plus mr-2"></i>Adicionar</a>
+<a href="/admin/franqueados/create" class="btn btn-primary shadow mb-3"><i class="fas fa-plus mr-2"></i>Adicionar</a>
 <div class="card shadow">
     <div class="card-body">
         <h4><i class="fas fa-filter mr-2"></i>Filtros</h4>        
-        <form method="GET" action="/admin/admins">
+        <form method="GET" action="/admin/franqueados">
             <div class="row">
-                <div class="form-group col-lg-9">
+                <div class="form-group col-lg-6">
                     <label for="busca">Digite um nome, sobrenome ou email</label>
                     <input type="text" class="form-control" id="busca" name="busca" placeholder="Buscar..." value="{{ isset($queries['busca']) ? $queries['busca'] : '' }}">
                 </div>
@@ -33,9 +33,18 @@
                         <option value="EXCLUIDO">EXCLUIDO</option>
                     </select>
                 </div>
+                <div class="form-group col-lg-3">
+                    <label for="cidade_id">Cidade</label>
+                    <select class="custom-select" id="cidade_id" name="cidade_id" required>
+                        <option value="%">TODOS</option>
+                        @foreach($cidades as $cidade)
+                            <option value="{{ $cidade->id }}">{{ $cidade->nome.'-'.$cidade->uf }}</option>
+                        @endforeach
+                    </select>
+                </div>
             </div>
             <button type="submit" class="btn btn-primary shadow mr-3"><i class="fas fa-filter mr-2"></i>Filtrar</button>
-            <a href="/admin/admins" class="btn btn-secondary shadow mr-3"><i class="fas fa-sync-alt mr-2"></i>Limpar filtros</a>
+            <a href="/admin/franqueados" class="btn btn-secondary shadow mr-3"><i class="fas fa-sync-alt mr-2"></i>Limpar filtros</a>
         </form>
         <hr>
         @if($amount != 0)
@@ -55,30 +64,33 @@
                     <tr>
                       <th scope="col">Nome</th>
                       <th scope="col">Email</th>
+                      <th scope="col">Cidade</th>
                       <th scope="col" class="table-actions">Ações</th>
                     </tr>
                 </thead>
                 <tbody>
-                    @foreach($admins as $admin)
-                        @if($admin->status == 'EXCLUIDO')
+                    @foreach($franqueados as $franqueado)
+                        @if($franqueado->status == 'EXCLUIDO')
                         <tr class="table-danger">
-                            <td>{{ $admin->nome . ' ' . $admin->sobrenome }}</td>
-                            <td>{{ $admin->email }}</td>
+                            <td>{{ $franqueado->nome . ' ' . $franqueado->sobrenome }}</td>
+                            <td>{{ $franqueado->email }}</td>
+                            <td>{{ $franqueado->cidade->nome.'-'.$franqueado->cidade->uf }}</td>
                             <td>
-                                <a href="/admin/admins/{{ $admin->id }}" class="btn btn-primary shadow" data-toggle="tooltip" title="Editar">
+                                <a href="/admin/franqueados/{{ $admin->id }}" class="btn btn-primary shadow" data-toggle="tooltip" title="Editar">
                                     <i class="fas fa-edit"></i>
                                 </a>
                             </td>
                         </tr>
                         @else
                         <tr>
-                            <td>{{ $admin->nome . ' ' . $admin->sobrenome }}</td>
-                            <td>{{ $admin->email }}</td>
+                            <td>{{ $franqueado->nome . ' ' . $franqueado->sobrenome }}</td>
+                            <td>{{ $franqueado->email }}</td>
+                            <td>{{ $franqueado->cidade->nome.'-'.$franqueado->cidade->uf }}</td>
                             <td>
-                                <a href="/admin/admins/{{ $admin->id }}" class="btn btn-primary shadow" data-toggle="tooltip" title="Editar">
+                                <a href="/admin/franqueados/{{ $franqueado->id }}" class="btn btn-primary shadow" data-toggle="tooltip" title="Editar">
                                     <i class="fas fa-edit"></i>
                                 </a>
-                                <button type="button" class="btn btn-danger shadow" data-toggle="modal" title="Excluir" data-target="#modalDelete{{ $admin->id }}"> 
+                                <button type="button" class="btn btn-danger shadow" data-toggle="modal" title="Excluir" data-target="#modalDelete{{ $franqueado->id }}"> 
                                     <i class="fas fa-trash-alt"></i>
                                 </button>
                             </td>
@@ -97,14 +109,14 @@
         <!-- END TABLE -->
         <br/>
         <!-- PAGINATION -->
-        {{ $admins->links() }}
+        {{ $franqueados->links() }}
         <!-- END PAGINATION -->
     </div>
 </div>
-@foreach($admins as $admin)
-    @if($admin->status != 'EXCLUIDO')
+@foreach($franqueados as $franqueado)
+    @if($franqueado->status != 'EXCLUIDO')
         <!-- Modal DELETE -->
-        <div class="modal fade" id="modalDelete{{$admin->id}}" tabindex="-1" role="dialog" aria-hidden="true">
+        <div class="modal fade" id="modalDelete{{$franqueado->id}}" tabindex="-1" role="dialog" aria-hidden="true">
             <div class="modal-dialog" role="document">
                 <div class="modal-content">
                     <div class="modal-header">
@@ -113,7 +125,7 @@
                             <span aria-hidden="true">&times;</span>
                         </button>
                     </div>
-                    <form method="POST" action="/admin/admins/{{ $admin->id }}">
+                    <form method="POST" action="/admin/franqueados/{{ $franqueado->id }}">
                         @csrf
                         @method('DELETE')
                         <div class="modal-body">

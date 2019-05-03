@@ -155,7 +155,7 @@
     <div class="modal-dialog" role="document">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title">Excluir Administrador</h5>
+                <h5 class="modal-title">Excluir Cidade</h5>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                 </button>
@@ -164,7 +164,7 @@
                 @csrf
                 @method('DELETE')
                 <div class="modal-body">
-                    <h5>Tem certeza que deseja excluir o Administrador?</h5>
+                    <h5>Tem certeza que deseja excluir a Cidade?</h5>
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-dismiss="modal">Fechar</button>

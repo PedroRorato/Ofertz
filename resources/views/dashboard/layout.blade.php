@@ -107,7 +107,7 @@
         <a href="/admin/usuarios" id="usuarios-menu" class="btn btn-block btn-menu"><i class="fas fa-users mr-2"></i>Usuários</a>
         <!-- END MENU -->
         <!-- COPYRIGHT -->
-        <div class="text-center text-white pt-4">Copyright Bergard © 2019</div>
+        <div class="text-center text-gray pt-4">Copyright Bergard © {{ now()->year }}</div>
         <!-- END COPYRIGHT -->               
         </div>
     </div>

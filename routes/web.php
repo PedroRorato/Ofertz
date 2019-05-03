@@ -42,6 +42,11 @@ Route::prefix('/admin')->group(function(){
 	Route::resource('/cidades', 'Admin\AdminCidadesController');
 	Route::resource('/empresas', 'Admin\AdminEmpresasController');
 	Route::resource('/eventos', 'Admin\AdminEventosController');
+	Route::resource('/fotos', 'Admin\AdminFotosController');
+	Route::resource('/franqueados', 'Admin\AdminFranqueadosController');
+	Route::resource('/ofertas', 'Admin\AdminOfertasController');
+	Route::resource('/produtos', 'Admin\AdminProdutosController');
+	Route::resource('/usuarios', 'Admin\AdminUsuariosController');
 });
 /*Franqueado*/
 Route::prefix('/franqueado')->group(function(){

@@ -65,6 +65,9 @@
 .text-danger{
 	color: #9e1916 !important;
 }
+.text-gray{
+	color: #c6ccd2;
+}
 /*END GERAL*/
 /**/
 /*LOGIN / CADASTRO*/
@@ -157,6 +160,9 @@
 .table-actions{
 	width: 110px!important;
 	min-width: 110px!important;
+}
+.table-img{
+	width: 70px!important;
 }
 .table-responsive{
 	border: 1px solid lightgrey;

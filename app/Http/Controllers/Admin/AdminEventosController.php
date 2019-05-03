@@ -12,7 +12,7 @@ use Illuminate\Support\Facades\Storage;
 use Auth;
 use Illuminate\Support\Facades\Hash;
 
-class AdmineventosController extends Controller
+class AdminEventosController extends Controller
 {
 
     public function __construct(){
@@ -35,7 +35,7 @@ class AdmineventosController extends Controller
             }
         }
         if (request()->has('busca') && request('busca') != null) {
-            $eventos = $eventos->whereRaw(" (`nome` like ? or `sobrenome` like ? or `email` like ? or `Evento` like ? ) ",[request('busca')."%", "%".request('busca')."%", request('busca')."%", "%".request('busca')."%"]);
+            $eventos = $eventos->whereRaw(" (`nome` like ? ) ", "%".request('busca')."%");
             $queries['busca'] = request('busca');
         }
         //Contagem

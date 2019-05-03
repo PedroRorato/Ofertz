@@ -17,7 +17,7 @@ class CreateFranqueadosTable extends Migration
             $table->bigIncrements('id');
             $table->string('nome');
             $table->string('sobrenome');
-            $table->string('status');
+            $table->string('status')->default('ATIVO');
             $table->string('telefone');
             $table->string('email')->unique();
             $table->timestamp('email_verified_at')->nullable();

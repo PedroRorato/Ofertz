@@ -15,4 +15,8 @@ class Cidade extends Model
     public function empresas(){
     	return $this->hasMany(Empresa::class);
     }
+
+    public function franqueados(){
+    	return $this->hasMany(Franqueado::class);
+    }
 }

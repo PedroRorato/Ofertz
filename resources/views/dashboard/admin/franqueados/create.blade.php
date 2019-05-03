@@ -1,15 +1,23 @@
 @extends('dashboard.layout')
-@section('title') Administradores @endsection
+@section('title') Franqueados @endsection
 @section('menu') #administradores-menu @endsection
 @section('breadcrumbs') 
-<li class="breadcrumb-item"><a href="/admin/admins">Listagem</a></li>
-<li class="breadcrumb-item"><a href="/admin/admins/create">Adicionar</a></li>
+<li class="breadcrumb-item"><a href="/admin/franqueados">Listagem</a></li>
+<li class="breadcrumb-item"><a href="/admin/franqueados/create">Adicionar</a></li>
 @endsection
 @section('content')
-<a href="/admin/admins" class="btn btn-secondary shadow mb-3"><i class="fas fa-arrow-left mr-2"></i>Voltar</a>
+<script type="text/javascript">
+    $(document).ready(function () {
+        $('#cpf').mask('000.000.000-00', {placeholder: "000.000.000-00"});
+        $('#telefone').mask('(00)00000-0000', {placeholder: "(00)00000-0000"});
+        //Select erro cadastro
+        $("#cidade option[value={!! old('cidade') ? old('cidade') : '1' !!}]").attr('selected', 'selected');
+    });
+</script>
+<a href="/admin/franqueados" class="btn btn-secondary shadow mb-3"><i class="fas fa-arrow-left mr-2"></i>Voltar</a>
 <div class="card shadow">
     <div class="card-body">
-        <form method="POST" action="/admin/admins">
+        <form method="POST" action="/admin/franqueados">
             @csrf
             <div class="row">
                 <div class="form-group col-md-6">
@@ -36,6 +44,37 @@
                     @if ($errors->has('email'))
                         <span class="invalid-feedback" role="alert">
                             <strong>{{ $errors->first('email') }}</strong>
+                        </span>
+                    @endif
+                </div>
+                <div class="form-group col-md-4">
+                    <label for="cpf">CPF</label>
+                    <input type="text" class="form-control{{ $errors->has('cpf') ? ' is-invalid' : '' }}" id="cpf" name="cpf" value="{{ old('cpf') }}" required>
+                    @if ($errors->has('cpf'))
+                        <span class="invalid-feedback" role="alert">
+                            <strong>{{ $errors->first('cpf') }}</strong>
+                        </span>
+                    @endif
+                </div>
+                <div class="form-group col-md-4">
+                    <label for="telefone">Telefone</label>
+                    <input type="text" class="form-control{{ $errors->has('telefone') ? ' is-invalid' : '' }}" id="telefone" name="telefone" value="{{ old('telefone') }}" required>
+                    @if ($errors->has('telefone'))
+                        <span class="invalid-feedback" role="alert">
+                            <strong>{{ $errors->first('telefone') }}</strong>
+                        </span>
+                    @endif
+                </div>
+                <div class="form-group col-md-4">
+                    <label for="cidade">Cidade</label>
+                    <select class="custom-select{{ $errors->has('cidade') ? ' is-invalid' : '' }}" id="cidade" name="cidade" required>
+                        @foreach($cidades as $cidade)
+                            <option value="{{ $cidade->id }}">{{ $cidade->nome.'-'.$cidade->uf }}</option>
+                        @endforeach
+                    </select>
+                    @if ($errors->has('cidade'))
+                        <span class="invalid-feedback" role="alert">
+                            <strong>{{ $errors->first('cidade') }}</strong>
                         </span>
                     @endif
                 </div>

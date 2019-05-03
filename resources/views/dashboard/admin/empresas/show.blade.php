@@ -259,7 +259,7 @@
                 @csrf
                 @method('DELETE')
                 <div class="modal-body">
-                    <h5>Tem certeza que deseja excluir o Empresa?</h5>
+                    <h5>Tem certeza que deseja excluir a Empresa?</h5>
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-dismiss="modal">Fechar</button>
