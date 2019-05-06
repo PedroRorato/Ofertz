@@ -140,6 +140,9 @@
 .dash-body{
 	background-color: #e3e6e8;
 }
+.dash-spinner{
+	display: none;
+}
 .fa-chevron-down{
 	float: right;
 }

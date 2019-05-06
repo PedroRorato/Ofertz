@@ -9,7 +9,7 @@
 <a href="/admin/categorias-evento" class="btn btn-secondary shadow mb-3"><i class="fas fa-arrow-left mr-2"></i>Voltar</a>
 <div class="card shadow">
     <div class="card-body">
-        <form method="POST" action="/admin/categorias-evento" enctype="multipart/form-data">
+        <form method="POST" action="/admin/categorias-evento" enctype="multipart/form-data" onsubmit="spinner()">
             @csrf
             <small class="form-text text-muted">*Campos não obrigatórios</small>
             <br/>
@@ -52,7 +52,12 @@
                 </div>
             </div>
             <hr>
-            <button type="submit" class="btn btn-primary shadow"><i class="fas fa-plus mr-2"></i>Adicionar</button>
+            <div class="dash-botoes">
+                <button type="submit" class="btn btn-primary shadow"><i class="fas fa-plus mr-2"></i>Adicionar</button>
+            </div>
+            <div class="dash-spinner">
+                <i class="fas fa-sync-alt fa-spin mr-2"></i>Aguarde...
+            </div>
         </form>
     </div>
 </div>

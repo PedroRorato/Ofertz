@@ -19,4 +19,5 @@ class Cidade extends Model
     public function franqueados(){
     	return $this->hasMany(Franqueado::class);
     }
+
 }

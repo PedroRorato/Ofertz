@@ -76,7 +76,7 @@
                             <td>{{ $franqueado->email }}</td>
                             <td>{{ $franqueado->cidade->nome.'-'.$franqueado->cidade->uf }}</td>
                             <td>
-                                <a href="/admin/franqueados/{{ $admin->id }}" class="btn btn-primary shadow" data-toggle="tooltip" title="Editar">
+                                <a href="/admin/franqueados/{{ $franqueado->id }}" class="btn btn-primary shadow" data-toggle="tooltip" title="Editar">
                                     <i class="fas fa-edit"></i>
                                 </a>
                             </td>
@@ -116,11 +116,11 @@
 @foreach($franqueados as $franqueado)
     @if($franqueado->status != 'EXCLUIDO')
         <!-- Modal DELETE -->
-        <div class="modal fade" id="modalDelete{{$franqueado->id}}" tabindex="-1" role="dialog" aria-hidden="true">
+        <div class="modal fade" id="modalDelete{{ $franqueado->id }}" tabindex="-1" role="dialog" aria-hidden="true">
             <div class="modal-dialog" role="document">
                 <div class="modal-content">
                     <div class="modal-header">
-                        <h5 class="modal-title">Excluir Administrador</h5>
+                        <h5 class="modal-title">Excluir Franqueado</h5>
                         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                             <span aria-hidden="true">&times;</span>
                         </button>
@@ -129,7 +129,7 @@
                         @csrf
                         @method('DELETE')
                         <div class="modal-body">
-                            <h5>Tem certeza que deseja excluir o Administrador?</h5>
+                            <h5>Tem certeza que deseja excluir o Franqueado?</h5>
                         </div>
                         <div class="modal-footer">
                             <button type="button" class="btn btn-secondary" data-dismiss="modal">Fechar</button>

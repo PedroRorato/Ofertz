@@ -9,7 +9,7 @@
 <a href="/admin/admins" class="btn btn-secondary shadow mb-3"><i class="fas fa-arrow-left mr-2"></i>Voltar</a>
 <div class="card shadow">
     <div class="card-body">
-        <form method="POST" action="/admin/admins">
+        <form method="POST" action="/admin/admins" onsubmit="spinner()">
             @csrf
             <div class="row">
                 <div class="form-group col-md-6">
@@ -54,7 +54,12 @@
                 </div>
             </div>
             <hr>
-            <button type="submit" class="btn btn-primary shadow"><i class="fas fa-plus mr-2"></i>Adicionar</button>
+            <div class="dash-botoes">
+                <button type="submit" class="btn btn-primary shadow"><i class="fas fa-plus mr-2"></i>Adicionar</button>
+            </div>
+            <div class="dash-spinner">
+                <i class="fas fa-sync-alt fa-spin mr-2"></i>Aguarde...
+            </div>
         </form>
     </div>
 </div>

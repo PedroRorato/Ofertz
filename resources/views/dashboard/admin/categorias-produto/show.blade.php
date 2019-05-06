@@ -17,7 +17,7 @@
 <a href="/admin/categorias-produto" class="btn btn-secondary shadow mb-3"><i class="fas fa-arrow-left mr-2"></i>Voltar</a>
 <div class="card shadow">
     <div class="card-body">
-        <form method="POST" action="/admin/categorias-produto/{{ $categoria->id }}" enctype="multipart/form-data">
+        <form method="POST" action="/admin/categorias-produto/{{ $categoria->id }}" enctype="multipart/form-data" onsubmit="spinner()">
             @csrf
             @method('PATCH')
             <small class="form-text text-muted">*Campos não obrigatórios</small>
@@ -68,12 +68,17 @@
                 </div>
             </div>
             <hr>
-            <button type="submit" class="btn btn-primary shadow mr-3 mt-3 mt-sm-0"><i class="fas fa-save mr-2"></i>Salvar</button>
-            @if($categoria->status != 'EXCLUIDO')
-            <button type="button" class="btn btn-danger shadow mt-3 mt-sm-0" data-toggle="modal" data-target="#modalDelete">
-                <i class="fas fa-trash-alt mr-2"></i>Excluir
-            </button>
-            @endif
+            <div class="dash-botoes">
+                <button type="submit" class="btn btn-primary shadow mr-3 mt-3 mt-sm-0"><i class="fas fa-save mr-2"></i>Salvar</button>
+                @if($categoria->status != 'EXCLUIDO')
+                <button type="button" class="btn btn-danger shadow mt-3 mt-sm-0" data-toggle="modal" data-target="#modalDelete">
+                    <i class="fas fa-trash-alt mr-2"></i>Excluir
+                </button>
+                @endif
+            </div>
+            <div class="dash-spinner">
+                <i class="fas fa-sync-alt fa-spin mr-2"></i>Aguarde...
+            </div>
         </form>
     </div>
 </div>

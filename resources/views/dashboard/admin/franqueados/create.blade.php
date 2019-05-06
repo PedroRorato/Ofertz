@@ -1,6 +1,6 @@
 @extends('dashboard.layout')
 @section('title') Franqueados @endsection
-@section('menu') #administradores-menu @endsection
+@section('menu') #franqueados-menu @endsection
 @section('breadcrumbs') 
 <li class="breadcrumb-item"><a href="/admin/franqueados">Listagem</a></li>
 <li class="breadcrumb-item"><a href="/admin/franqueados/create">Adicionar</a></li>

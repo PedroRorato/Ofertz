@@ -23,7 +23,7 @@ class AdminFranqueadosController extends Controller
         $franqueados = new Franqueado;
         $queries = [];
         $columns = [
-            'status',
+            'status', 'cidade_id'
         ];
         foreach ($columns as $column) {
             if (request()->has($column)) {
@@ -88,7 +88,7 @@ class AdminFranqueadosController extends Controller
         $franqueado = Franqueado::findOrFail($id);
         //Lista de cidades
         $cidades = Cidade::where('status', '=', 'ATIVO')->get();
-        return view('dashboard.admin.franqueados.show', compact('franqueado'));
+        return view('dashboard.admin.franqueados.show', compact('franqueado', 'cidades'));
     }
 
 
@@ -97,7 +97,7 @@ class AdminFranqueadosController extends Controller
         $franqueado = Franqueado::findOrFail($id);
         if (null !== request('password')) {
            //Validation
-            $attributes = request()->validate([
+            request()->validate([
                 'password' => ['required', 'string', 'min:5', 'confirmed'],
             ]);
 
@@ -109,17 +109,22 @@ class AdminFranqueadosController extends Controller
             return redirect('/admin/franqueados/'.$id)->withMessage("Senha alterada com sucesso!");
         } else{
             //Validation
-            $attributes = request()->validate([
-                'nome' => ['required', 'min:2', 'max:255'],
+            request()->validate([
+                'nome' => ['required', 'string', 'min:2', 'max:255'],
                 'sobrenome' => ['required', 'string', 'min:3', 'max:255'],
                 'email' => ['required', 'email', 'min:3', 'max:255'],
-                'status' => ['required', 'alpha', 'min:3', 'max:20'],
+                'cpf' => ['required', 'string', 'size:14'],
+                'telefone' => ['required', 'string', 'size:14'],
+                'cidade' => ['required', 'integer', 'max:255'],
             ]);
 
             //Update
             $franqueado->nome = request('nome');
             $franqueado->sobrenome = request('sobrenome');
             $franqueado->email = request('email');
+            $franqueado->cpf = request('cpf');
+            $franqueado->telefone = request('telefone');
+            $franqueado->cidade_id = request('cidade');
             $franqueado->status = request('status');
             $franqueado->save();
 

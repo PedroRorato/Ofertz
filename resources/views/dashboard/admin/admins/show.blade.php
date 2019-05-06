@@ -17,7 +17,7 @@
 <a href="/admin/admins" class="btn btn-secondary shadow mb-3"><i class="fas fa-arrow-left mr-2"></i>Voltar</a>
 <div class="card shadow">
     <div class="card-body">
-        <form method="POST" action="/admin/admins/{{ $admin->id }}">
+        <form method="POST" action="/admin/admins/{{ $admin->id }}" onsubmit="spinner()">
             @csrf
             @method('PATCH')
             <div class="row">
@@ -57,15 +57,20 @@
                 </div>
             </div>
             <hr>
-            <button type="submit" class="btn btn-primary shadow mr-3 mt-3 mt-sm-0"><i class="fas fa-save mr-2"></i>Salvar</button>
-            <button type="button" class="btn btn-warning shadow mr-3 mt-3 mt-sm-0" data-toggle="modal" data-target="#modalSenha">
-                <i class="fas fa-key mr-2"></i>Alterar senha
-            </button>
-            @if($admin->status != 'EXCLUIDO')
-            <button type="button" class="btn btn-danger shadow mt-3 mt-sm-0" data-toggle="modal" data-target="#modalDelete">
-                <i class="fas fa-trash-alt mr-2"></i>Excluir
-            </button>
-            @endif
+            <div class="dash-botoes">
+                <button type="submit" class="btn btn-primary shadow mr-3 mt-3 mt-sm-0"><i class="fas fa-save mr-2"></i>Salvar</button>
+                <button type="button" class="btn btn-warning shadow mr-3 mt-3 mt-sm-0" data-toggle="modal" data-target="#modalSenha">
+                    <i class="fas fa-key mr-2"></i>Alterar senha
+                </button>
+                @if($admin->status != 'EXCLUIDO')
+                    <button type="button" class="btn btn-danger shadow mt-3 mt-sm-0" data-toggle="modal" data-target="#modalDelete">
+                        <i class="fas fa-trash-alt mr-2"></i>Excluir
+                    </button>
+                @endif
+            </div>
+            <div class="dash-spinner">
+                <i class="fas fa-sync-alt fa-spin mr-2"></i>Aguarde...
+            </div>
         </form>
     </div>
 </div>
