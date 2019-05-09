@@ -5,15 +5,15 @@ namespace App\Http\Controllers\Admin;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Http\Controllers\AuxiliarController;
-use App\Evento;
-use App\CategoriasEvento;
+use App\Produto;
+use App\CategoriasProduto;
 use App\Cidade;
 use App\Empresa;
 use Illuminate\Support\Facades\Storage;
 use Auth;
 use Illuminate\Support\Facades\Hash;
 
-class AdminEventosController extends Controller
+class AdminProdutosController extends Controller
 {
 
     public function __construct(){
@@ -24,51 +24,43 @@ class AdminEventosController extends Controller
     public function index(Request $request){
 
         //Filters
-        $eventos = new Evento;
+        $produtos = new Produto;
         $queries = [];
         $columns = [
             'status', 'cidade_id',
         ];
         foreach ($columns as $column) {
             if (request()->has($column)) {
-                $eventos = $eventos->where($column, 'like', request($column));
+                $produtos = $produtos->where($column, 'like', request($column));
                 $queries[$column] = request($column);
             }
         }
         if (request()->has('busca') && request('busca') != null) {
-            $eventos = $eventos->whereRaw(" (`nome` like ? ) ", "%".request('busca')."%");
+            $produtos = $produtos->whereRaw(" (`nome` like ? ) ", "%".request('busca')."%");
             $queries['busca'] = request('busca');
         }
         //Contagem
-        $amount = $eventos->get()->count();
-        $eventos = $eventos->with('cidade', 'empresa');
-        $eventos = $eventos->orderBy('nome', 'asc')->paginate(25)->appends($queries,
+        $amount = $produtos->get()->count();
+        $produtos = $produtos->with('cidade', 'empresa');
+        $produtos = $produtos->orderBy('nome', 'asc')->paginate(25)->appends($queries,
             ['amount' => $amount]
         );
         //Lista de cidades
         $cidades = Cidade::where('status', '=', 'ATIVO')->get();
         
-        return view('dashboard.admin.eventos.index', compact('eventos', 'amount', 'columns', 'queries', 'cidades'));
+        return view('dashboard.admin.produtos.index', compact('produtos', 'amount', 'columns', 'queries', 'cidades'));
     }
 
 
     public function create(){
         //Lista de cidades
         $cidades = Cidade::where('status', '=', 'ATIVO')->orderBy('nome', 'asc')->get();
-        $categorias = CategoriasEvento::where('status', '=', 'ATIVO')->orderBy('nome', 'asc')->get();
-        return view('dashboard.admin.eventos.create', compact('cidades', 'categorias'));
+        $categorias = CategoriasProduto::where('status', '=', 'ATIVO')->orderBy('nome', 'asc')->get();
+        return view('dashboard.admin.produtos.create', compact('cidades', 'categorias'));
     }
 
 
     public function store(Request $request){
-
-        //Validação da data
-        $partes = explode("/", request('data'));
-        $data = $partes[2] . '-' . $partes[1] . '-' . $partes[0] . 'T' . request('time');
-        $date = strtotime($data);
-        if (time() > $date) {
-            return redirect()->back()->withInput()->with('data', 'Só são permitidas datas futuras');
-        }
 
         //Validation
         request()->validate([
@@ -81,13 +73,12 @@ class AdminEventosController extends Controller
 
         //S3
         $s3 = new AuxiliarController;
-        $filename = $s3->s3($request->file('foto'), 'ofertz/eventos/');
+        $filename = $s3->s3($request->file('foto'), 'ofertz/produtos/');
 
         //Create
-        $dados = Evento::create([
+        $dados = Produto::create([
             'foto' => $filename,
             'nome' => request('nome'),
-            'validade' => $data,
             'empresa_id' => '0',
             'cidade_id' => request('cidade'),
             'descricao' => request('descricao'),
@@ -99,19 +90,14 @@ class AdminEventosController extends Controller
         }
 
         ////Return
-        return redirect('/admin/eventos')->withMessage("Evento criado com sucesso!");
+        return redirect('/admin/produtos')->withMessage("Produto criado com sucesso!");
     }
 
 
     public function show($id){
-        $evento = Evento::findOrFail($id);
-        //Tratar data
-        $partesDT = explode(" ", $evento->validade);
-        $partesData = explode("-", $partesDT[0]);
-        $tempo = $partesDT[1];
-        $data = $partesData[2].'/'.$partesData[1].'/'.$partesData[0];
+        $produto = Produto::findOrFail($id);
         //Categorias à qual pertence
-        $pertences = $evento->categorias;
+        $pertences = $produto->categorias;
         $array_pertence[] = 0;
         foreach ($pertences as $pertence) {
             $array_pertence[] = $pertence->id;
@@ -119,22 +105,14 @@ class AdminEventosController extends Controller
         $pertences = $array_pertence;
         //Lista de cidades e categorias
         $cidades = Cidade::where('status', '=', 'ATIVO')->get();
-        $categorias = CategoriasEvento::where('status', '=', 'ATIVO')->orderBy('nome', 'asc')->get();
-        return view('dashboard.admin.eventos.show', compact('evento', 'cidades', 'data', 'tempo', 'pertences', 'categorias'));
+        $categorias = CategoriasProduto::where('status', '=', 'ATIVO')->orderBy('nome', 'asc')->get();
+        return view('dashboard.admin.produtos.show', compact('produto', 'cidades', 'pertences', 'categorias'));
     }
 
 
     public function update(Request $request, $id){
         
-        $evento = Evento::findOrFail($id);
-
-        //Tratamento da data
-        $partes = explode("/", request('data'));
-        $data = $partes[2] . '-' . $partes[1] . '-' . $partes[0] . 'T' . request('time');
-        $date = strtotime($data);
-        if (time() > $date) {
-            return redirect()->back()->withInput()->with('data', 'Só são permitidas datas futuras');
-        }
+        $produto = Produto::findOrFail($id);
 
         //Validation
         request()->validate([
@@ -150,51 +128,49 @@ class AdminEventosController extends Controller
             
             //S3
             $s3 = new AuxiliarController;
-            $filename = $s3->s3($request->file('foto'), 'ofertz/eventos/');
+            $filename = $s3->s3($request->file('foto'), 'ofertz/produtos/');
 
             //Update
-            $evento->foto = $filename;
-            $evento->nome = request('nome');
-            $evento->validade = $data;
-            $evento->cidade_id = request('cidade');
-            $evento->descricao = request('descricao');
-            $evento->status = request('status');
-            $evento->save();
+            $produto->foto = $filename;
+            $produto->nome = request('nome');
+            $produto->cidade_id = request('cidade');
+            $produto->descricao = request('descricao');
+            $produto->status = request('status');
+            $produto->save();
 
         }else{
 
             //Update
-            $evento->nome = request('nome');
-            $evento->validade = $data;
-            $evento->cidade_id = request('cidade');
-            $evento->descricao = request('descricao');
-            $evento->status = request('status');
-            $evento->save();
+            $produto->nome = request('nome');
+            $produto->cidade_id = request('cidade');
+            $produto->descricao = request('descricao');
+            $produto->status = request('status');
+            $produto->save();
 
         }
 
         //Remover Categorias
-        $evento->categorias()->detach();
+        $produto->categorias()->detach();
         //Adicionar Categorias
         foreach(request('categorias') as $categoria) {
-            $evento->categorias()->attach($categoria);
+            $produto->categorias()->attach($categoria);
         }
 
         //Redirect
-        return redirect('/admin/eventos/'.$id)->withMessage("Edição realizada com sucesso!");
+        return redirect('/admin/produtos/'.$id)->withMessage("Edição realizada com sucesso!");
     }
 
 
     public function destroy($id){
 
-        $evento = Evento::findOrFail($id);
+        $produto = Produto::findOrFail($id);
         
         //Update
-        $evento->status = "EXCLUIDO";
-        $evento->save();
+        $produto->status = "EXCLUIDO";
+        $produto->save();
 
         //Redirect
-        return redirect('/admin/eventos')->withMessage("Evento excluído com sucesso!");
+        return redirect('/admin/produtos')->withMessage("Produto excluído com sucesso!");
         
     }
 }

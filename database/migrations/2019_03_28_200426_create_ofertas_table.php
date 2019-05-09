@@ -15,10 +15,11 @@ class CreateOfertasTable extends Migration
     {
         Schema::create('ofertas', function (Blueprint $table) {
             $table->bigIncrements('id');
-            $table->decimal('preco', 8, 2);
+            $table->decimal('preco', 10, 2);
             $table->dateTime('validade');
-            $table->integer('users_id')->unsigned();
+            $table->string('observacao');
             $table->string('status')->default('ATIVO');
+            $table->unsignedInteger('empresa_id')->references('id')->on('empresas');
             $table->unsignedInteger('produto_id')->references('id')->on('produtos');
             $table->unsignedInteger('cidade_id')->references('id')->on('cidades');
             $table->timestamps();

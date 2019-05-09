@@ -16,8 +16,16 @@ class Cidade extends Model
     	return $this->hasMany(Empresa::class);
     }
 
+    public function eventos(){
+        return $this->hasMany(Evento::class);
+    }
+
     public function franqueados(){
     	return $this->hasMany(Franqueado::class);
+    }
+
+    public function produtos(){
+        return $this->hasMany(Produto::class);
     }
 
 }

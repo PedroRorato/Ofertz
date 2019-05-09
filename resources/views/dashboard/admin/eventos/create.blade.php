@@ -16,7 +16,7 @@
 <a href="/admin/eventos" class="btn btn-secondary shadow mb-3"><i class="fas fa-arrow-left mr-2"></i>Voltar</a>
 <div class="card shadow">
     <div class="card-body">
-        <form method="POST" action="/admin/eventos" enctype="multipart/form-data">
+        <form method="POST" action="/admin/eventos" enctype="multipart/form-data" onsubmit="progressBar()">
             @csrf
             <small class="form-text text-muted">*Campos não obrigatórios</small>
             <br/>
@@ -102,9 +102,32 @@
                         @endif
                     </div>
                 </div>
+                <div class="col-12">
+                    <h5 class="py-2">Categorias</h5>
+                    <div class="form-group">
+                        @foreach($categorias as $categoria)
+                            <div class="custom-control custom-checkbox custom-control-inline pb-3 mr-4">
+                                <input type="checkbox" class="custom-control-input {{ $errors->has('categorias') ? 'is-invalid' : '' }}" id="check{{ $categoria->id }}" name="categorias[]" value="{{ $categoria->id }}" {{ (is_array(old('categorias')) and in_array($categoria->id, old('categorias'))) ? ' checked' : '' }}> 
+                                <label class="custom-control-label" for="check{{ $categoria->id }}">{{ $categoria->nome }}</label>
+                            </div>
+                        @endforeach
+                        @if ($errors->has('categorias'))
+                            <span class="invalid-feedback" role="alert">
+                                <strong>{{ $errors->first('categorias') }}</strong>
+                            </span>
+                        @endif
+                    </div>
+                </div>
             </div>
             <hr>
-            <button type="submit" class="btn btn-primary shadow"><i class="fas fa-plus mr-2"></i>Adicionar</button>
+            <div class="dash-botoes">
+                <button type="submit" class="btn btn-primary shadow"><i class="fas fa-plus mr-2"></i>Adicionar</button>
+            </div>
+            <div class="dash-spinner">
+                <div class="progress">
+                    <div id="progresso" class="progress-bar progress-bar-striped bg-info progress-bar-animated" role="progressbar" style="width: 0%" ></div>
+                </div>
+            </div>
         </form>
     </div>
 </div>

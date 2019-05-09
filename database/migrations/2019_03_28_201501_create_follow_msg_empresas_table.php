@@ -16,7 +16,7 @@ class CreateFollowMsgEmpresasTable extends Migration
         Schema::create('follow_msg_empresas', function (Blueprint $table) {
             $table->unsignedInteger('user_id')->references('id')->on('users');
             $table->unsignedInteger('empresa_id')->references('id')->on('empresas');
-            $table->string('status');
+            $table->string('status')->default('ATIVO');
             $table->timestamps();
         });
     }

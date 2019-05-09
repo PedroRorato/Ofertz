@@ -1,68 +1,72 @@
 @extends('dashboard.layout')
-@section('title') Eventos @endsection
-@section('menu') #eventos-menu @endsection
+@section('title') Ofertas @endsection
+@section('menu') #ofertas-menu @endsection
 @section('breadcrumbs') 
-<li class="breadcrumb-item"><a href="/admin/eventos">Listagem</a></li>
-<li class="breadcrumb-item"><a href="/admin/eventos/{{ $evento->id }}">Painel da Empresa</a></li>
+<li class="breadcrumb-item"><a href="/admin/ofertas">Listagem</a></li>
+<li class="breadcrumb-item"><a href="/admin/ofertas/{{ $oferta->id }}">Painel da Oferta</a></li>
 @endsection
 @section('content')
 <script type="text/javascript">
     $(document).ready(function () {
         $('#data').mask('00/00/0000', {placeholder: "dd/mm/aaaa"});
+        $('#preco').mask('#.##0,00', {reverse: true, placeholder: "0,00"});
         //Select erro cadastro
-        $("#cidade").children('[value="{{ $evento->cidade_id }}"]').attr('selected', true);
-        $("#status").children('[value="{{ $evento->status }}"]').attr('selected', true);
+        $("#status").children('[value="{{ $oferta->status }}"]').attr('selected', true);
     });
 </script>
-<a href="/admin/eventos" class="btn btn-secondary shadow mb-3"><i class="fas fa-arrow-left mr-2"></i>Voltar</a>
+<a href="/admin/ofertas" class="btn btn-secondary shadow mb-3"><i class="fas fa-arrow-left mr-2"></i>Voltar</a>
 <div class="card shadow">
     <div class="card-body">
-        <form method="POST" action="/admin/eventos/{{ $evento->id }}" enctype="multipart/form-data">
+        <form method="POST" action="/admin/ofertas/{{ $oferta->id }}">
             @csrf
             @method('PATCH')
+            <input type="hidden" name="produto_id" value="{{ $produto->id }}">
             <small class="form-text text-muted">*Campos não obrigatórios</small>
             <br/>
             <div class="row">
                 <div class="col-md-6">
                     <div class="form-group">
-                        <img class="col mx-0 p-0 foto-dash" id="foto2" src="https://s3.us-east-1.amazonaws.com/bergard-teste/{{ $evento->foto }}">
+                        <img class="col mx-0 p-0 foto-dash" id="foto2" src="https://s3.us-east-1.amazonaws.com/bergard-teste/{{ $produto->foto }}">
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="form-group ">
+                        <label for="nome" class="mb-1">Nome</label>
+                        <h5>{{ $produto->nome }}</h5>
+                    </div>
+                    <div class="form-group">
+                        <label for="data" class="mb-1">Cidade</label>
+                        <h5>{{ $produto->cidade->nome . '-' . $produto->cidade->uf }}</h5>
+                    </div>
+                    <div class="form-group">
+                        <label for="descricao" class="mb-1">Descrição</label>
+                        <h5>{{ !empty($produto->descricao) ? $produto->descricao : 'Não há descrição' }}</h5>
+                    </div>
+                    <div class="form-group">
+                        <label for="descricao">Categorias</label>
+                        <h4 class="">
+                        @foreach($produto->categorias as $categoria)
+                            <span class="badge badge-secondary mr-2 mb-2">{{ $categoria->nome }}</span>
+                        @endforeach
+                        </h4>
                     </div>
                 </div>
             </div>
             <div class="row">
-                <div class="col-lg-6">
+                <div class="col-md-4">
                     <div class="form-group">
-                        <label for="foto_perfil">Banner do Evento</label>
-                        <div class="custom-file">
-                            <input type="file" accept=".jpg, .jpeg, .png" class="custom-file-input{{ $errors->has('foto') ? ' is-invalid' : '' }}" id="fotoInput" name="foto" onchange="loadImg(event, 'foto2', 'fotoNome2')">
-                            <label class="custom-file-label" id="fotoNome2" for="validatedCustomFile">Buscar...(jpeg, jpg, png)</label>
-                            <div id="alert_perfil"></div>
-                        </div>
-                        @if ($errors->has('foto'))
+                        <label for="preco">Preço</label>
+                        <input type="text" class="form-control{{ $errors->has('preco') ? ' is-invalid' : '' }}" id="preco" name="preco" value="{{ $oferta->preco }}" required>
+                        @if ($errors->has('preco'))
                             <span class="invalid-feedback" role="alert">
-                                <strong>{{ $errors->first('foto') }}</strong>
-                            </span>
-                        @else
-                            <small class="form-text text-muted">Formato quadrado</small>
-                        @endif
-                    </div>
-                </div>
-            </div>
-            <div class="row">
-                <div class="col-lg-12">
-                    <div class="form-group">
-                        <label for="nome">Nome</label>
-                        <input type="text" class="form-control{{ $errors->has('nome') ? ' is-invalid' : '' }}" id="nome" name="nome" placeholder="Digite o nome da evento..." value="{{ $evento->nome }}" required>
-                        @if ($errors->has('nome'))
-                            <span class="invalid-feedback" role="alert">
-                                <strong>{{ $errors->first('nome') }}</strong>
+                                <strong>{{ $errors->first('preco') }}</strong>
                             </span>
                         @endif
                     </div>
                 </div>
-                <div class="col-lg-4">
+                <div class="col-md-4">
                     <div class="form-group">
-                        <label for="data">Data</label>
+                        <label for="data">Validade: Data</label>
                         <input type="text" class="form-control{{ Session::has('data') ? ' is-invalid' : '' }}" id="data" name="data" value="{{ $data }}" required>
                         @if (Session::has('data'))
                             <span class="invalid-feedback" role="alert">
@@ -71,35 +75,20 @@
                         @endif
                     </div>
                 </div>
-                <div class="col-lg-4">
+                <div class="col-md-4">
                     <div class="form-group">
-                        <label for="time">Horário</label>
-                        <input type="time" class="form-control{{ $errors->has('time') ? ' is-invalid' : '' }}" id="time" name="time" value="{{ $tempo }}" required>
+                        <label for="time">Validade: Horário</label>
+                        <input type="time" class="form-control{{ $errors->has('time') ? ' is-invalid' : '' }}" id="time" name="time" placeholder="Digite o nome da empresa..." value="{{ $tempo }}" required>
                         <small class="form-text text-muted">hh:mm AM/PM</small>
-                    </div>
-                </div>
-                <div class="col-lg-4">
-                    <div class="form-group">
-                        <label for="cidade">Cidade</label>
-                        <select class="custom-select{{ $errors->has('cidade') ? ' is-invalid' : '' }}" id="cidade" name="cidade" required>
-                            @foreach($cidades as $cidade)
-                                <option value="{{ $cidade->id }}">{{ $cidade->nome.'-'.$cidade->uf }}</option>
-                            @endforeach
-                        </select>
-                        @if ($errors->has('cidade'))
-                            <span class="invalid-feedback" role="alert">
-                                <strong>{{ $errors->first('cidade') }}</strong>
-                            </span>
-                        @endif
                     </div>
                 </div>
                 <div class="col-12">
                     <div class="form-group">
-                        <label for="descricao">Descrição*</label>
-                        <textarea class="form-control{{ $errors->has('descricao') ? ' is-invalid' : '' }}" id="exampleFormControlTextarea1" rows="3" id="descricao" name="descricao" placeholder="Descreva o evento...">{{ $evento->descricao }}</textarea>
-                        @if ($errors->has('descricao'))
+                        <label for="observacao">Observação*</label>
+                        <textarea class="form-control{{ $errors->has('observacao') ? ' is-invalid' : '' }}" id="exampleFormControlTextarea1" rows="3" id="observacao" name="observacao" placeholder="Observação...">{{ $oferta->observacao }}</textarea>
+                        @if ($errors->has('observacao'))
                             <span class="invalid-feedback" role="alert">
-                                <strong>{{ $errors->first('descricao') }}</strong>
+                                <strong>{{ $errors->first('observacao') }}</strong>
                             </span>
                         @endif
                     </div>
@@ -115,12 +104,19 @@
                 </div>
             </div>
             <hr>
-            <button type="submit" class="btn btn-primary shadow mr-3 mt-3 mt-sm-0"><i class="fas fa-save mr-2"></i>Salvar</button>
-            @if($evento->status != 'EXCLUIDO')
-            <button type="button" class="btn btn-danger shadow mt-3 mt-sm-0" data-toggle="modal" data-target="#modalDelete">
-                <i class="fas fa-trash-alt mr-2"></i>Excluir
-            </button>
-            @endif
+            <div class="dash-botoes">
+                <button type="submit" class="btn btn-primary shadow mr-3 mt-3 mt-sm-0"><i class="fas fa-save mr-2"></i>Salvar</button>
+                @if($oferta->status != 'EXCLUIDO')
+                <button type="button" class="btn btn-danger shadow mt-3 mt-sm-0" data-toggle="modal" data-target="#modalDelete">
+                    <i class="fas fa-trash-alt mr-2"></i>Excluir
+                </button>
+                @endif
+            </div>
+            <div class="dash-spinner">
+                <div class="progress">
+                    <div id="progresso" class="progress-bar progress-bar-striped bg-info progress-bar-animated" role="progressbar" style="width: 0%" ></div>
+                </div>
+            </div>
         </form>
     </div>
 </div>
@@ -136,7 +132,7 @@
                     <span aria-hidden="true">&times;</span>
                 </button>
             </div>
-            <form method="POST" action="/admin/eventos/{{ $evento->id }}">
+            <form method="POST" action="/admin/ofertas/{{ $oferta->id }}">
                 @csrf
                 @method('DELETE')
                 <div class="modal-body">

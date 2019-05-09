@@ -31,4 +31,8 @@ class Empresa extends Authenticatable
     public function eventos(){
         return $this->hasMany(Evento::class);
     }
+
+    public function produtos(){
+        return $this->hasMany(Produto::class);
+    }
 }

@@ -14,7 +14,7 @@
 <a href="/admin/fotos" class="btn btn-secondary shadow mb-3"><i class="fas fa-arrow-left mr-2"></i>Voltar</a>
 <div class="card shadow">
     <div class="card-body">
-        <form method="POST" action="/admin/fotos/{{ $foto->id }}" enctype="multipart/form-data">
+        <form method="POST" action="/admin/fotos/{{ $foto->id }}" enctype="multipart/form-data" onsubmit="progressBar()">
             @csrf
             @method('PATCH')
             <small class="form-text text-muted">*Campos não obrigatórios</small>
@@ -62,12 +62,19 @@
                 </select>
             </div>
             <hr>
-            <button type="submit" class="btn btn-primary shadow mr-3 mt-3 mt-sm-0"><i class="fas fa-save mr-2"></i>Salvar</button>
-            @if($foto->status != 'EXCLUIDO')
-            <button type="button" class="btn btn-danger shadow mt-3 mt-sm-0" data-toggle="modal" data-target="#modalDelete">
-                <i class="fas fa-trash-alt mr-2"></i>Excluir
-            </button>
-            @endif
+            <div class="dash-botoes">
+                <button type="submit" class="btn btn-primary shadow mr-3 mt-3 mt-sm-0"><i class="fas fa-save mr-2"></i>Salvar</button>
+                @if($foto->status != 'EXCLUIDO')
+                <button type="button" class="btn btn-danger shadow mt-3 mt-sm-0" data-toggle="modal" data-target="#modalDelete">
+                    <i class="fas fa-trash-alt mr-2"></i>Excluir
+                </button>
+                @endif
+            </div>
+            <div class="dash-spinner">
+                <div class="progress">
+                    <div id="progresso" class="progress-bar progress-bar-striped bg-info progress-bar-animated" role="progressbar" style="width: 0%" ></div>
+                </div>
+            </div>
         </form>
     </div>
 </div>

@@ -57,7 +57,6 @@
                     <div id="progresso" class="progress-bar progress-bar-striped bg-info progress-bar-animated" role="progressbar" style="width: 0%" ></div>
                 </div>
             </div>
-            
         </form>
     </div>
 </div>

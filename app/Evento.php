@@ -18,4 +18,8 @@ class Evento extends Model
     public function empresa(){
     	return $this->belongsTo(Empresa::class);
     }
+
+    public function categorias(){
+    	return $this->belongsToMany(CategoriasEvento::class, "eventos_categoria_eventos");
+    }
 }

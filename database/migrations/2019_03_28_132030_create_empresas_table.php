@@ -17,7 +17,7 @@ class CreateEmpresasTable extends Migration
             $table->bigIncrements('id');
             $table->string('nome');
             $table->string('sobrenome');
-            $table->string('status');
+            $table->string('status')->default('ATIVO');
             $table->string('genero');
             $table->string('telefone');
             $table->string('foto')->nullable();

@@ -24,7 +24,7 @@
 <a href="/admin/empresas" class="btn btn-secondary shadow mb-3"><i class="fas fa-arrow-left mr-2"></i>Voltar</a>
 <div class="card shadow">
     <div class="card-body">
-        <form method="POST" action="/admin/empresas/{{ $empresa->id }}" enctype="multipart/form-data">
+        <form method="POST" action="/admin/empresas/{{ $empresa->id }}" enctype="multipart/form-data" onsubmit="progressBar()">
             @csrf
             @method('PATCH')
             <h4 class="">Dados da Empresa</h4>
@@ -193,15 +193,22 @@
                 </div>
             </div>
             <hr>
-            <button type="submit" class="btn btn-primary shadow mr-3 mt-3 mt-sm-0"><i class="fas fa-save mr-2"></i>Salvar</button>
-            <button type="button" class="btn btn-warning shadow mr-3 mt-3 mt-sm-0" data-toggle="modal" data-target="#modalSenha">
+            <div class="dash-botoes">
+                <button type="submit" class="btn btn-primary shadow mr-3 mt-3 mt-sm-0"><i class="fas fa-save mr-2"></i>Salvar</button>
+                <button type="button" class="btn btn-warning shadow mr-3 mt-3 mt-sm-0" data-toggle="modal" data-target="#modalSenha">
                 <i class="fas fa-key mr-2"></i>Alterar senha
             </button>
-            @if($empresa->status != 'EXCLUIDO')
-            <button type="button" class="btn btn-danger shadow mt-3 mt-sm-0" data-toggle="modal" data-target="#modalDelete">
-                <i class="fas fa-trash-alt mr-2"></i>Excluir
-            </button>
-            @endif
+                @if($empresa->status != 'EXCLUIDO')
+                <button type="button" class="btn btn-danger shadow mt-3 mt-sm-0" data-toggle="modal" data-target="#modalDelete">
+                    <i class="fas fa-trash-alt mr-2"></i>Excluir
+                </button>
+                @endif
+            </div>
+            <div class="dash-spinner">
+                <div class="progress">
+                    <div id="progresso" class="progress-bar progress-bar-striped bg-info progress-bar-animated" role="progressbar" style="width: 0%" ></div>
+                </div>
+            </div>
         </form>
     </div>
 </div>

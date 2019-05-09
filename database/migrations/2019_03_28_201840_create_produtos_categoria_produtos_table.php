@@ -14,9 +14,8 @@ class CreateProdutosCategoriaProdutosTable extends Migration
     public function up()
     {
         Schema::create('produtos_categoria_produtos', function (Blueprint $table) {
-            $table->unsignedInteger('produtos_id')->references('id')->on('produtos');
-            $table->unsignedInteger('categorias_produtos_id')->references('id')->on('categorias_produtos');
-            $table->string('status');
+            $table->unsignedInteger('produto_id')->references('id')->on('produtos');
+            $table->unsignedInteger('categorias_produto_id')->references('id')->on('categorias_produtos');
             $table->timestamps();
         });
     }

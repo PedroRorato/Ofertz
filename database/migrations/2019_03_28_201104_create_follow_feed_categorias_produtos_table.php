@@ -16,7 +16,7 @@ class CreateFollowFeedCategoriasProdutosTable extends Migration
         Schema::create('follow_feed_categorias_produtos', function (Blueprint $table) {
             $table->unsignedInteger('user_id')->references('id')->on('users');
             $table->unsignedInteger('categorias_produtos_id')->references('id')->on('categorias_produtos');
-            $table->string('status');
+            $table->string('status')->default('ATIVO');
             $table->timestamps();
         });
     }

@@ -19,7 +19,7 @@
 <a href="/admin/empresas" class="btn btn-secondary shadow mb-3"><i class="fas fa-arrow-left mr-2"></i>Voltar</a>
 <div class="card shadow">
     <div class="card-body">
-        <form method="POST" action="/admin/empresas" enctype="multipart/form-data">
+        <form method="POST" action="/admin/empresas" enctype="multipart/form-data" onsubmit="progressBar()">
             @csrf
             <h4 class="">Dados da Empresa</h4>
             <small class="form-text text-muted">*Campos não obrigatórios</small>
@@ -194,7 +194,14 @@
                 </div>
             </div>
             <hr>
-            <button type="submit" class="btn btn-primary shadow"><i class="fas fa-plus mr-2"></i>Adicionar</button>
+            <div class="dash-botoes">
+                <button type="submit" class="btn btn-primary shadow"><i class="fas fa-plus mr-2"></i>Adicionar</button>
+            </div>
+            <div class="dash-spinner">
+                <div class="progress">
+                    <div id="progresso" class="progress-bar progress-bar-striped bg-info progress-bar-animated" role="progressbar" style="width: 0%" ></div>
+                </div>
+            </div>
         </form>
     </div>
 </div>

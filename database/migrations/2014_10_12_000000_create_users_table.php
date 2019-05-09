@@ -17,7 +17,7 @@ class CreateUsersTable extends Migration
             $table->bigIncrements('id');
             $table->string('nome');
             $table->string('sobrenome');
-            $table->string('status')->nullable();
+            $table->string('status')->default('ATIVO');
             $table->string('genero');
             $table->string('foto')->nullable();
             $table->string('nascimento')->nullable();

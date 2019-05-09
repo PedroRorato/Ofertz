@@ -44,7 +44,13 @@ Route::prefix('/admin')->group(function(){
 	Route::resource('/eventos', 'Admin\AdminEventosController');
 	Route::resource('/fotos', 'Admin\AdminFotosController');
 	Route::resource('/franqueados', 'Admin\AdminFranqueadosController');
-	Route::resource('/ofertas', 'Admin\AdminOfertasController');
+	Route::get('/ofertas', 'Admin\AdminOfertasController@index');
+	Route::post('/ofertas', 'Admin\AdminOfertasController@store');
+	Route::get('/ofertas/choose', 'Admin\AdminOfertasController@choose');
+	Route::get('/ofertas/{oferta}', 'Admin\AdminOfertasController@show');
+	Route::patch('/ofertas/{oferta}', 'Admin\AdminOfertasController@update');
+	Route::delete('/ofertas/{oferta}', 'Admin\AdminOfertasController@destroy');
+	Route::get('/ofertas/produto/{produto}/create', 'Admin\AdminOfertasController@create');
 	Route::resource('/produtos', 'Admin\AdminProdutosController');
 	Route::resource('/usuarios', 'Admin\AdminUsuariosController');
 });

@@ -17,7 +17,7 @@ class CreateEventosTable extends Migration
             $table->bigIncrements('id');
             $table->string('nome');
             $table->string('descricao');
-            $table->string('foto')->nullable();
+            $table->string('foto');
             $table->string('status')->default('ATIVO');
             $table->dateTime('validade');
             $table->unsignedInteger('empresa_id')->references('id')->on('empresas');
