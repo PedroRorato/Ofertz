@@ -7,6 +7,7 @@
 @section('content')
 <script type="text/javascript">
     $(window).on('load', function() {
+        $("#situacao").children('[value="{{ $situacao }}"]').attr('selected', true);
         @if (!empty($queries))
             @foreach($columns as $column)
                 $("#{{ $column }}").children('[value="{{ $queries[$column] }}"]').attr('selected', true);
@@ -20,11 +21,18 @@
         <h4><i class="fas fa-filter mr-2"></i>Filtros</h4>        
         <form method="GET" action="/admin/eventos">
             <div class="row">
-                <div class="form-group col-lg-6">
+                <div class="form-group col-12">
                     <label for="busca">Digite o nome do evento</label>
                     <input type="text" class="form-control" id="busca" name="busca" placeholder="Buscar..." value="{{ isset($queries['busca']) ? $queries['busca'] : '' }}">
                 </div>
-                <div class="form-group col-lg-3">
+                <div class="form-group col-md-4">
+                    <label for="situacao">Situação</label>
+                    <select class="custom-select" id="situacao" name="situacao">
+                        <option value="ANDAMENTO">EM ANDAMENTO</option>
+                        <option value="FINALIZADA">FINALIZADA</option>
+                    </select>
+                </div>
+                <div class="form-group col-md-4">
                     <label for="status">Status</label>
                     <select class="custom-select" id="status" name="status">
                         <option value="%">TODOS</option>
@@ -32,7 +40,7 @@
                         <option value="EXCLUIDO">EXCLUIDO</option>
                     </select>
                 </div>
-                <div class="form-group col-lg-3">
+                <div class="form-group col-md-4">
                     <label for="cidade_id">Cidade</label>
                     <select class="custom-select" id="cidade_id" name="cidade_id" required>
                         <option value="%">TODOS</option>

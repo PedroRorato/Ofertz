@@ -17,41 +17,40 @@
 <a href="/admin/ofertas" class="btn btn-secondary shadow mb-3"><i class="fas fa-arrow-left mr-2"></i>Voltar</a>
 <div class="card shadow">
     <div class="card-body">
+        <div class="row">
+            <div class="col-md-6">
+                <div class="form-group">
+                    <img class="col mx-0 p-0 foto-dash" id="foto2" src="https://s3.us-east-1.amazonaws.com/bergard-teste/{{ $produto->foto }}">
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="form-group ">
+                    <label for="nome" class="mb-1">Nome</label>
+                    <h5>{{ $produto->nome }}</h5>
+                </div>
+                <div class="form-group">
+                    <label for="data" class="mb-1">Cidade</label>
+                    <h5>{{ $produto->cidade->nome . '-' . $produto->cidade->uf }}</h5>
+                </div>
+                <div class="form-group">
+                    <label for="descricao" class="mb-1">Descrição</label>
+                    <h5>{{ !empty($produto->descricao) ? $produto->descricao : 'Não há descrição' }}</h5>
+                </div>
+                <div class="form-group">
+                    <label for="descricao">Categorias</label>
+                    <h4 class="">
+                    @foreach($produto->categorias as $categoria)
+                        <span class="badge badge-secondary mr-2 mb-2">{{ $categoria->nome }}</span>
+                    @endforeach
+                    </h4>
+                </div>
+            </div>
+        </div>
+        @if ($editar)
         <form method="POST" action="/admin/ofertas/{{ $oferta->id }}">
             @csrf
             @method('PATCH')
             <input type="hidden" name="produto_id" value="{{ $produto->id }}">
-            <small class="form-text text-muted">*Campos não obrigatórios</small>
-            <br/>
-            <div class="row">
-                <div class="col-md-6">
-                    <div class="form-group">
-                        <img class="col mx-0 p-0 foto-dash" id="foto2" src="https://s3.us-east-1.amazonaws.com/bergard-teste/{{ $produto->foto }}">
-                    </div>
-                </div>
-                <div class="col-md-6">
-                    <div class="form-group ">
-                        <label for="nome" class="mb-1">Nome</label>
-                        <h5>{{ $produto->nome }}</h5>
-                    </div>
-                    <div class="form-group">
-                        <label for="data" class="mb-1">Cidade</label>
-                        <h5>{{ $produto->cidade->nome . '-' . $produto->cidade->uf }}</h5>
-                    </div>
-                    <div class="form-group">
-                        <label for="descricao" class="mb-1">Descrição</label>
-                        <h5>{{ !empty($produto->descricao) ? $produto->descricao : 'Não há descrição' }}</h5>
-                    </div>
-                    <div class="form-group">
-                        <label for="descricao">Categorias</label>
-                        <h4 class="">
-                        @foreach($produto->categorias as $categoria)
-                            <span class="badge badge-secondary mr-2 mb-2">{{ $categoria->nome }}</span>
-                        @endforeach
-                        </h4>
-                    </div>
-                </div>
-            </div>
             <div class="row">
                 <div class="col-md-4">
                     <div class="form-group">
@@ -117,7 +116,42 @@
                     <div id="progresso" class="progress-bar progress-bar-striped bg-info progress-bar-animated" role="progressbar" style="width: 0%" ></div>
                 </div>
             </div>
+
         </form>
+        @else
+        <div class="row">
+            <div class="col-md-3">
+                <div class="form-group">
+                    <label for="preco">Preço</label>
+                    <h5 id="preco">{{ $oferta->preco }}</h5>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="form-group">
+                    <label for="data">Validade: Data</label>
+                    <h5 id="data">{{ $data }}</h5>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="form-group">
+                    <label for="time">Validade: Horário</label>
+                    <h5 id="time">{{ $tempo }}</h5>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="form-group">
+                    <label for="status">Status</label>
+                    <h5>{{ $oferta->status }}</h5>
+                </div>
+            </div>
+            <div class="col-12">
+                <div class="form-group">
+                    <label for="observacao">Observação</label>
+                    <h5>{{ !empty($oferta->observacao) ? $oferta->observacao : 'Não há observação' }}</h5>
+                </div>
+            </div>
+        </div>
+        @endif
     </div>
 </div>
 

@@ -12,6 +12,7 @@ use App\Empresa;
 use Illuminate\Support\Facades\Storage;
 use Auth;
 use Illuminate\Support\Facades\Hash;
+use DateTime;
 
 class AdminEventosController extends Controller
 {
@@ -29,6 +30,14 @@ class AdminEventosController extends Controller
         $columns = [
             'status', 'cidade_id',
         ];
+        //Situacao
+        $situacao = '';
+        $sit = '>';
+        //Filtros
+        if (request('situacao') == 'FINALIZADA') {
+            $situacao = 'FINALIZADA';
+            $sit = '<';
+        }
         foreach ($columns as $column) {
             if (request()->has($column)) {
                 $eventos = $eventos->where($column, 'like', request($column));
@@ -41,14 +50,14 @@ class AdminEventosController extends Controller
         }
         //Contagem
         $amount = $eventos->get()->count();
-        $eventos = $eventos->with('cidade', 'empresa');
+        $eventos = $eventos->where('validade', $sit, \DB::raw('NOW()'))->with('cidade', 'empresa');
         $eventos = $eventos->orderBy('nome', 'asc')->paginate(25)->appends($queries,
             ['amount' => $amount]
         );
         //Lista de cidades
         $cidades = Cidade::where('status', '=', 'ATIVO')->get();
         
-        return view('dashboard.admin.eventos.index', compact('eventos', 'amount', 'columns', 'queries', 'cidades'));
+        return view('dashboard.admin.eventos.index', compact('eventos', 'amount', 'situacao', 'columns', 'queries', 'cidades'));
     }
 
 
@@ -105,6 +114,13 @@ class AdminEventosController extends Controller
 
     public function show($id){
         $evento = Evento::findOrFail($id);
+        //Data Painel
+        $date_now = new DateTime();
+        $date_validade    = new DateTime($evento->validade);
+        $editar = true;
+        if($date_now > $date_validade){
+            $editar = false;
+        }
         //Tratar data
         $partesDT = explode(" ", $evento->validade);
         $partesData = explode("-", $partesDT[0]);
@@ -118,9 +134,9 @@ class AdminEventosController extends Controller
         }
         $pertences = $array_pertence;
         //Lista de cidades e categorias
-        $cidades = Cidade::where('status', '=', 'ATIVO')->get();
         $categorias = CategoriasEvento::where('status', '=', 'ATIVO')->orderBy('nome', 'asc')->get();
-        return view('dashboard.admin.eventos.show', compact('evento', 'cidades', 'data', 'tempo', 'pertences', 'categorias'));
+        $cidades = Cidade::where('status', '=', 'ATIVO')->get();
+        return view('dashboard.admin.eventos.show', compact('evento', 'cidades', 'editar', 'data', 'tempo', 'pertences', 'categorias'));
     }
 
 

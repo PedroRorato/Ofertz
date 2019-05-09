@@ -3,7 +3,7 @@
 @section('menu') #eventos-menu @endsection
 @section('breadcrumbs') 
 <li class="breadcrumb-item"><a href="/admin/eventos">Listagem</a></li>
-<li class="breadcrumb-item"><a href="/admin/eventos/{{ $evento->id }}">Painel da Empresa</a></li>
+<li class="breadcrumb-item"><a href="/admin/eventos/{{ $evento->id }}">Painel do Evento</a></li>
 @endsection
 @section('content')
 <script type="text/javascript">
@@ -17,6 +17,7 @@
 <a href="/admin/eventos" class="btn btn-secondary shadow mb-3"><i class="fas fa-arrow-left mr-2"></i>Voltar</a>
 <div class="card shadow">
     <div class="card-body">
+        @if ($editar)
         <form method="POST" action="/admin/eventos/{{ $evento->id }}" enctype="multipart/form-data"  onsubmit="progressBar()">
             @csrf
             @method('PATCH')
@@ -145,6 +146,63 @@
                 </div>
             </div>
         </form>
+        @else
+        <div class="row">
+            <div class="col-md-6">
+                <div class="form-group">
+                    <img class="col mx-0 p-0 foto-dash" id="foto2" src="https://s3.us-east-1.amazonaws.com/bergard-teste/{{ $evento->foto }}">
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-lg-12">
+                <div class="form-group">
+                    <label>Nome</label>
+                    <h5>{{ $evento->nome }}</h5>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="form-group">
+                    <label>Data</label>
+                    <h5 id="data">{{ $data }}</h5>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="form-group">
+                    <label>Horário</label>
+                    <h5 id="time">{{ $tempo }}</h5>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="form-group">
+                    <label>Cidade</label>
+                    <h5 id="time">{{ $evento->cidade->nome.'-'.$evento->cidade->uf }}</h5>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="form-group">
+                    <label>Status</label>
+                    <h5 id="time">{{ $evento->status }}</h5>
+                </div>
+            </div>
+            <div class="col-12">
+                <div class="form-group">
+                    <label for="descricao">Descrição*</label>
+                    <h5>{{ !empty($oferta->descricao) ? $oferta->descricao : 'Não há descrição' }}</h5>
+                </div>
+            </div>
+            <div class="col-12">
+                <div class="form-group">
+                    <h5>Categorias</h5>
+                    <h4 class="">
+                    @foreach($categorias as $categoria)
+                        <span class="badge badge-secondary mr-2 mb-2">{{ $categoria->nome }}</span>
+                    @endforeach
+                    </h4>
+                </div>
+            </div>
+        </div>
+        @endif
     </div>
 </div>
 

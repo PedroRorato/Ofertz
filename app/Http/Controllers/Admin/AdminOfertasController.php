@@ -14,6 +14,7 @@ use Illuminate\Support\Facades\Storage;
 use Auth;
 use DB;
 use Illuminate\Support\Facades\Hash;
+use DateTime;
 
 class AdminOfertasController extends Controller
 {
@@ -105,6 +106,7 @@ class AdminOfertasController extends Controller
             ->join('empresas', 'produtos.empresa_id', '=', 'empresas.id')
             ->where('categorias_produtos.id', 'LIKE', $categoria_id)
             ->where('produtos.status', '=', 'ATIVO')
+            ->where('produtos.empresa_id', '=', '0')
             ->where('produtos.cidade_id', 'LIKE', $cidade_id)
             ->where('produtos.nome', 'LIKE', '%'.$busca.'%')
             ->orderBy('produtos.nome', 'ASC')
@@ -120,6 +122,7 @@ class AdminOfertasController extends Controller
             ->join('cidades', 'produtos.cidade_id', '=', 'cidades.id')
             ->join('empresas', 'produtos.empresa_id', '=', 'empresas.id')
             ->where('produtos.status', '=', 'ATIVO')
+            ->where('produtos.empresa_id', '=', '0')
             ->orderBy('produtos.nome', 'ASC')
             ->groupBy('produtos.id', 'produtos.nome', 'empresas.nome', 'cidades.nome', 'cidades.uf');
             //Appends e Paginate
@@ -184,13 +187,20 @@ class AdminOfertasController extends Controller
 
         $oferta = Oferta::findOrFail($id);
         $produto = $oferta->produto;
+        //Data Painel
+        $date_now = new DateTime();
+        $date_validade    = new DateTime($oferta->validade);
+        $editar = true;
+        if($date_now > $date_validade){
+            $editar = false;
+        }
         //Tratar data
         $partesDT = explode(" ", $oferta->validade);
         $partesData = explode("-", $partesDT[0]);
         $tempo = $partesDT[1];
         $data = $partesData[2].'/'.$partesData[1].'/'.$partesData[0];
         //Lista de cidades e categorias
-        return view('dashboard.admin.ofertas.show', compact('oferta', 'cidades', 'data', 'tempo', 'produto', 'categorias'));
+        return view('dashboard.admin.ofertas.show', compact('oferta', 'cidades', 'editar', 'data', 'tempo', 'produto', 'categorias'));
     }
 
     public function update(Request $request, $id){
