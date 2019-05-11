@@ -8,7 +8,10 @@ use App\Http\Controllers\AuxiliarController;
 use App\Foto;
 use Illuminate\Support\Facades\Storage;
 use Auth;
+//use Input;
 use Illuminate\Support\Facades\Hash;
+use Intervention\Image\ImageManagerStatic as Image;
+
 
 class AdminFotosController extends Controller
 {
@@ -54,16 +57,30 @@ class AdminFotosController extends Controller
 
     public function store(Request $request){
 
-        //Validation
+        //dd(request('points'));
+        $partes = explode(",", request('points'));
+
+        $lado = (int)$partes[2] - (int)$partes[0];
+
+        //dd((int)$partes[0] . ' / ' . (int)$partes[1] . ' / ' . ($p2 - $p0));
+
+
+        /*/Validation
         request()->validate([
             'foto' => ['required', 'image', 'mimes:jpeg,jpg,png', 'dimensions:min_width=300,min_height=300', 'max:10000'],
             'nome' => ['required', 'string', 'min:2', 'max:100'],
-        ]);
+        ]);*/
+
+        // to finally create image instances
+        $image = Image::make($request->file('foto'))->crop($lado, $lado, (int)$partes[0], (int)$partes[1])->resize(300, 300)->save('editado.jpg');
+
+        //dd(pathinfo($request->file('foto'), PATHINFO_FILENAME));
+        //fopen($request->file('foto'), 'r+');
 
 
         //S3
         $s3 = new AuxiliarController;
-        $filename = $s3->s3($request->file('foto'), 'ofertz/fotos/');
+        $filename = $s3->s32($request->file('foto'), $image, 'ofertz/fotos/');
 
 
         //Create

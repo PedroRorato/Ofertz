@@ -22,7 +22,7 @@
             <br/>
             <div class="row">
                 <div class="col-md-6">
-                    <div class="form-group">
+                    <div class="form-group" for="fotoInput">
                         <img class="col mx-0 p-0 foto-dash" id="foto2" src="{{ asset('img/img-fundo.png') }}">
                     </div>
                 </div>
@@ -30,7 +30,7 @@
             <div class="row">
                 <div class="col-lg-6">
                     <div class="form-group">
-                        <label for="foto_perfil">Banner do Evento</label>
+                        <label for="fotoInput">Banner do Evento</label>
                         <div class="custom-file">
                             <input type="file" accept=".jpg, .jpeg, .png" class="custom-file-input{{ $errors->has('foto') ? ' is-invalid' : '' }}" id="fotoInput" name="foto" onchange="loadImg(event, 'foto2', 'fotoNome2')" required>
                             <label class="custom-file-label" id="fotoNome2" for="validatedCustomFile">Buscar...(jpeg, jpg, png)</label>

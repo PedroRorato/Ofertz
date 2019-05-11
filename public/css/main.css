@@ -36,18 +36,30 @@
     background-color: #ad1c1c;
     border-color: #ad1c1c;
 }
+.editor-container{
+	width: 100%;
+	max-height: 360px;
+	overflow: hidden;
+}
 #foto{
 	background: lightgrey;
     border: 5px solid lightgrey;
     border-radius: .25rem;
     max-width: 300px;
 }
+.foto-container{
+	max-width: 300px;
+	overflow: hidden;
+}
+.card .foto-container{
+	cursor: pointer;
+}
 .foto-dash{
 	max-height: 300px;
 	width: auto;
 }
 .foto-mobile-dash{
-	height: 300px;
+	max-height: 300px;
 }
 .foto-bg-dash{
 	background-color: #555555;
