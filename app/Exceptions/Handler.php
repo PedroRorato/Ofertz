@@ -48,6 +48,9 @@ class Handler extends ExceptionHandler
     public function render($request, Exception $exception)
     {
 
+        if ($exception instanceof \Illuminate\Http\Exceptions\PostTooLargeException) {
+            return response()->view('errors.post-too-large');
+        }
         // Check out Error Handling #render for more information
         // render method is responsible for converting a given exception into an HTTP response
         // Catch AthenticationException and redirect back to somewhere else...

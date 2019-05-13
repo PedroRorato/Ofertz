@@ -36,24 +36,13 @@
     background-color: #ad1c1c;
     border-color: #ad1c1c;
 }
-.editor-container{
-	width: 100%;
-	max-height: 360px;
-	overflow: hidden;
-}
 #foto{
 	background: lightgrey;
     border: 5px solid lightgrey;
     border-radius: .25rem;
     max-width: 300px;
 }
-.foto-container{
-	max-width: 300px;
-	overflow: hidden;
-}
-.card .foto-container{
-	cursor: pointer;
-}
+
 .foto-dash{
 	max-height: 300px;
 	width: auto;
@@ -155,8 +144,24 @@
 .dash-spinner{
 	display: none;
 }
+.editor-container{
+	width: 100%;
+	max-height: 380px;
+	overflow: hidden;
+}
 .fa-chevron-down{
 	float: right;
+}
+.foto-container{
+	max-width: 300px;
+	overflow: hidden;
+}
+.foto-container:hover{
+	background-color: #e2e6ea;
+}
+
+.card .foto-container{
+	cursor: pointer;
 }
 #menu{
 	max-width: 230px;
@@ -172,6 +177,9 @@
 .menu-logo-img{
 	height: 85px;
 }
+#resetEditor{
+	display: none;
+}
 .table-actions{
 	width: 110px!important;
 	min-width: 110px!important;
@@ -183,26 +191,44 @@
 	border: 1px solid lightgrey;
 	border-radius: .25rem;
 }
+.zoom{
+	position: relative;
+	top: -43px;
+	font-size: 1.5rem;
+	cursor: pointer;
+}
+.zoomRow{
+	opacity: 0;
+}
+/*SCROLLBAR*/
 /* width */
 ::-webkit-scrollbar {
   width: 7px;
 }
-
 /* Track */
 ::-webkit-scrollbar-track {
   box-shadow: inset 0 0 5px grey; 
   border-radius: 7px;
 }
- 
 /* Handle */
 ::-webkit-scrollbar-thumb {
   background: #3490dc; 
   border-radius: 7px;
 }
-
 /* Handle on hover */
 ::-webkit-scrollbar-thumb:hover {
   background: #3490dc; 
+}
+/*RANGE*/
+input[type=range]::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  background: #343a40;
+}
+input[type=range]::-moz-range-thumb {
+  background: #343a40;
+}
+input[type=range]::-ms-thumb {
+  background: #343a40;
 }
 /*END DASHBOARD*/
 

@@ -26,6 +26,75 @@ function loadImg(e, idDisplay, idLabel) {
     reader.readAsDataURL(selectedFile);
     document.getElementById(idLabel).innerHTML = event.target.files[0].name;
 }
+//Carregar Imagem 2
+function readURL(input, format) {
+    var width = $(".editor-container").width();  
+    if (input.files && input.files[0]) { 
+        var reader = new FileReader();
+        reader.onload = function(e) {
+            $('#image').attr('src', e.target.result);
+            var resize = new Croppie($('#image')[0], {
+                viewport: { width: 270, height: 270, type: format },
+                boundary: { width: width, height: 290 },
+                showZoomer: true,
+                enableOrientation: true
+            });
+            $('#tamanho').html('');
+            $('#resetEditor').show();
+            $('#aviso').removeClass('d-none');
+            $( ".dash-spinner" ).hide();
+            $('#cortar').removeAttr("disabled");
+            $('#cortar').on('click', function() {
+                try {
+                    console.log(resize.get().points);
+                    $("#points").val(resize.get().points);
+                    resize.result('base64').then(function(dataImg) {
+                        var data = [{ image: dataImg }, { name: 'myimgage.jpg' }];
+                        $('#result').attr('src', dataImg);
+                    });
+                    $('#editorImagem').modal('hide')
+                }
+                catch(err) {
+                    console.log('resize');
+                }
+            });
+            $('.reset').on('click', function() {
+                try {
+                    $("#fotoInput").val('');
+                    resize.destroy();
+                    $('#image').attr('src', '');
+                    $('#aviso').addClass('d-none');
+                    $('#resetEditor').hide();
+                    $('#inputEditor').show();
+                    $( ".zoomRow" ).fadeTo(1, 0);
+                    $('#cortar').prop("disabled", true);
+                }
+                catch(err) {
+                    console.log('err.message djhfdjkhgdfhkb');
+                }
+            });
+            $('.zoomIn').on('click', function() {
+                try {
+                    var novo = resize.get().zoom + 0.2;
+                    resize.setZoom(novo);
+                }
+                catch(err) {
+                    console.log('err.message djhfdjkhgdfhkb');
+                }
+            });
+            $('.zoomOut').on('click', function() {
+                try {
+                    var novo = resize.get().zoom - 0.2;
+                    resize.setZoom(novo);
+                }
+                catch(err){
+                    console.log('error');
+                }
+            });
+        }
+        reader.readAsDataURL(input.files[0]);
+    }
+} 
 //Loaders
 function progressBar(){
     $( ".dash-botoes" ).hide(); 
