@@ -71,9 +71,9 @@ class AdminProdutosController extends Controller
             'categorias' => ['required'],
         ]);
 
-        //S3
-        $s3 = new AuxiliarController;
-        $filename = $s3->s3($request->file('foto'), 'ofertz/produtos/');
+        //cropS3
+        $auxiliar = new AuxiliarController;
+        $filename = $auxiliar->cropS3($request->file('foto'), request('points'), 'ofertz/produtos/', 300, 300);
 
         //Create
         $dados = Produto::create([
@@ -126,9 +126,9 @@ class AdminProdutosController extends Controller
 
         if($request->hasFile('foto')) {
             
-            //S3
-            $s3 = new AuxiliarController;
-            $filename = $s3->s3($request->file('foto'), 'ofertz/produtos/');
+            //cropS3
+            $auxiliar = new AuxiliarController;
+            $filename = $auxiliar->cropS3($request->file('foto'), request('points'), 'ofertz/produtos/', 300, 300);
 
             //Update
             $produto->foto = $filename;

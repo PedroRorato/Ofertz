@@ -16,7 +16,7 @@
         <input type="hidden" id="points" name="points">
         <div class="row">
             <div class="col-md-6">
-                <div class="card foto-container {{ $errors->has('foto') ? 'border-danger text-danger' : '' }}" data-toggle="modal" data-target="#editorImagem">
+                <div class="card foto-container {{ ($errors->has('foto') || $errors->has('points')) ? 'border-danger text-danger' : '' }}" data-toggle="modal" data-target="#editorImagem">
                     <img id="result" class="foto-dash" src="{{ asset('img/img-fundo.png') }}">
                     <div class="card-footer text-center">
                         Escolher foto
@@ -26,10 +26,14 @@
                     <span class="invalid-feedback" role="alert">
                         <strong>{{ $errors->first('foto') }}</strong>
                     </span>
+                @elseif ($errors->has('points'))
+                    <span class="invalid-feedback" role="alert">
+                        <strong>Salve a imagem antes de concluir o formulário.</strong>
+                    </span>
                 @endif
             </div>
         </div>
-        <br>
+        <br/>
         <div class="row">
             <div class="col-12">
                 <div class="form-group">
@@ -55,7 +59,7 @@
     </div>
 </div>
 
-<!-- Modal -->
+<!-- Modal Foto -->
 <div class="modal fade" id="editorImagem" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered" role="document">
         <div class="modal-content">
@@ -116,6 +120,5 @@
         $('#result').attr('src', "{{ asset('img/img-fundo.png') }}");
     });
 </script>
-
 @endsection
 

@@ -49,7 +49,7 @@
             <div class="card card-menu-profile">
                 <div class="card-header row mx-0 align-items-center px-3" data-toggle="collapse" data-target="#collapseProfile" aria-expanded="false">
                     <div class="col-2 px-0">
-                        <img src="{{ asset('img/profile.jpg') }}" alt="..." class="rounded-circle img-fluid">
+                        <img src="{{ asset('img/user.png') }}" alt="..." class="rounded-circle img-fluid">
                     </div>
                     <div class="col-9 pr-0">
                         {{ Auth::user()->nome  }}
@@ -61,23 +61,8 @@
                 <div id="collapseProfile" class="collapse" aria-labelledby="headingThree" data-parent="#menu-accordion">
                     <ul class="nav flex-column">
                         <li class="nav-item">
-                            <a class="nav-link" href="#">
+                            <a class="nav-link" href="/admin/conta">
                                 <i class="fas fa-user-edit mr-2"></i>Conta
-                            </a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" href="#">
-                                <i class="fas fa-handshake mr-2"></i>Painel Franqueado
-                            </a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" href="#">
-                                <i class="fas fa-store mr-2"></i>Painel Empresa
-                            </a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" href="#">
-                                <i class="fas fa-user mr-2"></i>Painel Usuário
                             </a>
                         </li>
                         <li class="nav-item">
@@ -137,6 +122,16 @@
                 <div class="alert alert-primary shadow text-center" role="alert">
                     <h4 class="mb-0">
                         {{ Session::get('message') }}
+                        <button type="button" class="close" onclick="hiddeAlert()">
+                            <span>&times;</span>
+                        </button>
+                    </h4>
+                </div>
+                @endif
+                @if($errors->any() || Session::has('data'))
+                <div class="alert alert-danger shadow text-center" role="alert">
+                    <h4 class="mb-0">
+                        Erro ao enviar formulário! Confira os dados!
                         <button type="button" class="close" onclick="hiddeAlert()">
                             <span>&times;</span>
                         </button>

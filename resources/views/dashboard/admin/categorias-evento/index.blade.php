@@ -34,7 +34,7 @@
                 </div>
             </div>
             <button type="submit" class="btn btn-primary shadow mr-3"><i class="fas fa-filter mr-2"></i>Filtrar</button>
-            <a href="/admin/categorias-evento" class="btn btn-secondary shadow mr-3"><i class="fas fa-sync-alt mr-2"></i>Limpar filtros</a>
+            <a href="/admin/categorias-evento" class="btn btn-secondary shadow"><i class="fas fa-sync-alt mr-2"></i>Limpar filtros</a>
         </form>
         <hr>
         @if($amount != 0)

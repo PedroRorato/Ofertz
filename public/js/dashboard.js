@@ -27,15 +27,15 @@ function loadImg(e, idDisplay, idLabel) {
     document.getElementById(idLabel).innerHTML = event.target.files[0].name;
 }
 //Carregar Imagem 2
-function readURL(input, format) {
-    var width = $(".editor-container").width();  
+function readURL(input, format, width, height) {
+    var widthBack = $(".editor-container").width();  
     if (input.files && input.files[0]) { 
         var reader = new FileReader();
         reader.onload = function(e) {
             $('#image').attr('src', e.target.result);
             var resize = new Croppie($('#image')[0], {
-                viewport: { width: 270, height: 270, type: format },
-                boundary: { width: width, height: 290 },
+                viewport: { width: width, height: height, type: format },
+                boundary: { width: widthBack, height: 290 },
                 showZoomer: true,
                 enableOrientation: true
             });
@@ -95,6 +95,7 @@ function readURL(input, format) {
         reader.readAsDataURL(input.files[0]);
     }
 } 
+
 //Loaders
 function progressBar(){
     $( ".dash-botoes" ).hide(); 

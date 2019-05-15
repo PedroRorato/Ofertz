@@ -42,11 +42,6 @@
     border-radius: .25rem;
     max-width: 300px;
 }
-
-.foto-dash{
-	max-height: 300px;
-	width: auto;
-}
 .foto-mobile-dash{
 	max-height: 300px;
 }
@@ -141,25 +136,45 @@
 .dash-body{
 	background-color: #e3e6e8;
 }
-.dash-spinner{
+.dash-spinner, .dash-spinner2{
 	display: none;
 }
 .editor-container{
 	width: 100%;
-	max-height: 380px;
+	max-height: 385px;
 	overflow: hidden;
+}
+.f-input-cidade{
+	position: absolute;
+    height: 100%;
+    width: 100%;
+    opacity: 0;
+    cursor: pointer;
 }
 .fa-chevron-down{
 	float: right;
 }
 .foto-container{
-	max-width: 300px;
+	max-width: 270px;
 	overflow: hidden;
 }
-.foto-container:hover{
+.foto-container1{
+	max-width: 440px;
+}
+.foto-container2{
+	max-width: 200px;
+}
+.foto-cidade{
+	height: 250px;
+	width: auto;
+}
+.foto-container:hover, .foto-container1:hover, .foto-container2:hover{
 	background-color: #e2e6ea;
 }
-
+.foto-dash{
+	max-height: 300px;
+	width: auto;
+}
 .card .foto-container{
 	cursor: pointer;
 }
@@ -177,7 +192,7 @@
 .menu-logo-img{
 	height: 85px;
 }
-#resetEditor{
+#resetEditor, #resetEditor2{
 	display: none;
 }
 .table-actions{
@@ -193,11 +208,11 @@
 }
 .zoom{
 	position: relative;
-	top: -43px;
+	top: -47px;
 	font-size: 1.5rem;
 	cursor: pointer;
 }
-.zoomRow{
+.zoomRow, .zoomRow2{
 	opacity: 0;
 }
 /*SCROLLBAR*/

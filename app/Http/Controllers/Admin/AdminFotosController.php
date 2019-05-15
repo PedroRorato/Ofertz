@@ -6,12 +6,8 @@ use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Http\Controllers\AuxiliarController;
 use App\Foto;
-use Illuminate\Support\Facades\Storage;
 use Auth;
-//use Input;
 use Illuminate\Support\Facades\Hash;
-use Intervention\Image\ImageManagerStatic as Image;
-
 
 class AdminFotosController extends Controller
 {
@@ -61,18 +57,12 @@ class AdminFotosController extends Controller
         request()->validate([
             'foto' => ['required', 'image', 'mimes:jpeg,jpg,png', 'dimensions:min_width=300,min_height=300', 'max:10000'],
             'nome' => ['required', 'string', 'min:2', 'max:100'],
+            'points' => ['required', 'string'],
         ]);
 
-        //Tratamento pontos
-        $partes = explode(",", request('points'));
-        $lado = (int)$partes[2] - (int)$partes[0];
-
-        // to finally create image instances
-        $image = Image::make($request->file('foto'))->crop($lado, $lado, (int)$partes[0], (int)$partes[1])->resize(300, 300)->save('editado.jpg');
-
-        //S3
-        $s3 = new AuxiliarController;
-        $filename = $s3->s32($request->file('foto'), $image, 'ofertz/fotos/');
+        //Crop S3
+        $auxiliar = new AuxiliarController;
+        $filename = $auxiliar->cropS3($request->file('foto'), request('points'), 'ofertz/fotos/');
 
         //Create
         Foto::create([
@@ -102,13 +92,14 @@ class AdminFotosController extends Controller
             'foto' => ['image', 'mimes:jpeg,jpg,png', 'dimensions:min_width=300,min_height=300', 'max:10000'],
             'nome' => ['required', 'string', 'min:2', 'max:100'],
             'status' => ['required', 'alpha', 'min:3', 'max:20'],
+            'points' => ['string'],
         ]);
 
         if($request->hasFile('foto')) {
-            
-            //S3
-            $s3 = new AuxiliarController;
-            $filename = $s3->s3($request->file('foto'), 'ofertz/fotos/');
+
+            //Crop S3
+            $auxiliar = new AuxiliarController;
+            $filename = $auxiliar->cropS3($request->file('foto'), request('points'), 'ofertz/fotos/');
 
             //Update
             $foto->url = $filename;

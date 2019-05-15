@@ -49,8 +49,9 @@ class AdminEventosController extends Controller
             $queries['busca'] = request('busca');
         }
         //Contagem
+        $eventos = $eventos->where('validade', $sit, \DB::raw('NOW()'));
         $amount = $eventos->get()->count();
-        $eventos = $eventos->where('validade', $sit, \DB::raw('NOW()'))->with('cidade', 'empresa');
+        $eventos = $eventos->with('cidade', 'empresa');
         $eventos = $eventos->orderBy('nome', 'asc')->paginate(25)->appends($queries,
             ['amount' => $amount]
         );
@@ -71,11 +72,10 @@ class AdminEventosController extends Controller
 
     public function store(Request $request){
 
+        $auxiliar = new AuxiliarController;
         //Validação da data
-        $partes = explode("/", request('data'));
-        $data = $partes[2] . '-' . $partes[1] . '-' . $partes[0] . 'T' . request('time');
-        $date = strtotime($data);
-        if (time() > $date) {
+        $data = $auxiliar->validaDataTempo(request('data'));
+        if (!$data) {
             return redirect()->back()->withInput()->with('data', 'Só são permitidas datas futuras');
         }
 
@@ -86,11 +86,11 @@ class AdminEventosController extends Controller
             'cidade' => ['required', 'integer'],
             'descricao' => ['string', 'max:255'],
             'categorias' => ['required'],
+            'points' => ['required', 'string'],
         ]);
 
-        //S3
-        $s3 = new AuxiliarController;
-        $filename = $s3->s3($request->file('foto'), 'ofertz/eventos/');
+        //Crop S3
+        $filename = $auxiliar->cropS3($request->file('foto'), request('points'), 'ofertz/eventos/', 300, 300);
 
         //Create
         $dados = Evento::create([
@@ -114,25 +114,18 @@ class AdminEventosController extends Controller
 
     public function show($id){
         $evento = Evento::findOrFail($id);
+        //Auxiliar
+        $auxiliar = new AuxiliarController;
         //Data Painel
-        $date_now = new DateTime();
-        $date_validade    = new DateTime($evento->validade);
-        $editar = true;
-        if($date_now > $date_validade){
-            $editar = false;
-        }
+        $editar = $auxiliar->verificaData($evento->validade);
+        //Validação da data
         //Tratar data
         $partesDT = explode(" ", $evento->validade);
         $partesData = explode("-", $partesDT[0]);
         $tempo = $partesDT[1];
         $data = $partesData[2].'/'.$partesData[1].'/'.$partesData[0];
         //Categorias à qual pertence
-        $pertences = $evento->categorias;
-        $array_pertence[] = 0;
-        foreach ($pertences as $pertence) {
-            $array_pertence[] = $pertence->id;
-        }
-        $pertences = $array_pertence;
+        $pertences = $auxiliar->categoriasArray($evento->categorias);
         //Lista de cidades e categorias
         $categorias = CategoriasEvento::where('status', '=', 'ATIVO')->orderBy('nome', 'asc')->get();
         $cidades = Cidade::where('status', '=', 'ATIVO')->get();
@@ -143,12 +136,11 @@ class AdminEventosController extends Controller
     public function update(Request $request, $id){
         
         $evento = Evento::findOrFail($id);
-
-        //Tratamento da data
-        $partes = explode("/", request('data'));
-        $data = $partes[2] . '-' . $partes[1] . '-' . $partes[0] . 'T' . request('time');
-        $date = strtotime($data);
-        if (time() > $date) {
+        //Auxiliar
+        $auxiliar = new AuxiliarController;
+        //Validação da data
+        $data = $auxiliar->validaDataTempo(request('data'));
+        if (!$data) {
             return redirect()->back()->withInput()->with('data', 'Só são permitidas datas futuras');
         }
 
@@ -164,9 +156,8 @@ class AdminEventosController extends Controller
 
         if($request->hasFile('foto')) {
             
-            //S3
-            $s3 = new AuxiliarController;
-            $filename = $s3->s3($request->file('foto'), 'ofertz/eventos/');
+            //cropS3
+            $filename = $auxiliar->cropS3($request->file('foto'), request('points'), 'ofertz/eventos/', 300, 300);
 
             //Update
             $evento->foto = $filename;

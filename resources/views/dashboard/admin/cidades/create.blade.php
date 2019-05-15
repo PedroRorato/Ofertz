@@ -19,46 +19,41 @@
             <small class="form-text text-muted">*Campos não obrigatórios</small>
             <br/>
             <div class="row">
-                <div class="col-lg-8">
-                    <div class="form-group foto-mobile-dash">
-                        <img class="col mx-0 p-0 foto-dash" id="foto2" src="{{ asset('img/img-fundo.png') }}">
-                    </div>
-                    <div class="form-group">
-                        <label for="foto_perfil">Foto Desktop</label>
-                        <div class="custom-file">
-                            <input type="file" accept=".jpg, .jpeg, .png" class="custom-file-input{{ $errors->has('foto_desktop') ? ' is-invalid' : '' }}" id="fotoInput" name="foto_desktop" onchange="loadImg(event, 'foto2', 'fotoNome2')" required>
-                            <label class="custom-file-label" id="fotoNome2" for="validatedCustomFile">Buscar...(jpeg, jpg, png)</label>
-                            <div id="alert_perfil"></div>
+                <div class="col-lg-8 pb-4">
+                    <div class="card foto-container1 {{ $errors->has('foto_desktop') ? 'border-danger text-danger' : '' }}">
+                        <img id="result" class="img-fluid foto-cidade mx-auto" src="{{ asset('img/img-fundo-desktop.png') }}">
+                        <div class="card-footer text-center">
+                            Escolher foto Desktop
                         </div>
-                        @if ($errors->has('foto_desktop'))
-                            <span class="invalid-feedback" role="alert">
-                                <strong>{{ $errors->first('foto_desktop') }}</strong>
-                            </span>
-                        @else
-                            <small class="form-text text-muted">Largura mínima: 1500px | Altura mínima: 1000px</small>
-                        @endif
+                        <input type="file" accept=".jpg, .jpeg, .png" class="f-input-cidade" id="fotoInput2" name="foto_desktop" onchange="loadImg(event, 'result', 'fotoNome2')">
                     </div>
+                    @if ($errors->has('foto_desktop'))
+                        <span class="invalid-feedback" role="alert">
+                            <strong>{{ $errors->first('foto_desktop') }}</strong>
+                        </span>
+                    @else
+                        <small class="form-text text-muted pt-1">Largura mínima: 1500px | Altura mínima: 1000px</small>
+                    @endif
+                    
                 </div>
-                <div class="col-lg-4">
-                    <div class="form-group foto-mobile-dash">
-                        <img class="col mx-0 p-0 foto-dash" id="foto1" src="{{ asset('img/img-fundo.png') }}">
-                    </div>
-                    <div class="form-group">
-                        <label for="foto_perfil">Foto Mobile</label>
-                        <div class="custom-file">
-                            <input type="file" accept=".jpg, .jpeg, .png" class="custom-file-input{{ $errors->has('foto_mobile') ? ' is-invalid' : '' }}" id="fotoInput1" name="foto_mobile" onchange="loadImg(event, 'foto1', 'fotoNome1')" required>
-                            <label class="custom-file-label" id="fotoNome1" for="validatedCustomFile">Buscar...(jpeg, jpg, png)</label>
-                            <div id="alert_perfil"></div>
+                <div class="col-lg-4 pb-4">
+                   <div class="card  foto-container2 {{ $errors->has('foto_mobile') ? 'border-danger text-danger' : '' }}">
+                        <img id="result2" class="img-fluid foto-cidade mx-auto" src="{{ asset('img/img-fundo-mobile.png') }}">
+                        <div class="card-footer text-center">
+                            Escolher foto Mobile
                         </div>
-                        @if ($errors->has('foto_mobile'))
-                            <span class="invalid-feedback" role="alert">
-                                <strong>{{ $errors->first('foto_mobile') }}</strong>
-                            </span>
-                        @else
-                            <small class="form-text text-muted">Largura mínima: 500px | Altura mínima: 800px</small>
-                        @endif
+                        <input type="file" accept=".jpg, .jpeg, .png" class="f-input-cidade" id="fotoInput2" name="foto_mobile" onchange="loadImg(event, 'result2', 'fotoNome2')">
                     </div>
+                    @if ($errors->has('foto_mobile'))
+                        <span class="invalid-feedback" role="alert">
+                            <strong>{{ $errors->first('foto_mobile') }}</strong>
+                        </span>
+                    @else
+                        <small class="form-text text-muted pt-1">Largura mínima: 500px | Altura mínima: 800px</small>
+                    @endif
                 </div>
+            </div>
+            <div class="row">
                 <div class="col-md-8">
                     <div class="form-group">
                         <label for="nome">Cidade</label>
@@ -133,5 +128,6 @@
         </form>
     </div>
 </div>
+
 @endsection
 

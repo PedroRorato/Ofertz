@@ -1,5 +1,5 @@
 @extends('dashboard.layout')
-@section('title') Usuários @endsection
+@section('title') Usuarios @endsection
 @section('menu') #usuarios-menu @endsection
 @section('breadcrumbs') 
 <li class="breadcrumb-item"><a href="/admin/usuarios">Listagem</a></li>
@@ -43,7 +43,7 @@
                 </div>
             </div>
             <button type="submit" class="btn btn-primary shadow mr-3"><i class="fas fa-filter mr-2"></i>Filtrar</button>
-            <a href="/admin/usuarios" class="btn btn-secondary shadow mr-3"><i class="fas fa-sync-alt mr-2"></i>Limpar filtros</a>
+            <a href="/admin/usuarios" class="btn btn-secondary shadow"><i class="fas fa-sync-alt mr-2"></i>Limpar filtros</a>
         </form>
         <hr>
         @if($amount != 0)
@@ -61,8 +61,7 @@
             <table class="table mb-0" >
                 <thead>
                     <tr>
-                      <th scope="col">Nome</th>
-                      <th scope="col">Email</th>
+                      <th scope="col">Responsável</th>
                       <th scope="col">Cidade</th>
                       <th scope="col" class="table-actions">Ações</th>
                     </tr>
@@ -72,7 +71,6 @@
                         @if($usuario->status == 'EXCLUIDO')
                         <tr class="table-danger">
                             <td>{{ $usuario->nome.' '.$usuario->sobrenome }}</td>
-                            <td>{{ $usuario->email }}</td>
                             <td>{{ $usuario->cidade->nome.'-'.$usuario->cidade->uf }}</td>
                             <td>
                                 <a href="/admin/usuarios/{{ $usuario->id }}" class="btn btn-primary shadow" data-toggle="tooltip" title="Editar">
@@ -83,7 +81,6 @@
                         @else
                         <tr>
                             <td>{{ $usuario->nome.' '.$usuario->sobrenome }}</td>
-                            <td>{{ $usuario->email }}</td>
                             <td>{{ $usuario->cidade->nome.'-'.$usuario->cidade->uf }}</td>
                             <td>
                                 <a href="/admin/usuarios/{{ $usuario->id }}" class="btn btn-primary shadow" data-toggle="tooltip" title="Editar">
@@ -119,7 +116,7 @@
             <div class="modal-dialog" role="document">
                 <div class="modal-content">
                     <div class="modal-header">
-                        <h5 class="modal-title">Excluir Usuario</h5>
+                        <h5 class="modal-title">Excluir usuario</h5>
                         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                             <span aria-hidden="true">&times;</span>
                         </button>
@@ -128,7 +125,7 @@
                         @csrf
                         @method('DELETE')
                         <div class="modal-body">
-                            <h5>Tem certeza que deseja excluir a Usuario?</h5>
+                            <h5>Tem certeza que deseja excluir a usuario?</h5>
                         </div>
                         <div class="modal-footer">
                             <button type="button" class="btn btn-secondary" data-dismiss="modal">Fechar</button>

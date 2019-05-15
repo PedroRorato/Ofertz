@@ -40,6 +40,8 @@ Route::prefix('/admin')->group(function(){
 	Route::resource('/categorias-evento', 'Admin\AdminCategoriasEventoController');
 	Route::resource('/categorias-produto', 'Admin\AdminCategoriasProdutoController');
 	Route::resource('/cidades', 'Admin\AdminCidadesController');
+	Route::get('/conta', 'Admin\AdminContaController@show');
+	Route::patch('/conta', 'Admin\AdminContaController@update');
 	Route::resource('/empresas', 'Admin\AdminEmpresasController');
 	Route::resource('/eventos', 'Admin\AdminEventosController');
 	Route::resource('/fotos', 'Admin\AdminFotosController');

@@ -54,7 +54,7 @@ class AdminEmpresasController extends Controller
 
     public function create(){
         //Lista de cidades
-        $cidades = Cidade::where('status', '=', 'ATIVO')->get();
+        $cidades = Cidade::where('status', '=', 'ATIVO')->orderBy('nome', 'asc')->get();
         //Return
         return view('dashboard.admin.empresas.create', compact('cidades'));
     }
@@ -62,7 +62,18 @@ class AdminEmpresasController extends Controller
 
     public function store(Request $request){
 
-        ////Validation
+        //Auxiliar
+        $auxiliar = new AuxiliarController;
+        //Valida data
+        $data = NULL;
+        if (request('nascimento')) {
+            $data = $auxiliar->validaNascimento(request('nascimento'));
+            if (!$data) {
+                return redirect()->back()->withInput()->with('data', 'Só são permitidas datas passadas');
+            }
+        }
+
+        //Validation
         request()->validate([
             'foto' => ['required', 'image', 'mimes:jpeg,jpg,png', 'dimensions:min_width=300,min_height=300', 'max:10000'],
             'empresa' => ['required', 'string', 'min:2', 'max:100'],
@@ -74,13 +85,12 @@ class AdminEmpresasController extends Controller
             'email' => ['required', 'email', 'min:3', 'max:255', 'unique:empresas'],
             'password' => ['required', 'string', 'min:5', 'confirmed'],
             'genero' => ['required', 'alpha', 'max:6'],
-            'nascimento' => ['string', 'size:10'],
             'telefone' => ['required', 'string', 'size:14'],
         ]);
 
-        //S3
-        $s3 = new AuxiliarController;
-        $filename = $s3->s3($request->file('foto'), 'ofertz/e/');
+        //cropS3
+        $auxiliar = new AuxiliarController;
+        $filename = $auxiliar->cropS3($request->file('foto'), request('points'), 'ofertz/empresas/', 300, 300);
 
         //Create
         Empresa::create([
@@ -94,9 +104,9 @@ class AdminEmpresasController extends Controller
             'email' => request('email'),
             'password' => Hash::make(request('password')),
             'genero' => request('genero'),
-            'nascimento' => request('nascimento'),
             'telefone' => request('telefone'),
             'status' => 'ATIVO',
+            'nascimento' => $data,
         ]);
 
         //Return
@@ -106,16 +116,33 @@ class AdminEmpresasController extends Controller
 
     public function show($id){
         $empresa = Empresa::findOrFail($id);
+        //Tratar data
+        $data = NULL;
+        if (isset($empresa->nascimento)) {
+            $partesData = explode("-", $empresa->nascimento);
+            $data = $partesData[2].'/'.$partesData[1].'/'.$partesData[0];
+        }
         //Lista de cidades
-        $cidades = Cidade::where('status', '=', 'ATIVO')->get();
-        return view('dashboard.admin.empresas.show', compact('empresa', 'cidades'));
+        $cidades = Cidade::where('status', '=', 'ATIVO')->orderBy('nome', 'asc')->get();
+        return view('dashboard.admin.empresas.show', compact('empresa', 'cidades', 'data'));
     }
 
 
     public function update(Request $request, $id){
+        //Auxiliar
+        $auxiliar = new AuxiliarController;
+        //Valida data
+        $data = NULL;
+        if (request('nascimento')) {
+            $data = $auxiliar->validaNascimento(request('nascimento'));
+            if (!$data) {
+                return redirect()->back()->withInput()->with('data', 'Só são permitidas datas passadas');
+            }
+        }
+
         
         $empresa = Empresa::findOrFail($id);
-        if (null !== request('password')) {
+        if ($request->has('password')) {
            //Validation
             request()->validate([
                 'password' => ['required', 'string', 'min:5', 'confirmed'],
@@ -139,14 +166,13 @@ class AdminEmpresasController extends Controller
                 'sobrenome' => ['required', 'string', 'min:2', 'max:100'],
                 'email' => ['required', 'email', 'min:3', 'max:255'],
                 'genero' => ['required', 'alpha', 'max:6'],
-                'nascimento' => ['string', 'size:10'],
                 'telefone' => ['required', 'string', 'size:14'],
                 'status' => ['required', 'alpha', 'min:3', 'max:20'],
             ]);
             
-            //S3
-            $s3 = new AuxiliarController;
-            $filename = $s3->s3($request->file('foto'), 'ofertz/empresas/');
+            //cropS3
+            $auxiliar = new AuxiliarController;
+            $filename = $auxiliar->cropS3($request->file('foto'), request('points'), 'ofertz/empresas/', 300, 300);
 
             //Update
             $empresa->foto = $filename;
@@ -158,7 +184,7 @@ class AdminEmpresasController extends Controller
             $empresa->sobrenome = request('sobrenome');
             $empresa->email = request('email');
             $empresa->genero = request('genero');
-            $empresa->nascimento = request('nascimento');
+            $empresa->nascimento = $data;
             $empresa->telefone = request('telefone');
             $empresa->status = request('status');
             $empresa->save();
@@ -176,7 +202,6 @@ class AdminEmpresasController extends Controller
                 'sobrenome' => ['required', 'string', 'min:2', 'max:100'],
                 'email' => ['required', 'email', 'min:3', 'max:255'],
                 'genero' => ['required', 'alpha', 'max:6'],
-                'nascimento' => ['string', 'size:10'],
                 'telefone' => ['required', 'string', 'size:14'],
                 'status' => ['required', 'alpha', 'min:3', 'max:20'],
             ]);
@@ -190,7 +215,7 @@ class AdminEmpresasController extends Controller
             $empresa->sobrenome = request('sobrenome');
             $empresa->email = request('email');
             $empresa->genero = request('genero');
-            $empresa->nascimento = request('nascimento');
+            $empresa->nascimento = $data;
             $empresa->telefone = request('telefone');
             $empresa->status = request('status');
             $empresa->save();
@@ -211,6 +236,5 @@ class AdminEmpresasController extends Controller
 
         //Redirect
         return redirect('/admin/empresas')->withMessage("Empresa excluída com sucesso!");
-        
     }
 }

@@ -151,10 +151,8 @@ class AdminOfertasController extends Controller
     public function store(Request $request){
 
         //Validação da data
-        $partes = explode("/", request('data'));
-        $data = $partes[2] . '-' . $partes[1] . '-' . $partes[0] . 'T' . request('time');
-        $date = strtotime($data);
-        if (time() > $date) {
+        $data = $auxiliar->validaDataTempo(request('data'));
+        if (!$data) {
             return redirect()->back()->withInput()->with('data', 'Só são permitidas datas futuras');
         }
 
@@ -189,7 +187,7 @@ class AdminOfertasController extends Controller
         $produto = $oferta->produto;
         //Data Painel
         $date_now = new DateTime();
-        $date_validade    = new DateTime($oferta->validade);
+        $date_validade = new DateTime($oferta->validade);
         $editar = true;
         if($date_now > $date_validade){
             $editar = false;
@@ -208,10 +206,8 @@ class AdminOfertasController extends Controller
         $oferta = Oferta::findOrFail($id);
 
         //Validação da data
-        $partes = explode("/", request('data'));
-        $data = $partes[2] . '-' . $partes[1] . '-' . $partes[0] . 'T' . request('time');
-        $date = strtotime($data);
-        if (time() > $date) {
+        $data = $auxiliar->validaDataTempo(request('data'));
+        if (!$data) {
             return redirect()->back()->withInput()->with('data', 'Só são permitidas datas futuras');
         }
 

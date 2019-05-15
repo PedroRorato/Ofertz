@@ -21,7 +21,7 @@ class CreateEmpresasTable extends Migration
             $table->string('genero');
             $table->string('telefone');
             $table->string('foto')->nullable();
-            $table->string('nascimento')->nullable();
+            $table->date('nascimento')->nullable();
             $table->string('email')->unique();
             $table->timestamp('email_verified_at')->nullable();
             $table->string('password');

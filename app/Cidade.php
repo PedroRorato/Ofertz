@@ -28,4 +28,8 @@ class Cidade extends Model
         return $this->hasMany(Produto::class);
     }
 
+    public function usuarios(){
+        return $this->hasMany(User::class);
+    }
+
 }

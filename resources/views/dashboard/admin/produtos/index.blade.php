@@ -80,17 +80,6 @@
                                 </a>
                             </td>
                         </tr>
-                        @elseif($produto->status == 'PENDENTE')
-                        <tr class="table-danger">
-                            <td>{{ $produto->nome }}</td>
-                            <td>{{ $produto->empresa->empresa }}</td>
-                            <td>{{ $produto->cidade->nomee.'-'.$produto->cidade->uf }}</td>
-                            <td>
-                                <a href="/admin/produtos/{{ $produto->id }}" class="btn btn-primary shadow" data-toggle="tooltip" title="Editar">
-                                    <i class="fas fa-edit"></i>
-                                </a>
-                            </td>
-                        </tr>
                         @else
                         <tr>
                             <td>{{ $produto->nome }}</td>

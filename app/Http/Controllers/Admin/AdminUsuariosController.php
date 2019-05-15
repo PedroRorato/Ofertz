@@ -45,7 +45,7 @@ class AdminUsuariosController extends Controller
         );
 
         //Lista de cidades
-        $cidades = Cidade::where('status', '=', 'ATIVO')->get();
+        $cidades = Cidade::where('status', '=', 'ATIVO')->orderBy('nome', 'asc')->get();
 
         //Return
         return view('dashboard.admin.usuarios.index', compact('usuarios', 'amount', 'columns', 'queries', 'cidades'));
@@ -54,7 +54,7 @@ class AdminUsuariosController extends Controller
 
     public function create(){
         //Lista de cidades
-        $cidades = Cidade::where('status', '=', 'ATIVO')->get();
+        $cidades = Cidade::where('status', '=', 'ATIVO')->orderBy('nome', 'asc')->get();
         //Return
         return view('dashboard.admin.usuarios.create', compact('cidades'));
     }
@@ -62,57 +62,74 @@ class AdminUsuariosController extends Controller
 
     public function store(Request $request){
 
-        ////Validation
+        //Auxiliar
+        $auxiliar = new AuxiliarController;
+        //Validação da data
+        $data = NULL;
+        if (request('nascimento')) {
+            $data = $auxiliar->validaNascimento(request('nascimento'));
+            if (!$data) {
+                return redirect()->back()->withInput()->with('data', 'Há algo errado com a data');
+            }
+        }
+
+        //Validation
         request()->validate([
             'foto' => ['required', 'image', 'mimes:jpeg,jpg,png', 'dimensions:min_width=300,min_height=300', 'max:10000'],
-            'usuario' => ['required', 'string', 'min:2', 'max:100'],
-            'cnpj' => ['string', 'size:18'],
             'cidade' => ['integer', 'max:255'],
-            'descricao' => ['string', 'max:255'],
             'nome' => ['required', 'string', 'min:2', 'max:100'],
             'sobrenome' => ['required', 'string', 'min:2', 'max:100'],
-            'email' => ['required', 'email', 'min:3', 'max:255', 'unique:usuarios'],
+            'email' => ['required', 'email', 'min:3', 'max:255', 'unique:users'],
             'password' => ['required', 'string', 'min:5', 'confirmed'],
             'genero' => ['required', 'alpha', 'max:6'],
-            'nascimento' => ['string', 'size:10'],
-            'telefone' => ['required', 'string', 'size:14'],
         ]);
 
-        //S3
-        $s3 = new AuxiliarController;
-        $filename = $s3->s3($request->file('foto'), 'ofertz/e/');
+        //cropS3
+        $filename = $auxiliar->cropS3($request->file('foto'), request('points'), 'ofertz/usuarios/', 300, 300);
 
         //Create
         User::create([
             'foto' => $filename,
-            'usuario' => request('usuario'),
-            'cnpj' => request('cnpj'),
             'cidade_id' => request('cidade'),
-            'descricao' => request('descricao'),
             'nome' => request('nome'),
             'sobrenome' => request('sobrenome'),
             'email' => request('email'),
             'password' => Hash::make(request('password')),
             'genero' => request('genero'),
-            'nascimento' => request('nascimento'),
-            'telefone' => request('telefone'),
-            'status' => 'ATIVO',
+            'nascimento' => $data,
         ]);
 
         //Return
-        return redirect('/admin/usuarios')->withMessage("usuario criada com sucesso!");
+        return redirect('/admin/usuarios')->withMessage("Usuário criada com sucesso!");
     }
 
 
     public function show($id){
         $usuario = User::findOrFail($id);
+        //Tratar data
+        $data = NULL;
+        if (isset($usuario->nascimento)) {
+            $partesData = explode("-", $usuario->nascimento);
+            $data = $partesData[2].'/'.$partesData[1].'/'.$partesData[0];
+        }
         //Lista de cidades
-        $cidades = Cidade::where('status', '=', 'ATIVO')->get();
-        return view('dashboard.admin.usuarios.show', compact('usuario', 'cidades'));
+        $cidades = Cidade::where('status', '=', 'ATIVO')->orderBy('nome', 'asc')->get();
+        return view('dashboard.admin.usuarios.show', compact('usuario', 'cidades', 'data'));
     }
 
 
     public function update(Request $request, $id){
+
+        //Auxiliar
+        $auxiliar = new AuxiliarController;
+        //Validação da data
+        $data = NULL;
+        if (request('nascimento')) {
+            $data = $auxiliar->validaNascimento(request('nascimento'));
+            if (!$data) {
+                return redirect()->back()->withInput()->with('data', 'Há algo errado com a data');
+            }
+        }
         
         $usuario = User::findOrFail($id);
         if (null !== request('password')) {
@@ -131,35 +148,26 @@ class AdminUsuariosController extends Controller
             //Validation
             request()->validate([
                 'foto' => ['image', 'mimes:jpeg,jpg,png', 'dimensions:min_width=300,min_height=300', 'max:10000'],
-                'usuario' => ['required', 'string', 'min:2', 'max:100'],
-                'cnpj' => ['string', 'size:18'],
                 'cidade' => ['integer', 'max:255'],
-                'descricao' => ['string', 'max:255'],
                 'nome' => ['required', 'string', 'min:2', 'max:100'],
                 'sobrenome' => ['required', 'string', 'min:2', 'max:100'],
                 'email' => ['required', 'email', 'min:3', 'max:255'],
                 'genero' => ['required', 'alpha', 'max:6'],
-                'nascimento' => ['string', 'size:10'],
-                'telefone' => ['required', 'string', 'size:14'],
                 'status' => ['required', 'alpha', 'min:3', 'max:20'],
             ]);
             
-            //S3
-            $s3 = new AuxiliarController;
-            $filename = $s3->s3($request->file('foto'), 'ofertz/usuarios/');
+            //cropS3
+            $auxiliar = new AuxiliarController;
+            $filename = $auxiliar->cropS3($request->file('foto'), request('points'), 'ofertz/usuarios/', 300, 300);
 
             //Update
             $usuario->foto = $filename;
-            $usuario->usuario = request('usuario');
-            $usuario->cnpj = request('cnpj');
             $usuario->cidade_id = request('cidade');
-            $usuario->descricao = request('descricao');
             $usuario->nome = request('nome');
             $usuario->sobrenome = request('sobrenome');
             $usuario->email = request('email');
             $usuario->genero = request('genero');
-            $usuario->nascimento = request('nascimento');
-            $usuario->telefone = request('telefone');
+            $usuario->nascimento = $data;
             $usuario->status = request('status');
             $usuario->save();
 
@@ -168,30 +176,21 @@ class AdminUsuariosController extends Controller
         }else{
             //Validation
             request()->validate([
-                'usuario' => ['required', 'string', 'min:2', 'max:100'],
-                'cnpj' => ['string', 'size:18'],
                 'cidade' => ['integer', 'max:255'],
-                'descricao' => ['string', 'max:255'],
                 'nome' => ['required', 'string', 'min:2', 'max:100'],
                 'sobrenome' => ['required', 'string', 'min:2', 'max:100'],
                 'email' => ['required', 'email', 'min:3', 'max:255'],
                 'genero' => ['required', 'alpha', 'max:6'],
-                'nascimento' => ['string', 'size:10'],
-                'telefone' => ['required', 'string', 'size:14'],
                 'status' => ['required', 'alpha', 'min:3', 'max:20'],
             ]);
 
             //Update
-            $usuario->usuario = request('usuario');
-            $usuario->cnpj = request('cnpj');
             $usuario->cidade_id = request('cidade');
-            $usuario->descricao = request('descricao');
             $usuario->nome = request('nome');
             $usuario->sobrenome = request('sobrenome');
             $usuario->email = request('email');
             $usuario->genero = request('genero');
-            $usuario->nascimento = request('nascimento');
-            $usuario->telefone = request('telefone');
+            $usuario->nascimento = $data;
             $usuario->status = request('status');
             $usuario->save();
 
@@ -210,7 +209,7 @@ class AdminUsuariosController extends Controller
         $usuario->save();
 
         //Redirect
-        return redirect('/admin/usuarios')->withMessage("usuario excluída com sucesso!");
+        return redirect('/admin/usuarios')->withMessage("Usuário excluída com sucesso!");
         
     }
 }
