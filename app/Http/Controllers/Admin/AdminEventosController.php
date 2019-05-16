@@ -56,7 +56,7 @@ class AdminEventosController extends Controller
             ['amount' => $amount]
         );
         //Lista de cidades
-        $cidades = Cidade::where('status', '=', 'ATIVO')->get();
+        $cidades = Cidade::where('status', '=', 'ATIVO')->orderBy('nome', 'asc')->get();
         
         return view('dashboard.admin.eventos.index', compact('eventos', 'amount', 'situacao', 'columns', 'queries', 'cidades'));
     }
@@ -128,7 +128,7 @@ class AdminEventosController extends Controller
         $pertences = $auxiliar->categoriasArray($evento->categorias);
         //Lista de cidades e categorias
         $categorias = CategoriasEvento::where('status', '=', 'ATIVO')->orderBy('nome', 'asc')->get();
-        $cidades = Cidade::where('status', '=', 'ATIVO')->get();
+        $cidades = Cidade::where('status', '=', 'ATIVO')->orderBy('nome', 'asc')->get();
         return view('dashboard.admin.eventos.show', compact('evento', 'cidades', 'editar', 'data', 'tempo', 'pertences', 'categorias'));
     }
 

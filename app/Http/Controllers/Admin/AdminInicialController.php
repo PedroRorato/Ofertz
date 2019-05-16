@@ -1,10 +1,11 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Admin;
 
 use Illuminate\Http\Request;
+use App\Http\Controllers\Controller;
 
-class EmpresaController extends Controller
+class AdminInicialController extends Controller
 {
     /**
      * Create a new controller instance.
@@ -13,7 +14,7 @@ class EmpresaController extends Controller
      */
     public function __construct()
     {
-        $this->middleware('auth:empresa');
+        $this->middleware('auth:admin');
     }
 
     /**
@@ -23,6 +24,6 @@ class EmpresaController extends Controller
      */
     public function index()
     {
-        return view('dashboard.empresa.index');
+        return view('dashboard.admin.index');
     }
 }

@@ -1,4 +1,4 @@
-@extends('dashboard.layout')
+@extends('dashboard.admin.layout')
 @section('title') Empresas @endsection
 @section('menu') #empresas-menu @endsection
 @section('breadcrumbs') 
@@ -183,6 +183,7 @@
                         <option value="ATIVO">ATIVO</option>
                         <option value="EXCLUIDO">EXCLUIDO</option>
                         <option value="INATIVO">INATIVO</option>
+                        <option value="PENDENTE">PENDENTE</option>
                     </select>
                 </div>
             </div>

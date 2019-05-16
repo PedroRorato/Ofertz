@@ -1,4 +1,4 @@
-@extends('dashboard.layout')
+@extends('dashboard.admin.layout')
 @section('title') Administradores @endsection
 @section('menu') #administradores-menu @endsection
 @section('breadcrumbs') 

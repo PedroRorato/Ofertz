@@ -4,7 +4,7 @@
 @section('content')
 <div class="container">
     <div class="row ">
-        <form class="py-5 col-lg-6 col-md-8 mx-auto" method="POST" action="{{ route('admin.login.submit') }}">
+        <form class="py-5 col-lg-6 col-md-8 mx-auto" method="POST" action="/admin/login">
             <h2 class="text-center pb-2">Login Admin</h2>
             @csrf
             <div class="form-group">

@@ -43,7 +43,7 @@ class AdminFranqueadosController extends Controller
         );
 
         //Lista de cidades
-        $cidades = Cidade::where('status', '=', 'ATIVO')->get();
+        $cidades = Cidade::where('status', '=', 'ATIVO')->orderBy('nome', 'asc')->get();
 
         //Return
         return view('dashboard.admin.franqueados.index', compact('franqueados', 'amount', 'columns', 'queries', 'cidades'));
@@ -51,7 +51,7 @@ class AdminFranqueadosController extends Controller
 
     public function create(){
         //Lista de cidades
-        $cidades = Cidade::where('status', '=', 'ATIVO')->get();
+        $cidades = Cidade::where('status', '=', 'ATIVO')->orderBy('nome', 'asc')->get();
         //Return
         return view('dashboard.admin.franqueados.create', compact('cidades'));
     }
@@ -87,7 +87,7 @@ class AdminFranqueadosController extends Controller
     public function show($id){
         $franqueado = Franqueado::findOrFail($id);
         //Lista de cidades
-        $cidades = Cidade::where('status', '=', 'ATIVO')->get();
+        $cidades = Cidade::where('status', '=', 'ATIVO')->orderBy('nome', 'asc')->get();
         return view('dashboard.admin.franqueados.show', compact('franqueado', 'cidades'));
     }
 

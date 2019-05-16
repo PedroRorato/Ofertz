@@ -42,7 +42,7 @@ class AdminContaController extends Controller
             $admin->save();
 
             //Redirect
-            return redirect('/admin/admins/'.$id)->withMessage("Senha alterada com sucesso!");
+            return redirect('/admin/conta')->withMessage("Senha alterada com sucesso!");
         } elseif($request->hasFile('foto')) {
             //Validation
             request()->validate([
@@ -64,7 +64,7 @@ class AdminContaController extends Controller
             $admin->save();
 
             //Redirect
-            return redirect('/admin/admins/'.$id)->withMessage("Edição realizada com sucesso!");
+            return redirect('/admin/conta')->withMessage("Edição realizada com sucesso!");
         }else{
             //Validation
             request()->validate([
@@ -85,16 +85,19 @@ class AdminContaController extends Controller
     }
 
 
-    public function destroy($id){
+    public function destroy(){
 
-        $admin = User::findOrFail($id);
+        $admin = Admin::findOrFail(auth()->id());
         
         //Update
         $admin->status = "EXCLUIDO";
         $admin->save();
 
+        //Logout
+        Auth::logout();
+
         //Redirect
-        return redirect('/admin/admins')->withMessage("Usuário excluída com sucesso!");
+        return redirect('/admin/login')->withMessage("Conta excluída com sucesso!");
         
     }
 }

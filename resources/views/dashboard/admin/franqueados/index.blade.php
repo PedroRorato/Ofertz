@@ -1,4 +1,4 @@
-@extends('dashboard.layout')
+@extends('dashboard.admin.layout')
 @section('title') Franqueados @endsection
 @section('menu') #franqueados-menu @endsection
 @section('breadcrumbs') 

@@ -1,10 +1,11 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Franqueado;
 
 use Illuminate\Http\Request;
+use App\Http\Controllers\Controller;
 
-class AdminController extends Controller
+class InicialController extends Controller
 {
     /**
      * Create a new controller instance.
@@ -13,7 +14,7 @@ class AdminController extends Controller
      */
     public function __construct()
     {
-        $this->middleware('auth:admin');
+        $this->middleware('auth:franqueado');
     }
 
     /**
@@ -23,6 +24,6 @@ class AdminController extends Controller
      */
     public function index()
     {
-        return view('dashboard.admin.index');
+        return view('dashboard.franqueado.index');
     }
 }

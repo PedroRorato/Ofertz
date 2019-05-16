@@ -1,4 +1,4 @@
-@extends('dashboard.layout')
+@extends('dashboard.admin.layout')
 @section('title') Categorias Produto @endsection
 @section('menu') #categorias-produto-menu @endsection
 @section('breadcrumbs') 

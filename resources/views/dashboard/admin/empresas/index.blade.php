@@ -1,4 +1,4 @@
-@extends('dashboard.layout')
+@extends('dashboard.admin.layout')
 @section('title') Empresas @endsection
 @section('menu') #empresas-menu @endsection
 @section('breadcrumbs') 
@@ -30,6 +30,8 @@
                         <option value="%">TODOS</option>
                         <option value="ATIVO">ATIVO</option>
                         <option value="EXCLUIDO">EXCLUIDO</option>
+                        <option value="INATIVO">INATIVO</option>
+                        <option value="PENDENTE">PENDENTE</option>
                     </select>
                 </div>
                 <div class="form-group col-lg-3">
@@ -80,8 +82,8 @@
                                 </a>
                             </td>
                         </tr>
-                        @elseif($empresa->status == 'PENDENTE')
-                        <tr class="table-danger">
+                        @elseif($empresa->status == 'INATIVO')
+                        <tr class="table-secondary">
                             <td>{{ $empresa->empresa }}</td>
                             <td>{{ $empresa->nome.' '.$empresa->sobrenome }}</td>
                             <td>{{ $empresa->cidade->nome.'-'.$empresa->cidade->uf }}</td>
@@ -89,6 +91,23 @@
                                 <a href="/admin/empresas/{{ $empresa->id }}" class="btn btn-primary shadow" data-toggle="tooltip" title="Editar">
                                     <i class="fas fa-edit"></i>
                                 </a>
+                                <button type="button" class="btn btn-danger shadow" data-toggle="modal" title="Excluir" data-target="#modalDelete{{ $empresa->id }}"> 
+                                    <i class="fas fa-trash-alt"></i>
+                                </button>
+                            </td>
+                        </tr>
+                        @elseif($empresa->status == 'PENDENTE')
+                        <tr class="table-primary">
+                            <td>{{ $empresa->empresa }}</td>
+                            <td>{{ $empresa->nome.' '.$empresa->sobrenome }}</td>
+                            <td>{{ $empresa->cidade->nome.'-'.$empresa->cidade->uf }}</td>
+                            <td>
+                                <a href="/admin/empresas/{{ $empresa->id }}" class="btn btn-primary shadow" data-toggle="tooltip" title="Editar">
+                                    <i class="fas fa-edit"></i>
+                                </a>
+                                <button type="button" class="btn btn-danger shadow" data-toggle="modal" title="Excluir" data-target="#modalDelete{{ $empresa->id }}"> 
+                                    <i class="fas fa-trash-alt"></i>
+                                </button>
                             </td>
                         </tr>
                         @else

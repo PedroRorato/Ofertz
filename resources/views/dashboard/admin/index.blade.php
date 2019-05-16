@@ -1,4 +1,4 @@
-@extends('dashboard.layout')
+@extends('dashboard.admin.layout')
 @section('title') Painel de Controle @endsection
 @section('menu') #inicial-menu @endsection
 @section('breadcrumbs') 

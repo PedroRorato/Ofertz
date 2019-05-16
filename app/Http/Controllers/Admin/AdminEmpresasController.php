@@ -40,12 +40,12 @@ class AdminEmpresasController extends Controller
         //Contagem
         $amount = $empresas->get()->count();
         $empresas = $empresas->with('cidade');
-        $empresas = $empresas->orderBy('nome', 'asc')->paginate(25)->appends($queries,
+        $empresas = $empresas->orderBy('empresa', 'asc')->paginate(25)->appends($queries,
             ['amount' => $amount]
         );
 
         //Lista de cidades
-        $cidades = Cidade::where('status', '=', 'ATIVO')->get();
+        $cidades = Cidade::where('status', '=', 'ATIVO')->orderBy('nome', 'asc')->get();
 
         //Return
         return view('dashboard.admin.empresas.index', compact('empresas', 'amount', 'columns', 'queries', 'cidades'));

@@ -58,7 +58,7 @@ class Handler extends ExceptionHandler
             $guard = array_get($exception->guards(), 0);
             switch($guard){
                 case 'admin':
-                    return redirect(route('admin.login'));
+                    return redirect('/admin/login');
                     break;
                 default:
                     return redirect(route('login'));

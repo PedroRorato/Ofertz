@@ -1,4 +1,4 @@
-@extends('dashboard.layout')
+@extends('dashboard.admin.layout')
 @section('title') Conta @endsection
 @section('menu') #menu-accordion @endsection
 @section('breadcrumbs') 
@@ -156,7 +156,7 @@
                     <span aria-hidden="true">&times;</span>
                 </button>
             </div>
-            <form method="POST" action="/admin/admins/{{ $admin->id }}">
+            <form method="POST" action="/admin/conta">
                 @csrf
                 @method('PATCH')
                 <div class="modal-body">
@@ -192,7 +192,7 @@
                     <span aria-hidden="true">&times;</span>
                 </button>
             </div>
-            <form method="POST" action="/admin/admins/{{ $admin->id }}">
+            <form method="POST" action="/admin/conta">
                 @csrf
                 @method('DELETE')
                 <div class="modal-body">
