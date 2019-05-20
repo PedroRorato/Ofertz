@@ -2,8 +2,8 @@
 @section('title') Produtos @endsection
 @section('menu') #produtos-menu @endsection
 @section('breadcrumbs') 
-<li class="breadcrumb-item"><a href="/admin/produtos">Listagem</a></li>
-<li class="breadcrumb-item"><a href="/admin/produtos/{{ $produto->id }}">Painel do Produto</a></li>
+<li class="breadcrumb-item"><a href="/franqueado/produtos">Listagem</a></li>
+<li class="breadcrumb-item"><a href="/franqueado/produtos/{{ $produto->id }}">Painel do Produto</a></li>
 @endsection
 @section('content')
 <script type="text/javascript">
@@ -14,12 +14,13 @@
         $("#status").children('[value="{{ $produto->status }}"]').attr('selected', true);
     });
 </script>
-<a href="/admin/produtos" class="btn btn-secondary shadow mb-3"><i class="fas fa-arrow-left mr-2"></i>Voltar</a>
-<form method="POST" action="/admin/produtos/{{ $produto->id }}" enctype="multipart/form-data"  onsubmit="progressBar()">
+<a href="/franqueado/produtos" class="btn btn-secondary shadow mb-3"><i class="fas fa-arrow-left mr-2"></i>Voltar</a>
+<form method="POST" action="/franqueado/produtos/{{ $produto->id }}" enctype="multipart/form-data"  onsubmit="progressBar()">
 <div class="card shadow">
     <div class="card-body">
         @csrf
         @method('PATCH')
+        <h5>Produto de: {{ $produto->empresa->empresa }}</h5>
         <small class="form-text text-muted">*Campos não obrigatórios</small>
         <br/>
         <input type="hidden" id="points" name="points">
@@ -43,69 +44,37 @@
             </div>
         </div>
         <br/>
-        <div class="row">
-            <div class="col-md-8">
-                <div class="form-group">
-                    <label for="nome">Nome</label>
-                    <input type="text" class="form-control{{ $errors->has('nome') ? ' is-invalid' : '' }}" id="nome" name="nome" placeholder="Digite o nome da produto..." value="{{ $produto->nome }}" required>
-                    @if ($errors->has('nome'))
-                        <span class="invalid-feedback" role="alert">
-                            <strong>{{ $errors->first('nome') }}</strong>
-                        </span>
-                    @endif
+        <div class="form-group">
+            <label for="nome">Nome</label>
+            <input type="text" class="form-control{{ $errors->has('nome') ? ' is-invalid' : '' }}" id="nome" name="nome" placeholder="Digite o nome da produto..." value="{{ $produto->nome }}" required>
+            @if ($errors->has('nome'))
+                <span class="invalid-feedback" role="alert">
+                    <strong>{{ $errors->first('nome') }}</strong>
+                </span>
+            @endif
+        </div>
+        <div class="form-group">
+            <label for="descricao">Descrição*</label>
+            <textarea class="form-control{{ $errors->has('descricao') ? ' is-invalid' : '' }}" id="exampleFormControlTextarea1" rows="3" id="descricao" name="descricao" placeholder="Descreva o produto...">{{ $produto->descricao }}</textarea>
+            @if ($errors->has('descricao'))
+                <span class="invalid-feedback" role="alert">
+                    <strong>{{ $errors->first('descricao') }}</strong>
+                </span>
+            @endif
+        </div>
+        <h5 class="py-2">Categorias</h5>
+        <div class="form-group">
+            @foreach($categorias as $categoria)
+                <div class="custom-control custom-checkbox custom-control-inline pb-3 mr-4">
+                    <input type="checkbox" class="custom-control-input {{ $errors->has('categorias') ? 'is-invalid' : '' }}" id="check{{ $categoria->id }}" name="categorias[]" value="{{ $categoria->id }}" {{ array_search($categoria->id, $pertences) ? ' checked' : '' }}> 
+                    <label class="custom-control-label" for="check{{ $categoria->id }}">{{ $categoria->nome }}</label>
                 </div>
-            </div>
-            <div class="col-mP-4">
-                <div class="form-group">
-                    <label for="cidade">Cidade</label>
-                    <select class="custom-select{{ $errors->has('cidade') ? ' is-invalid' : '' }}" id="cidade" name="cidade" required>
-                        @foreach($cidades as $cidade)
-                            <option value="{{ $cidade->id }}">{{ $cidade->nome.'-'.$cidade->uf }}</option>
-                        @endforeach
-                    </select>
-                    @if ($errors->has('cidade'))
-                        <span class="invalid-feedback" role="alert">
-                            <strong>{{ $errors->first('cidade') }}</strong>
-                        </span>
-                    @endif
-                </div>
-            </div>
-            <div class="col-12">
-                <div class="form-group">
-                    <label for="descricao">Descrição*</label>
-                    <textarea class="form-control{{ $errors->has('descricao') ? ' is-invalid' : '' }}" id="exampleFormControlTextarea1" rows="3" id="descricao" name="descricao" placeholder="Descreva o produto...">{{ $produto->descricao }}</textarea>
-                    @if ($errors->has('descricao'))
-                        <span class="invalid-feedback" role="alert">
-                            <strong>{{ $errors->first('descricao') }}</strong>
-                        </span>
-                    @endif
-                </div>
-            </div>
-            <div class="col-12">
-                <h5 class="py-2">Categorias</h5>
-                <div class="form-group">
-                    @foreach($categorias as $categoria)
-                        <div class="custom-control custom-checkbox custom-control-inline pb-3 mr-4">
-                            <input type="checkbox" class="custom-control-input {{ $errors->has('categorias') ? 'is-invalid' : '' }}" id="check{{ $categoria->id }}" name="categorias[]" value="{{ $categoria->id }}" {{ array_search($categoria->id, $pertences) ? ' checked' : '' }}> 
-                            <label class="custom-control-label" for="check{{ $categoria->id }}">{{ $categoria->nome }}</label>
-                        </div>
-                    @endforeach
-                    @if ($errors->has('categorias'))
-                        <span class="invalid-feedback" role="alert">
-                            <strong>{{ $errors->first('categorias') }}</strong>
-                        </span>
-                    @endif
-                </div>
-            </div>
-            <div class="col-12">
-                <div class="form-group">
-                    <label for="status">Status</label>
-                    <select class="custom-select" id="status" name="status">
-                        <option value="ATIVO">ATIVO</option>
-                        <option value="EXCLUIDO">EXCLUIDO</option>
-                    </select>
-                </div>
-            </div>
+            @endforeach
+            @if ($errors->has('categorias'))
+                <span class="invalid-feedback" role="alert">
+                    <strong>{{ $errors->first('categorias') }}</strong>
+                </span>
+            @endif
         </div>
         <hr>
         <div class="dash-botoes">
@@ -176,7 +145,7 @@
                     <span aria-hidden="true">&times;</span>
                 </button>
             </div>
-            <form method="POST" action="/admin/produtos/{{ $produto->id }}">
+            <form method="POST" action="/franqueado/produtos/{{ $produto->id }}">
                 @csrf
                 @method('DELETE')
                 <div class="modal-body">

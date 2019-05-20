@@ -2,8 +2,8 @@
 @section('title') Usuarios @endsection
 @section('menu') #usuarios-menu @endsection
 @section('breadcrumbs') 
-<li class="breadcrumb-item"><a href="/admin/usuarios">Listagem</a></li>
-<li class="breadcrumb-item"><a href="/admin/usuarios/create">Adicionar</a></li>
+<li class="breadcrumb-item"><a href="/franqueado/usuarios">Listagem</a></li>
+<li class="breadcrumb-item"><a href="/franqueado/usuarios/create">Adicionar</a></li>
 @endsection
 @section('content')
 <script type="text/javascript">
@@ -16,8 +16,8 @@
         $("#genero option[value={!! old('genero') ? old('genero') : '1' !!}]").attr('selected', 'selected');
     });
 </script>
-<a href="/admin/usuarios" class="btn btn-secondary shadow mb-3"><i class="fas fa-arrow-left mr-2"></i>Voltar</a>
-<form method="POST" action="/admin/usuarios" enctype="multipart/form-data" onsubmit="progressBar()">
+<a href="/franqueado/usuarios" class="btn btn-secondary shadow mb-3"><i class="fas fa-arrow-left mr-2"></i>Voltar</a>
+<form method="POST" action="/franqueado/usuarios" enctype="multipart/form-data" onsubmit="progressBar()">
 <div class="card shadow">
     <div class="card-body">
         @csrf
@@ -29,7 +29,7 @@
                 <div class="card foto-container {{ ($errors->has('foto') || $errors->has('points')) ? 'border-danger text-danger' : '' }}" data-toggle="modal" data-target="#editorImagem">
                     <img id="result" class="img-fluid" src="{{ asset('img/user.png') }}">
                     <div class="card-footer text-center">
-                        Escolher foto
+                        Escolher foto*
                     </div>
                 </div>
                 @if ($errors->has('foto'))
@@ -95,7 +95,7 @@
                     <input type="password" class="form-control" id="password-confirm" name="password_confirmation" placeholder="Confirme a senha..." required>
                 </div>
             </div>
-            <div class="col-lg-4">
+            <div class="col-lg-6">
                 <div class="form-group">
                     <label for="genero">Gênero</label>
                     <select class="custom-select{{ $errors->has('genero') ? ' is-invalid' : '' }}" id="genero" name="genero" required>
@@ -110,28 +110,13 @@
                     @endif
                 </div>
             </div>
-            <div class="col-lg-4">
+            <div class="col-lg-6">
                 <div class="form-group">
                     <label for="nascimento">Data de Nascimento*</label>
                     <input type="text" class="form-control{{ Session::has('data') ? ' is-invalid' : '' }}" id="nascimento" name="nascimento" value="{{ old('nascimento') }}">
                     @if (Session::has('data'))
                         <span class="invalid-feedback" role="alert">
                             <strong>{{ Session::get('data') }}</strong>
-                        </span>
-                    @endif
-                </div>
-            </div>
-            <div class="col-lg-4">
-                <div class="form-group">
-                    <label for="cidade">Cidade</label>
-                    <select class="custom-select{{ $errors->has('cidade') ? ' is-invalid' : '' }}" id="cidade" name="cidade" required>
-                        @foreach($cidades as $cidade)
-                            <option value="{{ $cidade->id }}">{{ $cidade->nome.'-'.$cidade->uf }}</option>
-                        @endforeach
-                    </select>
-                    @if ($errors->has('cidade'))
-                        <span class="invalid-feedback" role="alert">
-                            <strong>{{ $errors->first('cidade') }}</strong>
                         </span>
                     @endif
                 </div>

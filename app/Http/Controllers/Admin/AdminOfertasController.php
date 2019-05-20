@@ -150,6 +150,8 @@ class AdminOfertasController extends Controller
 
     public function store(Request $request){
 
+        //Auxiliar
+        $auxiliar = new AuxiliarController;
         //Validação da data
         $data = $auxiliar->validaDataTempo(request('data'));
         if (!$data) {
@@ -204,7 +206,8 @@ class AdminOfertasController extends Controller
     public function update(Request $request, $id){
         
         $oferta = Oferta::findOrFail($id);
-
+        //Auxiliar
+        $auxiliar = new AuxiliarController;
         //Validação da data
         $data = $auxiliar->validaDataTempo(request('data'));
         if (!$data) {

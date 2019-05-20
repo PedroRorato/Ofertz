@@ -38,6 +38,7 @@
         @csrf
         @method('PATCH')
         <h4 class="">Dados da Empresa</h4>
+        <p>STATUS: {{ $empresa->status }}</p>
         <small class="form-text text-muted">*Campos não obrigatórios</small>
         <br/>
         <input type="hidden" id="points" name="points">
@@ -134,7 +135,7 @@
                     @endif
                 </div>
             </div>
-            <div class="col-lg-6">
+            <div class="col-lg-4">
                 <div class="form-group">
                     <label for="genero">Gênero</label>
                     <select class="custom-select{{ $errors->has('genero') ? ' is-invalid' : '' }}" id="genero" name="genero" required>
@@ -149,7 +150,7 @@
                     @endif
                 </div>
             </div>
-            <div class="col-lg-6">
+            <div class="col-lg-4">
                 <div class="form-group">
                     <label for="nascimento">Data de Nascimento*</label>
                     <input type="text" class="form-control{{ $errors->has('data') ? ' is-invalid' : '' }}" id="nascimento" name="nascimento" value="{{ $data }}">
@@ -160,7 +161,7 @@
                     @endif
                 </div>
             </div>
-            <div class="col-lg-6">
+            <div class="col-lg-4">
                 <div class="form-group">
                     <label for="telefone">Celular</label>
                     <input type="text" class="form-control{{ $errors->has('telefone') ? ' is-invalid' : '' }}" id="telefone" name="telefone" value="{{ $empresa->telefone }}" required>
@@ -171,24 +172,25 @@
                     @endif
                 </div>
             </div>
-            <div class="col-lg-6">
-                <div class="form-group">
-                    <label for="status">Status</label>
-                    <select class="custom-select" id="status" name="status">
-                        <option value="ATIVO">ATIVO</option>
-                        <option value="INATIVO">INATIVO</option>
-                    </select>
-                </div>
-            </div>
         </div>
         <hr>
         <div class="dash-botoes">
+            <button type="submit" class="btn btn-primary shadow mr-3 mt-3 mt-sm-0"><i class="fas fa-save mr-2"></i>Salvar</button>
             @if($empresa->status == 'PENDENTE')
             <button type="button" class="btn btn-success shadow mr-3 mt-3 mt-sm-0" data-toggle="modal" title="Aceitar" data-target="#modalAceitar"> 
                 <i class="fas fa-check"></i>Aceitar
             </button>
             @endif
-            <button type="submit" class="btn btn-primary shadow mr-3 mt-3 mt-sm-0"><i class="fas fa-save mr-2"></i>Salvar</button>
+            @if($empresa->status == 'ATIVO')
+            <button type="button" class="btn btn-dark shadow mr-3 mt-3 mt-sm-0" data-toggle="modal" title="Aceitar" data-target="#modalInativar"> 
+                <i class="fas fa-thumbs-down mr-2"></i>Tornar status INATIVO
+            </button>
+            @endif
+            @if($empresa->status == 'INATIVO')
+            <button type="button" class="btn btn-success shadow mr-3 mt-3 mt-sm-0" data-toggle="modal" title="Aceitar" data-target="#modalAtivar"> 
+                <i class="fas fa-thumbs-up mr-2"></i>Tornar status ATIVO
+            </button>
+            @endif
             <button type="button" class="btn btn-warning shadow mr-3 mt-3 mt-sm-0" data-toggle="modal" data-target="#modalSenha">
                 <i class="fas fa-key mr-2"></i>Alterar senha
             </button>
@@ -284,7 +286,7 @@
         </div>
     </div>
 </div>
-<!-- Modal DELETE -->
+@if($empresa->status != 'EXCLUIDO')
 <div class="modal fade" id="modalDelete" tabindex="-1" role="dialog" aria-hidden="true">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
@@ -308,8 +310,60 @@
         </div>
     </div>
 </div>
+@endif
+@if($empresa->status == 'ATIVO')
+<div class="modal fade" id="modalInativar" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Tornar status INATIVO</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <form method="POST" action="/franqueado/empresas/{{ $empresa->id }}">
+                @csrf
+                @method('PATCH')
+                <input type="hidden" name="inativo" value="1">
+                <div class="modal-body">
+                    <h5>Ao tornar o status INATIVO, a empresa NÃO poderá postar EVENTOS e OFERTAS. Tem certeza que deseja tornar o status da Empresa INATIVO?</h5>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Fechar</button>
+                    <button type="submit" class="btn btn-dark shadow"><i class="fas fa-thumbs-down mr-2"></i>Tornar status INATIVO</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+@endif
+@if($empresa->status == 'INATIVO')
+<div class="modal fade" id="modalAtivar" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Tornar status ATIVO</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <form method="POST" action="/franqueado/empresas/{{ $empresa->id }}">
+                @csrf
+                @method('PATCH')
+                <input type="hidden" name="ativo" value="1">
+                <div class="modal-body">
+                    <h5>Ao tornar o status ATIVO, a empresa poderá voltar a postar EVENTOS e OFERTAS. Tem certeza que deseja tornar o status da Empresa ATIVO?</h5>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Fechar</button>
+                    <button type="submit" class="btn btn-success shadow"><i class="fas fa-thumbs-up mr-2"></i>Tornar status ATIVO</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+@endif
 @if($empresa->status == 'PENDENTE')
-<!-- Modal PENDENTE -->
 <div class="modal fade" id="modalAceitar" tabindex="-1" role="dialog" aria-hidden="true">
     <div class="modal-dialog" role="document">
         <div class="modal-content">

@@ -4,7 +4,7 @@
 @section('content')
 <div class="container">
     <div class="row ">
-        <form class="py-5 col-lg-6 col-md-8 mx-auto" method="POST" action="{{ route('login') }}">
+        <form class="py-5 col-lg-6 col-md-8 mx-auto" method="POST" action="/usuario/login">
             <h2 class="text-center pb-2">Login Usuário</h2>
             @csrf
             <div class="form-group">
@@ -28,7 +28,7 @@
             </div>
             <button type="submit" class="btn btn-danger btn-block">Login</button>
             <a href="" class="btn btn-facebook btn-block"><i class="fab fa-facebook fa-lg mr-2"></i>Login com Facebook</a>
-            <a href="/cadastro" class="btn btn-dark btn-block">Cadastrar</a>
+            <a href="/usuario/cadastro" class="btn btn-dark btn-block">Cadastrar</a>
         </form> 
     </div>
 </div>

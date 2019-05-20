@@ -88,7 +88,7 @@
             <a href="/admin/compras" id="compras-menu" class="btn btn-block btn-menu disabled" ><i class="fas fa-shopping-cart mr-2"></i>Compras</a>
             <a href="/admin/empresas" id="empresas-menu" class="btn btn-block btn-menu"><i class="fas fa-store mr-2"></i>Empresas</a>
             <a href="/admin/eventos" id="eventos-menu" class="btn btn-block btn-menu"><i class="fas fa-glass-cheers mr-2"></i>Eventos</a>
-            <a href="/admin/fotos" id="fotos-menu" class="btn btn-block btn-menu"><i class="fas fa-image mr-2"></i>Fotos</a>
+            <a href="/admin/fotos" id="fotos-menu" class="btn btn-block btn-menu disabled"><i class="fas fa-image mr-2"></i>Fotos</a>
             <a href="/admin/franqueados" id="franqueados-menu" class="btn btn-block btn-menu"><i class="fas fa-handshake mr-2"></i>Franqueados</a>
             <a href="/admin/ofertas" id="ofertas-menu" class="btn btn-block btn-menu"><i class="fas fa-tag mr-2"></i>Ofertas</a>
             <a href="/admin/produtos" id="produtos-menu" class="btn btn-block btn-menu"><i class="fas fa-gifts mr-2"></i>Produtos</a>

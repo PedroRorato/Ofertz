@@ -2,8 +2,8 @@
 @section('title') Ofertas @endsection
 @section('menu') #ofertas-menu @endsection
 @section('breadcrumbs') 
-<li class="breadcrumb-item"><a href="/admin/ofertas">Listagem</a></li>
-<li class="breadcrumb-item"><a href="/admin/ofertas/{{ $oferta->id }}">Painel da Oferta</a></li>
+<li class="breadcrumb-item"><a href="/franqueado/ofertas">Listagem</a></li>
+<li class="breadcrumb-item"><a href="/franqueado/ofertas/{{ $oferta->id }}">Painel da Oferta</a></li>
 @endsection
 @section('content')
 <script type="text/javascript">
@@ -14,9 +14,12 @@
         $("#status").children('[value="{{ $oferta->status }}"]').attr('selected', true);
     });
 </script>
-<a href="/admin/ofertas" class="btn btn-secondary shadow mb-3"><i class="fas fa-arrow-left mr-2"></i>Voltar</a>
+<a href="/franqueado/ofertas" class="btn btn-secondary shadow mb-3"><i class="fas fa-arrow-left mr-2"></i>Voltar</a>
 <div class="card shadow">
     <div class="card-body">
+        <h5>Produto de: {{ $produto->empresa->empresa }}</h5>
+        <small class="form-text text-muted">*Campos não obrigatórios</small>
+        <br/>
         <div class="row">
             <div class="col-md-6">
                 <div class="form-group">
@@ -27,10 +30,6 @@
                 <div class="form-group ">
                     <label for="nome" class="mb-1">Nome</label>
                     <h5>{{ $produto->nome }}</h5>
-                </div>
-                <div class="form-group">
-                    <label for="data" class="mb-1">Cidade</label>
-                    <h5>{{ $produto->cidade->nome . '-' . $produto->cidade->uf }}</h5>
                 </div>
                 <div class="form-group">
                     <label for="descricao" class="mb-1">Descrição</label>
@@ -47,7 +46,7 @@
             </div>
         </div>
         @if ($editar)
-        <form method="POST" action="/admin/ofertas/{{ $oferta->id }}">
+        <form method="POST" action="/franqueado/ofertas/{{ $oferta->id }}">
             @csrf
             @method('PATCH')
             <input type="hidden" name="produto_id" value="{{ $produto->id }}">
@@ -90,15 +89,6 @@
                                 <strong>{{ $errors->first('observacao') }}</strong>
                             </span>
                         @endif
-                    </div>
-                </div>
-                <div class="col-12">
-                    <div class="form-group">
-                        <label for="status">Status</label>
-                        <select class="custom-select" id="status" name="status">
-                            <option value="ATIVO">ATIVO</option>
-                            <option value="EXCLUIDO">EXCLUIDO</option>
-                        </select>
                     </div>
                 </div>
             </div>
@@ -166,7 +156,7 @@
                     <span aria-hidden="true">&times;</span>
                 </button>
             </div>
-            <form method="POST" action="/admin/ofertas/{{ $oferta->id }}">
+            <form method="POST" action="/franqueado/ofertas/{{ $oferta->id }}">
                 @csrf
                 @method('DELETE')
                 <div class="modal-body">

@@ -129,6 +129,8 @@ class AdminEmpresasController extends Controller
 
 
     public function update(Request $request, $id){
+
+        $empresa = Empresa::findOrFail($id);
         //Auxiliar
         $auxiliar = new AuxiliarController;
         //Valida data
@@ -140,9 +142,41 @@ class AdminEmpresasController extends Controller
             }
         }
 
-        
-        $empresa = Empresa::findOrFail($id);
-        if ($request->has('password')) {
+        //UPDATES
+        if (request('aceitar')) {
+            //Validation
+            request()->validate([
+                'aceitar' => ['boolean'],
+            ]);
+
+            $empresa->status = 'ATIVO';
+            $empresa->save();
+            //Redirect
+            return redirect('/admin/empresas/')->withMessage("Empresa aceita com sucesso!");
+            
+        } elseif (request('ativo')) {
+            //Validation
+            request()->validate([
+                'ativo' => ['boolean'],
+            ]);
+
+            $empresa->status = 'ATIVO';
+            $empresa->save();
+            //Redirect
+            return redirect('/admin/empresas/')->withMessage("Empresa com status ATIVO!");
+            
+        } elseif (request('inativo')) {
+            //Validation
+            request()->validate([
+                'inativo' => ['boolean'],
+            ]);
+
+            $empresa->status = 'INATIVO';
+            $empresa->save();
+            //Redirect
+            return redirect('/admin/empresas/')->withMessage("Empresa com status INATIVO!");
+            
+        } elseif ($request->has('password')) {
            //Validation
             request()->validate([
                 'password' => ['required', 'string', 'min:5', 'confirmed'],
@@ -164,7 +198,7 @@ class AdminEmpresasController extends Controller
                 'descricao' => ['string', 'max:255'],
                 'nome' => ['required', 'string', 'min:2', 'max:100'],
                 'sobrenome' => ['required', 'string', 'min:2', 'max:100'],
-                'email' => ['required', 'email', 'min:3', 'max:255'],
+                'email' => ['required', 'email', 'min:3', 'max:255', 'unique:empresas,email,'.$id],
                 'genero' => ['required', 'alpha', 'max:6'],
                 'telefone' => ['required', 'string', 'size:14'],
                 'status' => ['required', 'alpha', 'min:3', 'max:20'],
@@ -200,7 +234,7 @@ class AdminEmpresasController extends Controller
                 'descricao' => ['string', 'max:255'],
                 'nome' => ['required', 'string', 'min:2', 'max:100'],
                 'sobrenome' => ['required', 'string', 'min:2', 'max:100'],
-                'email' => ['required', 'email', 'min:3', 'max:255'],
+                'email' => ['required', 'email', 'min:3', 'max:255', 'unique:empresas,email,'.$id],
                 'genero' => ['required', 'alpha', 'max:6'],
                 'telefone' => ['required', 'string', 'size:14'],
                 'status' => ['required', 'alpha', 'min:3', 'max:20'],

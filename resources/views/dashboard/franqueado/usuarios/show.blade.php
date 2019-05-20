@@ -2,8 +2,8 @@
 @section('title') Usuarios @endsection
 @section('menu') #usuarios-menu @endsection
 @section('breadcrumbs') 
-<li class="breadcrumb-item"><a href="/admin/usuarios">Listagem</a></li>
-<li class="breadcrumb-item"><a href="/admin/usuarios/{{ $usuario->id }}">Painel da Usuario</a></li>
+<li class="breadcrumb-item"><a href="/franqueado/usuarios">Listagem</a></li>
+<li class="breadcrumb-item"><a href="/franqueado/usuarios/{{ $usuario->id }}">Painel da Usuario</a></li>
 @endsection
 @section('content')
 <script type="text/javascript">
@@ -21,8 +21,8 @@
         @endif
     });
 </script>
-<a href="/admin/usuarios" class="btn btn-secondary shadow mb-3"><i class="fas fa-arrow-left mr-2"></i>Voltar</a>
-<form method="POST" action="/admin/usuarios/{{ $usuario->id }}" enctype="multipart/form-data" onsubmit="progressBar()">
+<a href="/franqueado/usuarios" class="btn btn-secondary shadow mb-3"><i class="fas fa-arrow-left mr-2"></i>Voltar</a>
+<form method="POST" action="/franqueado/usuarios/{{ $usuario->id }}" enctype="multipart/form-data" onsubmit="progressBar()">
 <div class="card shadow">
     <div class="card-body">
         @csrf
@@ -110,30 +110,6 @@
                     @endif
                 </div>
             </div>
-            <div class="col-lg-6">
-                <div class="form-group">
-                    <label for="cidade">Cidade</label>
-                    <select class="custom-select{{ $errors->has('cidade') ? ' is-invalid' : '' }}" id="cidade" name="cidade" required>
-                        @foreach($cidades as $cidade)
-                            <option value="{{ $cidade->id }}">{{ $cidade->nome.'-'.$cidade->uf }}</option>
-                        @endforeach
-                    </select>
-                    @if ($errors->has('cidade'))
-                        <span class="invalid-feedback" role="alert">
-                            <strong>{{ $errors->first('cidade') }}</strong>
-                        </span>
-                    @endif
-                </div>
-            </div>
-            <div class="col-lg-6">
-                <div class="form-group">
-                    <label for="status">Status</label>
-                    <select class="custom-select" id="status" name="status">
-                        <option value="ATIVO">ATIVO</option>
-                        <option value="EXCLUIDO">EXCLUIDO</option>
-                    </select>
-                </div>
-            </div>
         </div>
         <hr>
         <div class="dash-botoes">
@@ -207,7 +183,7 @@
                     <span aria-hidden="true">&times;</span>
                 </button>
             </div>
-            <form method="POST" action="/admin/usuarios/{{ $usuario->id }}">
+            <form method="POST" action="/franqueado/usuarios/{{ $usuario->id }}">
                 @csrf
                 @method('PATCH')
                 <div class="modal-body">
@@ -243,7 +219,7 @@
                     <span aria-hidden="true">&times;</span>
                 </button>
             </div>
-            <form method="POST" action="/admin/usuarios/{{ $usuario->id }}">
+            <form method="POST" action="/franqueado/usuarios/{{ $usuario->id }}">
                 @csrf
                 @method('DELETE')
                 <div class="modal-body">

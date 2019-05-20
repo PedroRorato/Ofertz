@@ -2,8 +2,8 @@
 @section('title') Eventos @endsection
 @section('menu') #eventos-menu @endsection
 @section('breadcrumbs') 
-<li class="breadcrumb-item"><a href="/admin/eventos">Listagem</a></li>
-<li class="breadcrumb-item"><a href="/admin/eventos/create">Adicionar</a></li>
+<li class="breadcrumb-item"><a href="/franqueado/eventos">Listagem</a></li>
+<li class="breadcrumb-item"><a href="/franqueado/eventos/create">Adicionar</a></li>
 @endsection
 @section('content')
 <script type="text/javascript">
@@ -13,8 +13,8 @@
         $("#cidade option[value={!! old('cidade') ? old('cidade') : '1' !!}]").attr('selected', 'selected');
     });
 </script>
-<a href="/admin/eventos" class="btn btn-secondary shadow mb-3"><i class="fas fa-arrow-left mr-2"></i>Voltar</a>
-<form method="POST" action="/admin/eventos" enctype="multipart/form-data" onsubmit="progressBar()">
+<a href="/franqueado/eventos" class="btn btn-secondary shadow mb-3"><i class="fas fa-arrow-left mr-2"></i>Voltar</a>
+<form method="POST" action="/franqueado/eventos" enctype="multipart/form-data" onsubmit="progressBar()">
 <div class="card shadow">
     <div class="card-body">
         @csrf
@@ -53,7 +53,7 @@
                     @endif
                 </div>
             </div>
-            <div class="col-md-6 col-lg-4">
+            <div class="col-md-6">
                 <div class="form-group">
                     <label for="data">Data</label>
                     <input type="text" class="form-control{{ Session::has('data') ? ' is-invalid' : '' }}" id="data" name="data" value="{{ old('data') }}" required>
@@ -64,26 +64,11 @@
                     @endif
                 </div>
             </div>
-            <div class="col-md-6 col-lg-4">
+            <div class="col-md-6">
                 <div class="form-group">
                     <label for="time">Horário</label>
                     <input type="time" class="form-control{{ $errors->has('time') ? ' is-invalid' : '' }}" id="time" name="time" placeholder="Digite o nome da empresa..." value="{{ old('time') }}" required>
                     <small class="form-text text-muted">hh:mm AM/PM</small>
-                </div>
-            </div>
-            <div class="col-lg-4">
-                <div class="form-group">
-                    <label for="cidade">Cidade</label>
-                    <select class="custom-select{{ $errors->has('cidade') ? ' is-invalid' : '' }}" id="cidade" name="cidade" required>
-                        @foreach($cidades as $cidade)
-                            <option value="{{ $cidade->id }}">{{ $cidade->nome.'-'.$cidade->uf }}</option>
-                        @endforeach
-                    </select>
-                    @if ($errors->has('cidade'))
-                        <span class="invalid-feedback" role="alert">
-                            <strong>{{ $errors->first('cidade') }}</strong>
-                        </span>
-                    @endif
                 </div>
             </div>
             <div class="col-12">

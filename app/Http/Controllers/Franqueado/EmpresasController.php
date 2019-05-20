@@ -24,13 +24,11 @@ class EmpresasController extends Controller
         $empresas = new Empresa;
         $queries = [];
         //Cidade Específica
-        $empresas = $empresas->where('cidade_id', '=', Auth::user()->cidade_id);
+        $empresas = $empresas->where('cidade_id', '=', Auth::user()->cidade_id)->where('status', '!=', 'EXCLUIDO');
         //Requests
         if (request()->has('status')) {
-            $empresas = $empresas->where('status', 'LIKE', request('status'))->where('status', '!=', 'EXCLUIDO');
+            $empresas = $empresas->where('status', 'LIKE', request('status'));
             $queries['status'] = request('status');
-        } else{
-            $pendencias = $empresas->where('status', '!=', 'EXCLUIDO');
         }
         if (request()->has('busca') && request('busca') != null) {
             $empresas = $empresas->whereRaw(" (`nome` like ? or `sobrenome` like ? or `email` like ? or `empresa` like ? ) ",[request('busca')."%", "%".request('busca')."%", request('busca')."%", "%".request('busca')."%"]);
@@ -107,6 +105,10 @@ class EmpresasController extends Controller
 
     public function show($id){
         $empresa = Empresa::findOrFail($id);
+        //Verifica status
+        abort_if($empresa->status == 'EXCLUIDO', 404);
+        //Verifica proprietário
+        abort_if($empresa->cidade_id != Auth::user()->cidade_id, 403);
         //Tratar data
         $data = NULL;
         if (isset($empresa->nascimento)) {
@@ -120,6 +122,11 @@ class EmpresasController extends Controller
 
     public function update(Request $request, $id){
 
+        $empresa = Empresa::findOrFail($id);
+        //Verifica status
+        abort_if($empresa->status == 'EXCLUIDO', 404);
+        //Verifica proprietário
+        abort_if($empresa->cidade_id != Auth::user()->cidade_id, 403);
         //Auxiliar
         $auxiliar = new AuxiliarController;
         //Valida data
@@ -131,8 +138,6 @@ class EmpresasController extends Controller
             }
         }
 
-        
-        $empresa = Empresa::findOrFail($id);
         if (request('aceitar')) {
             //Validation
             request()->validate([
@@ -143,6 +148,28 @@ class EmpresasController extends Controller
             $empresa->save();
             //Redirect
             return redirect('/franqueado/empresas/')->withMessage("Empresa aceita com sucesso!");
+            
+        } elseif (request('ativo')) {
+            //Validation
+            request()->validate([
+                'ativo' => ['boolean'],
+            ]);
+
+            $empresa->status = 'ATIVO';
+            $empresa->save();
+            //Redirect
+            return redirect('/franqueado/empresas/')->withMessage("Empresa com status ATIVO!");
+            
+        } elseif (request('inativo')) {
+            //Validation
+            request()->validate([
+                'inativo' => ['boolean'],
+            ]);
+
+            $empresa->status = 'INATIVO';
+            $empresa->save();
+            //Redirect
+            return redirect('/franqueado/empresas/')->withMessage("Empresa com status INATIVO!");
             
         } elseif ($request->has('password')) {
            //Validation
@@ -168,7 +195,6 @@ class EmpresasController extends Controller
                 'email' => ['required', 'email', 'min:3', 'max:255'],
                 'genero' => ['required', 'alpha', 'max:6'],
                 'telefone' => ['required', 'string', 'size:14'],
-                'status' => ['required', 'alpha', 'min:3', 'max:20'],
             ]);
             
             //cropS3
@@ -186,7 +212,6 @@ class EmpresasController extends Controller
             $empresa->genero = request('genero');
             $empresa->nascimento = $data;
             $empresa->telefone = request('telefone');
-            $empresa->status = request('status');
             $empresa->save();
 
             //Redirect
@@ -202,7 +227,6 @@ class EmpresasController extends Controller
                 'email' => ['required', 'email', 'min:3', 'max:255'],
                 'genero' => ['required', 'alpha', 'max:6'],
                 'telefone' => ['required', 'string', 'size:14'],
-                'status' => ['required', 'alpha', 'min:3', 'max:20'],
             ]);
 
             //Update
@@ -215,7 +239,6 @@ class EmpresasController extends Controller
             $empresa->genero = request('genero');
             $empresa->nascimento = $data;
             $empresa->telefone = request('telefone');
-            $empresa->status = request('status');
             $empresa->save();
 
             //Redirect
@@ -226,6 +249,10 @@ class EmpresasController extends Controller
     public function destroy($id){
 
         $empresa = Empresa::findOrFail($id);
+        //Verifica status
+        abort_if($empresa->status == 'EXCLUIDO', 404);
+        //Verifica proprietário
+        abort_if($empresa->cidade_id != Auth::user()->cidade_id, 403);
         
         //Update
         $empresa->status = "EXCLUIDO";

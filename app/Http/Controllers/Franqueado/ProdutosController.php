@@ -17,7 +17,7 @@ class ProdutosController extends Controller
 {
 
     public function __construct(){
-        $this->middleware('auth:admin');
+        $this->middleware('auth:franqueado');
     }
 
 
@@ -26,15 +26,9 @@ class ProdutosController extends Controller
         //Filters
         $produtos = new Produto;
         $queries = [];
-        $columns = [
-            'status', 'cidade_id',
-        ];
-        foreach ($columns as $column) {
-            if (request()->has($column)) {
-                $produtos = $produtos->where($column, 'like', request($column));
-                $queries[$column] = request($column);
-            }
-        }
+        //Cidade Específica
+        $produtos = $produtos->where('cidade_id', '=', Auth::user()->cidade_id)->where('status', '!=', 'EXCLUIDO');
+        //Queries
         if (request()->has('busca') && request('busca') != null) {
             $produtos = $produtos->whereRaw(" (`nome` like ? ) ", "%".request('busca')."%");
             $queries['busca'] = request('busca');
@@ -45,18 +39,15 @@ class ProdutosController extends Controller
         $produtos = $produtos->orderBy('nome', 'asc')->paginate(25)->appends($queries,
             ['amount' => $amount]
         );
-        //Lista de cidades
-        $cidades = Cidade::where('status', '=', 'ATIVO')->get();
         
-        return view('dashboard.admin.produtos.index', compact('produtos', 'amount', 'columns', 'queries', 'cidades'));
+        return view('dashboard.franqueado.produtos.index', compact('produtos', 'amount', 'queries'));
     }
 
 
     public function create(){
         //Lista de cidades
-        $cidades = Cidade::where('status', '=', 'ATIVO')->orderBy('nome', 'asc')->get();
         $categorias = CategoriasProduto::where('status', '=', 'ATIVO')->orderBy('nome', 'asc')->get();
-        return view('dashboard.admin.produtos.create', compact('cidades', 'categorias'));
+        return view('dashboard.franqueado.produtos.create', compact('categorias'));
     }
 
 
@@ -66,7 +57,6 @@ class ProdutosController extends Controller
         request()->validate([
             'foto' => ['required', 'image', 'mimes:jpeg,jpg,png', 'dimensions:min_width=300,min_height=300', 'max:10000'],
             'nome' => ['required', 'string', 'min:2', 'max:100'],
-            'cidade' => ['required', 'integer'],
             'descricao' => ['string', 'max:255'],
             'categorias' => ['required'],
         ]);
@@ -80,7 +70,7 @@ class ProdutosController extends Controller
             'foto' => $filename,
             'nome' => request('nome'),
             'empresa_id' => '0',
-            'cidade_id' => request('cidade'),
+            'cidade_id' => Auth::user()->cidade_id,
             'descricao' => request('descricao'),
         ]);
 
@@ -90,12 +80,16 @@ class ProdutosController extends Controller
         }
 
         ////Return
-        return redirect('/admin/produtos')->withMessage("Produto criado com sucesso!");
+        return redirect('/franqueado/produtos')->withMessage("Produto criado com sucesso!");
     }
 
 
     public function show($id){
         $produto = Produto::findOrFail($id);
+        //Verifica status
+        abort_if($produto->status == 'EXCLUIDO', 404);
+        //Verifica proprietário
+        abort_if($produto->cidade_id != Auth::user()->cidade_id, 403);
         //Categorias à qual pertence
         $pertences = $produto->categorias;
         $array_pertence[] = 0;
@@ -103,24 +97,24 @@ class ProdutosController extends Controller
             $array_pertence[] = $pertence->id;
         }
         $pertences = $array_pertence;
-        //Lista de cidades e categorias
-        $cidades = Cidade::where('status', '=', 'ATIVO')->get();
+        //Lista de categorias
         $categorias = CategoriasProduto::where('status', '=', 'ATIVO')->orderBy('nome', 'asc')->get();
-        return view('dashboard.admin.produtos.show', compact('produto', 'cidades', 'pertences', 'categorias'));
+        return view('dashboard.franqueado.produtos.show', compact('produto', 'pertences', 'categorias'));
     }
 
 
     public function update(Request $request, $id){
         
         $produto = Produto::findOrFail($id);
-
+        //Verifica status
+        abort_if($produto->status == 'EXCLUIDO', 404);
+        //Verifica proprietário
+        abort_if($produto->cidade_id != Auth::user()->cidade_id, 403);
         //Validation
         request()->validate([
             'foto' => ['image', 'mimes:jpeg,jpg,png', 'dimensions:min_width=300,min_height=300', 'max:10000'],
             'nome' => ['required', 'string', 'min:2', 'max:100'],
-            'cidade' => ['required', 'integer'],
             'descricao' => ['string', 'max:255'],
-            'status' => ['required', 'alpha', 'min:3', 'max:20'],
             'categorias' => ['required'],
         ]);
 
@@ -133,18 +127,14 @@ class ProdutosController extends Controller
             //Update
             $produto->foto = $filename;
             $produto->nome = request('nome');
-            $produto->cidade_id = request('cidade');
             $produto->descricao = request('descricao');
-            $produto->status = request('status');
             $produto->save();
 
         }else{
 
             //Update
             $produto->nome = request('nome');
-            $produto->cidade_id = request('cidade');
             $produto->descricao = request('descricao');
-            $produto->status = request('status');
             $produto->save();
 
         }
@@ -157,20 +147,23 @@ class ProdutosController extends Controller
         }
 
         //Redirect
-        return redirect('/admin/produtos/'.$id)->withMessage("Edição realizada com sucesso!");
+        return redirect('/franqueado/produtos/'.$id)->withMessage("Edição realizada com sucesso!");
     }
 
 
     public function destroy($id){
 
         $produto = Produto::findOrFail($id);
-        
+        //Verifica status
+        abort_if($produto->status == 'EXCLUIDO', 404);
+        //Verifica proprietário
+        abort_if($produto->cidade_id != Auth::user()->cidade_id, 403);
         //Update
         $produto->status = "EXCLUIDO";
         $produto->save();
 
         //Redirect
-        return redirect('/admin/produtos')->withMessage("Produto excluído com sucesso!");
+        return redirect('/franqueado/produtos')->withMessage("Produto excluído com sucesso!");
         
     }
 }

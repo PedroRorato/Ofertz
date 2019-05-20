@@ -18,7 +18,7 @@ class EventosController extends Controller
 {
 
     public function __construct(){
-        $this->middleware('auth:admin');
+        $this->middleware('auth:franqueado');
     }
 
 
@@ -27,9 +27,8 @@ class EventosController extends Controller
         //Filters
         $eventos = new Evento;
         $queries = [];
-        $columns = [
-            'status', 'cidade_id',
-        ];
+        //Cidade Específica
+        $eventos = $eventos->where('cidade_id', '=', Auth::user()->cidade_id)->where('status', '!=', 'EXCLUIDO');
         //Situacao
         $situacao = '';
         $sit = '>';
@@ -38,12 +37,6 @@ class EventosController extends Controller
             $situacao = 'FINALIZADA';
             $sit = '<';
         }
-        foreach ($columns as $column) {
-            if (request()->has($column)) {
-                $eventos = $eventos->where($column, 'like', request($column));
-                $queries[$column] = request($column);
-            }
-        }
         if (request()->has('busca') && request('busca') != null) {
             $eventos = $eventos->whereRaw(" (`nome` like ? ) ", "%".request('busca')."%");
             $queries['busca'] = request('busca');
@@ -51,22 +44,19 @@ class EventosController extends Controller
         //Contagem
         $eventos = $eventos->where('validade', $sit, \DB::raw('NOW()'));
         $amount = $eventos->get()->count();
-        $eventos = $eventos->with('cidade', 'empresa');
+        $eventos = $eventos->with('empresa');
         $eventos = $eventos->orderBy('nome', 'asc')->paginate(25)->appends($queries,
             ['amount' => $amount]
         );
-        //Lista de cidades
-        $cidades = Cidade::where('status', '=', 'ATIVO')->orderBy('nome', 'asc')->get();
         
-        return view('dashboard.admin.eventos.index', compact('eventos', 'amount', 'situacao', 'columns', 'queries', 'cidades'));
+        return view('dashboard.franqueado.eventos.index', compact('eventos', 'amount', 'situacao', 'queries'));
     }
 
 
     public function create(){
-        //Lista de cidades
-        $cidades = Cidade::where('status', '=', 'ATIVO')->orderBy('nome', 'asc')->get();
+        //Lista de categorias
         $categorias = CategoriasEvento::where('status', '=', 'ATIVO')->orderBy('nome', 'asc')->get();
-        return view('dashboard.admin.eventos.create', compact('cidades', 'categorias'));
+        return view('dashboard.franqueado.eventos.create', compact('categorias'));
     }
 
 
@@ -83,7 +73,6 @@ class EventosController extends Controller
         request()->validate([
             'foto' => ['required', 'image', 'mimes:jpeg,jpg,png', 'dimensions:min_width=300,min_height=300', 'max:10000'],
             'nome' => ['required', 'string', 'min:2', 'max:100'],
-            'cidade' => ['required', 'integer'],
             'descricao' => ['string', 'max:255'],
             'categorias' => ['required'],
             'points' => ['required', 'string'],
@@ -98,7 +87,7 @@ class EventosController extends Controller
             'nome' => request('nome'),
             'validade' => $data,
             'empresa_id' => '0',
-            'cidade_id' => request('cidade'),
+            'cidade_id' => Auth::user()->cidade_id,
             'descricao' => request('descricao'),
         ]);
 
@@ -108,12 +97,16 @@ class EventosController extends Controller
         }
 
         ////Return
-        return redirect('/admin/eventos')->withMessage("Evento criado com sucesso!");
+        return redirect('/franqueado/eventos')->withMessage("Evento criado com sucesso!");
     }
 
 
     public function show($id){
         $evento = Evento::findOrFail($id);
+        //Verifica status
+        abort_if($evento->status == 'EXCLUIDO', 404);
+        //Verifica proprietário
+        abort_if($evento->cidade_id != Auth::user()->cidade_id, 403);
         //Auxiliar
         $auxiliar = new AuxiliarController;
         //Data Painel
@@ -126,16 +119,19 @@ class EventosController extends Controller
         $data = $partesData[2].'/'.$partesData[1].'/'.$partesData[0];
         //Categorias à qual pertence
         $pertences = $auxiliar->categoriasArray($evento->categorias);
-        //Lista de cidades e categorias
+        //Lista de categorias
         $categorias = CategoriasEvento::where('status', '=', 'ATIVO')->orderBy('nome', 'asc')->get();
-        $cidades = Cidade::where('status', '=', 'ATIVO')->orderBy('nome', 'asc')->get();
-        return view('dashboard.admin.eventos.show', compact('evento', 'cidades', 'editar', 'data', 'tempo', 'pertences', 'categorias'));
+        return view('dashboard.franqueado.eventos.show', compact('evento', 'editar', 'data', 'tempo', 'pertences', 'categorias'));
     }
 
 
     public function update(Request $request, $id){
         
         $evento = Evento::findOrFail($id);
+        //Verifica status
+        abort_if($evento->status == 'EXCLUIDO', 404);
+        //Verifica proprietário
+        abort_if($evento->cidade_id != Auth::user()->cidade_id, 403);
         //Auxiliar
         $auxiliar = new AuxiliarController;
         //Validação da data
@@ -148,9 +144,7 @@ class EventosController extends Controller
         request()->validate([
             'foto' => ['image', 'mimes:jpeg,jpg,png', 'dimensions:min_width=300,min_height=300', 'max:10000'],
             'nome' => ['required', 'string', 'min:2', 'max:100'],
-            'cidade' => ['required', 'integer'],
             'descricao' => ['string', 'max:255'],
-            'status' => ['required', 'alpha', 'min:3', 'max:20'],
             'categorias' => ['required'],
         ]);
 
@@ -163,9 +157,7 @@ class EventosController extends Controller
             $evento->foto = $filename;
             $evento->nome = request('nome');
             $evento->validade = $data;
-            $evento->cidade_id = request('cidade');
             $evento->descricao = request('descricao');
-            $evento->status = request('status');
             $evento->save();
 
         }else{
@@ -173,9 +165,7 @@ class EventosController extends Controller
             //Update
             $evento->nome = request('nome');
             $evento->validade = $data;
-            $evento->cidade_id = request('cidade');
             $evento->descricao = request('descricao');
-            $evento->status = request('status');
             $evento->save();
 
         }
@@ -188,20 +178,24 @@ class EventosController extends Controller
         }
 
         //Redirect
-        return redirect('/admin/eventos/'.$id)->withMessage("Edição realizada com sucesso!");
+        return redirect('/franqueado/eventos/'.$id)->withMessage("Edição realizada com sucesso!");
     }
 
 
     public function destroy($id){
 
         $evento = Evento::findOrFail($id);
+        //Verifica status
+        abort_if($evento->status == 'EXCLUIDO', 404);
+        //Verifica proprietário
+        abort_if($evento->cidade_id != Auth::user()->cidade_id, 403);
         
         //Update
         $evento->status = "EXCLUIDO";
         $evento->save();
 
         //Redirect
-        return redirect('/admin/eventos')->withMessage("Evento excluído com sucesso!");
+        return redirect('/franqueado/eventos')->withMessage("Evento excluído com sucesso!");
         
     }
 }

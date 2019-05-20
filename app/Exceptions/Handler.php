@@ -56,14 +56,7 @@ class Handler extends ExceptionHandler
         // Catch AthenticationException and redirect back to somewhere else...
         if($exception instanceof AuthenticationException){
             $guard = array_get($exception->guards(), 0);
-            switch($guard){
-                case 'admin':
-                    return redirect('/admin/login');
-                    break;
-                default:
-                    return redirect(route('login'));
-                    break;
-            }
+            redirect('/login');
         }
         return parent::render($request, $exception);
     }

@@ -43,29 +43,7 @@ class ContaController extends Controller
 
             //Redirect
             return redirect('/franqueado/conta')->withMessage("Senha alterada com sucesso!");
-        } elseif($request->hasFile('foto')) {
-            //Validation
-            request()->validate([
-                'foto' => ['image', 'mimes:jpeg,jpg,png', 'dimensions:min_width=300,min_height=300', 'max:10000'],
-                'nome' => ['required', 'string', 'min:2', 'max:100'],
-                'sobrenome' => ['required', 'string', 'min:2', 'max:100'],
-                'email' => ['required', 'email', 'min:3', 'max:255'],
-            ]);
-            
-            //cropS3
-            $auxiliar = new AuxiliarController;
-            $filename = $auxiliar->cropS3($request->file('foto'), request('points'), 'ofertz/franqueados/', 300, 300);
-
-            //Update
-            $franqueado->foto = $filename;
-            $franqueado->nome = request('nome');
-            $franqueado->sobrenome = request('sobrenome');
-            $franqueado->email = request('email');
-            $franqueado->save();
-
-            //Redirect
-            return redirect('/franqueado/conta')->withMessage("Edição realizada com sucesso!");
-        }else{
+        } else{
             //Validation
             request()->validate([
                 'nome' => ['required', 'string', 'min:2', 'max:100'],

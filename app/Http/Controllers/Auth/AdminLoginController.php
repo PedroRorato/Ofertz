@@ -27,6 +27,6 @@ class AdminLoginController extends Controller
     		return redirect()->intended('/admin');
     	}
 
-    	return redirect()->back()->withInput($request->only('email', 'remember'))->withMessage("Dados incorretos!");
+    	return redirect()->back()->withInput($request->only('email'))->withMessage("Dados incorretos!");
     }
 }

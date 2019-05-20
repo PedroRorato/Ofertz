@@ -35,6 +35,10 @@
             </div>
             @endif
             <button type="submit" class="btn btn-danger shadow btn-block">Login</button>
+            <br/>
+            <hr class="mx-5">
+            <br/>
+            <p class="text-center">Interessado em adquirir a franquia? Ligue para 55 9900 9090</p>
         </form> 
     </div>
 </div>

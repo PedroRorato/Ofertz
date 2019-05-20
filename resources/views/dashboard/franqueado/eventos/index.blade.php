@@ -2,56 +2,34 @@
 @section('title') Eventos @endsection
 @section('menu') #eventos-menu @endsection
 @section('breadcrumbs') 
-<li class="breadcrumb-item"><a href="/admin/eventos">Listagem</a></li>
+<li class="breadcrumb-item"><a href="/franqueado/eventos">Listagem</a></li>
 @endsection
 @section('content')
 <script type="text/javascript">
     $(window).on('load', function() {
         $("#situacao").children('[value="{{ $situacao }}"]').attr('selected', true);
-        @if (!empty($queries))
-            @foreach($columns as $column)
-                $("#{{ $column }}").children('[value="{{ $queries[$column] }}"]').attr('selected', true);
-            @endforeach
-        @endif
     });
 </script>
-<a href="/admin/eventos/create" class="btn btn-primary shadow mb-3"><i class="fas fa-plus mr-2"></i>Adicionar</a>
+<a href="/franqueado/eventos/create" class="btn btn-primary shadow mb-3"><i class="fas fa-plus mr-2"></i>Adicionar</a>
 <div class="card shadow">
     <div class="card-body">
         <h4><i class="fas fa-filter mr-2"></i>Filtros</h4>        
-        <form method="GET" action="/admin/eventos">
+        <form method="GET" action="/franqueado/eventos">
             <div class="row">
-                <div class="form-group col-12">
+                <div class="form-group col-lg-8">
                     <label for="busca">Digite o nome do evento</label>
                     <input type="text" class="form-control" id="busca" name="busca" placeholder="Buscar..." value="{{ isset($queries['busca']) ? $queries['busca'] : '' }}">
                 </div>
-                <div class="form-group col-md-4">
+                <div class="form-group col-lg-4">
                     <label for="situacao">Situação</label>
-                    <select class="custom-select" id="situacao" name="situacao">
+                    <select class="custom-select" id="situacao" name="situacao" autofocus>
                         <option value="ANDAMENTO">EM ANDAMENTO</option>
                         <option value="FINALIZADA">FINALIZADA</option>
                     </select>
                 </div>
-                <div class="form-group col-md-4">
-                    <label for="status">Status</label>
-                    <select class="custom-select" id="status" name="status">
-                        <option value="%">TODOS</option>
-                        <option value="ATIVO">ATIVO</option>
-                        <option value="EXCLUIDO">EXCLUIDO</option>
-                    </select>
-                </div>
-                <div class="form-group col-md-4">
-                    <label for="cidade_id">Cidade</label>
-                    <select class="custom-select" id="cidade_id" name="cidade_id" required>
-                        <option value="%">TODOS</option>
-                        @foreach($cidades as $cidade)
-                            <option value="{{ $cidade->id }}">{{ $cidade->nome.'-'.$cidade->uf }}</option>
-                        @endforeach
-                    </select>
-                </div>
             </div>
             <button type="submit" class="btn btn-primary shadow mr-3"><i class="fas fa-filter mr-2"></i>Filtrar</button>
-            <a href="/admin/eventos" class="btn btn-secondary shadow mr-3"><i class="fas fa-sync-alt mr-2"></i>Limpar filtros</a>
+            <a href="/franqueado/eventos" class="btn btn-secondary shadow mr-3"><i class="fas fa-sync-alt mr-2"></i>Limpar filtros</a>
         </form>
         <hr>
         @if($amount != 0)
@@ -71,49 +49,25 @@
                     <tr>
                       <th scope="col">Evento</th>
                       <th scope="col">Empresa</th>
-                      <th scope="col">Cidade</th>
+                      <th scope="col">Data</th>
                       <th scope="col" class="table-actions">Ações</th>
                     </tr>
                 </thead>
                 <tbody>
                     @foreach($eventos as $evento)
-                        @if($evento->status == 'EXCLUIDO')
-                        <tr class="table-danger">
-                            <td>{{ $evento->nome }}</td>
-                            <td>{{ $evento->empresa->empresa }}</td>
-                            <td>{{ $evento->cidade->nome.'-'.$evento->cidade->uf }}</td>
-                            <td>
-                                <a href="/admin/eventos/{{ $evento->id }}" class="btn btn-primary shadow" data-toggle="tooltip" title="Editar">
-                                    <i class="fas fa-edit"></i>
-                                </a>
-                            </td>
-                        </tr>
-                        @elseif($evento->status == 'PENDENTE')
-                        <tr class="table-danger">
-                            <td>{{ $evento->nome }}</td>
-                            <td>{{ $evento->empresa->empresa }}</td>
-                            <td>{{ $evento->cidade->nomee.'-'.$evento->cidade->uf }}</td>
-                            <td>
-                                <a href="/admin/eventos/{{ $evento->id }}" class="btn btn-primary shadow" data-toggle="tooltip" title="Editar">
-                                    <i class="fas fa-edit"></i>
-                                </a>
-                            </td>
-                        </tr>
-                        @else
-                        <tr>
-                            <td>{{ $evento->nome }}</td>
-                            <td>{{ $evento->empresa->empresa }}</td>
-                            <td>{{ $evento->cidade->nome.'-'.$evento->cidade->uf }}</td>
-                            <td>
-                                <a href="/admin/eventos/{{ $evento->id }}" class="btn btn-primary shadow" data-toggle="tooltip" title="Editar">
-                                    <i class="fas fa-edit"></i>
-                                </a>
-                                <button type="button" class="btn btn-danger shadow" data-toggle="modal" title="Excluir" data-target="#modalDelete{{ $evento->id }}"> 
-                                    <i class="fas fa-trash-alt"></i>
-                                </button>
-                            </td>
-                        </tr>
-                        @endif
+                    <tr>
+                        <td>{{ $evento->nome }}</td>
+                        <td>{{ $evento->empresa->empresa }}</td>
+                        <td>{{ date("d/m/Y", strtotime($evento->validade)) }}</td>
+                        <td>
+                            <a href="/franqueado/eventos/{{ $evento->id }}" class="btn btn-primary shadow" data-toggle="tooltip" title="Editar">
+                                <i class="fas fa-edit"></i>
+                            </a>
+                            <button type="button" class="btn btn-danger shadow" data-toggle="modal" title="Excluir" data-target="#modalDelete{{ $evento->id }}"> 
+                                <i class="fas fa-trash-alt"></i>
+                            </button>
+                        </td>
+                    </tr>
                     @endforeach
                 </tbody>
             </table>
@@ -143,7 +97,7 @@
                             <span aria-hidden="true">&times;</span>
                         </button>
                     </div>
-                    <form method="POST" action="/admin/eventos/{{ $evento->id }}">
+                    <form method="POST" action="/franqueado/eventos/{{ $evento->id }}">
                         @csrf
                         @method('DELETE')
                         <div class="modal-body">

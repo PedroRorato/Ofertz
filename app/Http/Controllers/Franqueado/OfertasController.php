@@ -20,7 +20,7 @@ class OfertasController extends Controller
 {
 
     public function __construct(){
-        $this->middleware('auth:admin');
+        $this->middleware('auth:franqueado');
     }
 
     public function index(Request $request){
@@ -28,8 +28,6 @@ class OfertasController extends Controller
         //Variaveis
         $busca = '';
         $categoria_id = '';
-        $cidade_id = '';
-        $status = '';
         $situacao = '';
         $sit = '>';
         //Verificar filtro
@@ -41,48 +39,43 @@ class OfertasController extends Controller
                 $situacao = 'FINALIZADA';
                 $sit = '<';
             }
-            $status = request('status');
             $categoria_id = request('categoria_id');
-            $cidade_id = request('cidade_id');
             $ofertas = DB::table('ofertas')
-            ->select('produtos.nome', 'ofertas.id', 'ofertas.status', 'ofertas.preco', 'ofertas.validade', 'empresas.nome AS enome', 'cidades.nome AS cnome', 'cidades.uf AS cuf')
+            ->select('produtos.nome', 'ofertas.id', 'ofertas.status', 'ofertas.preco', 'ofertas.validade', 'empresas.empresa AS enome')
             ->join('produtos', 'ofertas.produto_id', '=', 'produtos.id')
             ->join('produtos_categoria_produtos', 'produtos.id', '=', 'produtos_categoria_produtos.produto_id')
             ->join('categorias_produtos', 'produtos_categoria_produtos.categorias_produto_id', '=', 'categorias_produtos.id')
-            ->join('cidades', 'produtos.cidade_id', '=', 'cidades.id')
             ->join('empresas', 'produtos.empresa_id', '=', 'empresas.id')
+            ->where('ofertas.cidade_id', '=', Auth::user()->cidade_id)
             ->where('ofertas.validade', $sit, \DB::raw('NOW()'))
-            ->where('ofertas.status', 'LIKE', $status)
             ->where('categorias_produtos.id', 'LIKE', $categoria_id)
-            ->where('produtos.cidade_id', 'LIKE', $cidade_id)
             ->where('produtos.nome', 'LIKE', '%'.$busca.'%')
             ->orderBy('produtos.nome', 'ASC')
-            ->groupBy('produtos.nome', 'ofertas.id', 'ofertas.status', 'ofertas.preco', 'ofertas.validade', 'empresas.nome', 'cidades.nome', 'cidades.uf');
+            ->groupBy('produtos.nome', 'ofertas.id', 'ofertas.status', 'ofertas.preco', 'ofertas.validade', 'empresas.empresa');
             //Appends e Paginate
             $amount = $ofertas->get()->count();
             $ofertas = $ofertas->orderBy('nome', 'asc')->paginate(25)->appends(
-                ['amount' => $amount, 'busca' => $busca, 'situacao' => $situacao, 'cidade_id' => $cidade_id, 'categoria_id' => $categoria_id]
+                ['amount' => $amount, 'busca' => $busca, 'situacao' => $situacao, 'categoria_id' => $categoria_id]
             );
         } else{
             $ofertas = DB::table('ofertas')
-            ->select('produtos.nome', 'ofertas.id', 'ofertas.status', 'ofertas.preco', 'ofertas.validade', 'empresas.nome AS enome', 'cidades.nome AS cnome', 'cidades.uf AS cuf')
+            ->select('produtos.nome', 'ofertas.id', 'ofertas.status', 'ofertas.preco', 'ofertas.validade', 'empresas.empresa AS enome')
             ->join('produtos', 'ofertas.produto_id', '=', 'produtos.id')
-            ->join('cidades', 'produtos.cidade_id', '=', 'cidades.id')
             ->join('empresas', 'produtos.empresa_id', '=', 'empresas.id')
+            ->where('produtos.cidade_id', '=', Auth::user()->cidade_id)
             ->where('ofertas.validade', '>', \DB::raw('NOW()'))
             ->orderBy('produtos.nome', 'ASC')
-            ->groupBy('produtos.nome', 'ofertas.id', 'ofertas.status', 'ofertas.preco', 'ofertas.validade', 'empresas.nome', 'cidades.nome', 'cidades.uf');
+            ->groupBy('produtos.nome', 'ofertas.id', 'ofertas.status', 'ofertas.preco', 'ofertas.validade', 'empresas.empresa');
             //Appends e Paginate
             $amount = $ofertas->get()->count();
             $ofertas = $ofertas->orderBy('nome', 'asc')->paginate(25)->appends(
                 ['amount' => $amount]
             );
         }
-        //Lista de cidades
-        $cidades = Cidade::where('status', '=', 'ATIVO')->get();
+        //Lista de categorias
         $categorias = CategoriasProduto::where('status', '=', 'ATIVO')->orderBy('nome', 'asc')->get();
         //Return
-        return view('dashboard.admin.ofertas.index', compact('ofertas', 'amount', 'situacao', 'status', 'busca', 'cidade_id', 'categoria_id', 'cidades', 'categorias'));
+        return view('dashboard.franqueado.ofertas.index', compact('ofertas', 'amount', 'situacao', 'busca', 'categoria_id', 'categorias'));
     }
 
     public function choose(Request $request){
@@ -90,7 +83,6 @@ class OfertasController extends Controller
         //Variaveis
         $busca = '';
         $categoria_id = '';
-        $cidade_id = '';
         //Verificar filtro
         if (request()->has('busca')) {
             if (request()->has('busca') && request('busca') != null) {
@@ -99,7 +91,7 @@ class OfertasController extends Controller
             $categoria_id = request('categoria_id');
             $cidade_id = request('cidade_id');
             $produtos = DB::table('produtos')
-            ->select('produtos.id', 'produtos.nome', 'empresas.nome AS enome', 'cidades.nome AS cnome', 'cidades.uf AS cuf')
+            ->select('produtos.id', 'produtos.nome', 'empresas.empresa AS enome', 'cidades.nome AS cnome', 'cidades.uf AS cuf')
             ->join('produtos_categoria_produtos', 'produtos.id', '=', 'produtos_categoria_produtos.produto_id')
             ->join('categorias_produtos', 'produtos_categoria_produtos.categorias_produto_id', '=', 'categorias_produtos.id')
             ->join('cidades', 'produtos.cidade_id', '=', 'cidades.id')
@@ -107,49 +99,53 @@ class OfertasController extends Controller
             ->where('categorias_produtos.id', 'LIKE', $categoria_id)
             ->where('produtos.status', '=', 'ATIVO')
             ->where('produtos.empresa_id', '=', '0')
-            ->where('produtos.cidade_id', 'LIKE', $cidade_id)
+            ->where('produtos.cidade_id', 'LIKE', Auth::user()->cidade_id)
             ->where('produtos.nome', 'LIKE', '%'.$busca.'%')
             ->orderBy('produtos.nome', 'ASC')
-            ->groupBy('produtos.id', 'produtos.nome', 'empresas.nome', 'cidades.nome', 'cidades.uf');
+            ->groupBy('produtos.id', 'produtos.nome', 'empresas.empresa', 'cidades.nome', 'cidades.uf');
             //Appends e Paginate
             $amount = $produtos->get()->count();
             $produtos = $produtos->orderBy('nome', 'asc')->paginate(25)->appends(
-                ['amount' => $amount, 'busca' => $busca, 'cidade_id' => $cidade_id, 'categoria_id' => $categoria_id]
+                ['amount' => $amount, 'busca' => $busca, 'categoria_id' => $categoria_id]
             );
         } else{
             $produtos = DB::table('produtos')
-            ->select('produtos.id', 'produtos.nome', 'empresas.nome AS enome', 'cidades.nome AS cnome', 'cidades.uf AS cuf')
+            ->select('produtos.id', 'produtos.nome', 'empresas.empresa AS enome', 'cidades.nome AS cnome', 'cidades.uf AS cuf')
             ->join('cidades', 'produtos.cidade_id', '=', 'cidades.id')
             ->join('empresas', 'produtos.empresa_id', '=', 'empresas.id')
+            ->where('produtos.cidade_id', 'LIKE', Auth::user()->cidade_id)
             ->where('produtos.status', '=', 'ATIVO')
             ->where('produtos.empresa_id', '=', '0')
             ->orderBy('produtos.nome', 'ASC')
-            ->groupBy('produtos.id', 'produtos.nome', 'empresas.nome', 'cidades.nome', 'cidades.uf');
+            ->groupBy('produtos.id', 'produtos.nome', 'empresas.empresa', 'cidades.nome', 'cidades.uf');
             //Appends e Paginate
             $amount = $produtos->get()->count();
             $produtos = $produtos->orderBy('nome', 'asc')->paginate(25)->appends(
                 ['amount' => $amount]
             );
         }
-        //Lista de cidades
-        $cidades = Cidade::where('status', '=', 'ATIVO')->get();
+        //Lista de categorias
         $categorias = CategoriasProduto::where('status', '=', 'ATIVO')->orderBy('nome', 'asc')->get();
         //Return
-        return view('dashboard.admin.ofertas.choose', compact('produtos', 'amount', 'busca', 'cidade_id', 'categoria_id', 'cidades', 'categorias'));
+        return view('dashboard.franqueado.ofertas.choose', compact('produtos', 'amount', 'busca', 'categoria_id', 'categorias'));
     }
 
     public function create($id){
 
         //Dados do Produto
         $produto = Produto::findOrFail($id);
-        //Lista de cidades
-        $cidades = Cidade::where('status', '=', 'ATIVO')->orderBy('nome', 'asc')->get();
+        //Verifica status
+        abort_if($produto->status == 'EXCLUIDO', 404);
+        //Verifica proprietário
+        abort_if($produto->cidade_id != Auth::user()->cidade_id, 403);
         //Return
-        return view('dashboard.admin.ofertas.create', compact('cidades', 'produto'));
+        return view('dashboard.franqueado.ofertas.create', compact('produto'));
     }
 
     public function store(Request $request){
 
+        //Auxiliar
+        $auxiliar = new AuxiliarController;
         //Validação da data
         $data = $auxiliar->validaDataTempo(request('data'));
         if (!$data) {
@@ -167,23 +163,34 @@ class OfertasController extends Controller
             'observacao' => ['string', 'max:255'],
         ]);
 
+        //Dados do Produto
+        $produto = Produto::findOrFail(request('produto_id'));
+        //Verifica status
+        abort_if($produto->status == 'EXCLUIDO', 404);
+        //Verifica proprietário
+        abort_if($produto->cidade_id != Auth::user()->cidade_id, 403);
+
         //Create
         $dados = Oferta::create([
             'preco' => $preco,
             'validade' => $data,
             'empresa_id' => '0',
             'produto_id' => request('produto_id'),
-            'cidade_id' => request('cidade'),
+            'cidade_id' => Auth::user()->cidade_id,
             'observacao' => request('observacao'),
         ]);
 
         ////Return
-        return redirect('/admin/ofertas')->withMessage("Oferta criado com sucesso!");
+        return redirect('/franqueado/ofertas')->withMessage("Oferta criado com sucesso!");
     }
 
     public function show($id){
 
         $oferta = Oferta::findOrFail($id);
+        //Verifica status
+        abort_if($oferta->status == 'EXCLUIDO', 404);
+        //Verifica proprietário
+        abort_if($oferta->cidade_id != Auth::user()->cidade_id, 403);
         $produto = $oferta->produto;
         //Data Painel
         $date_now = new DateTime();
@@ -197,14 +204,19 @@ class OfertasController extends Controller
         $partesData = explode("-", $partesDT[0]);
         $tempo = $partesDT[1];
         $data = $partesData[2].'/'.$partesData[1].'/'.$partesData[0];
-        //Lista de cidades e categorias
-        return view('dashboard.admin.ofertas.show', compact('oferta', 'cidades', 'editar', 'data', 'tempo', 'produto', 'categorias'));
+        //Lista de categorias
+        return view('dashboard.franqueado.ofertas.show', compact('oferta', 'editar', 'data', 'tempo', 'produto', 'categorias'));
     }
 
     public function update(Request $request, $id){
         
         $oferta = Oferta::findOrFail($id);
-
+        //Verifica status
+        abort_if($oferta->status == 'EXCLUIDO', 404);
+        //Verifica proprietário
+        abort_if($oferta->cidade_id != Auth::user()->cidade_id, 403);
+        //Auxiliar
+        $auxiliar = new AuxiliarController;
         //Validação da data
         $data = $auxiliar->validaDataTempo(request('data'));
         if (!$data) {
@@ -224,24 +236,27 @@ class OfertasController extends Controller
         $oferta->preco = $preco;
         $oferta->validade = $data;
         $oferta->observacao = request('observacao');
-        $oferta->status = request('status');        
         $oferta->save();
 
         //Redirect
-        return redirect('/admin/ofertas/'.$id)->withMessage("Edição realizada com sucesso!");
+        return redirect('/franqueado/ofertas/'.$id)->withMessage("Edição realizada com sucesso!");
     }
 
 
     public function destroy($id){
 
         $oferta = Oferta::findOrFail($id);
+        //Verifica status
+        abort_if($oferta->status == 'EXCLUIDO', 404);
+        //Verifica proprietário
+        abort_if($oferta->cidade_id != Auth::user()->cidade_id, 403);
         
         //Update
         $oferta->status = "EXCLUIDO";
         $oferta->save();
 
         //Redirect
-        return redirect('/admin/ofertas')->withMessage("Oferta excluído com sucesso!");
+        return redirect('/franqueado/ofertas')->withMessage("Oferta excluído com sucesso!");
         
     }
 }

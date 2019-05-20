@@ -62,6 +62,7 @@
                 <thead>
                     <tr>
                       <th scope="col">Responsável</th>
+                      <th scope="col">Email</th>
                       <th scope="col">Cidade</th>
                       <th scope="col" class="table-actions">Ações</th>
                     </tr>
@@ -71,6 +72,7 @@
                         @if($usuario->status == 'EXCLUIDO')
                         <tr class="table-danger">
                             <td>{{ $usuario->nome.' '.$usuario->sobrenome }}</td>
+                            <td>{{ $usuario->email }}</td>
                             <td>{{ $usuario->cidade->nome.'-'.$usuario->cidade->uf }}</td>
                             <td>
                                 <a href="/admin/usuarios/{{ $usuario->id }}" class="btn btn-primary shadow" data-toggle="tooltip" title="Editar">
@@ -81,6 +83,7 @@
                         @else
                         <tr>
                             <td>{{ $usuario->nome.' '.$usuario->sobrenome }}</td>
+                            <td>{{ $usuario->email }}</td>
                             <td>{{ $usuario->cidade->nome.'-'.$usuario->cidade->uf }}</td>
                             <td>
                                 <a href="/admin/usuarios/{{ $usuario->id }}" class="btn btn-primary shadow" data-toggle="tooltip" title="Editar">

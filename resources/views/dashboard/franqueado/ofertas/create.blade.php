@@ -2,9 +2,9 @@
 @section('title') Ofertas @endsection
 @section('menu') #ofertas-menu @endsection
 @section('breadcrumbs') 
-<li class="breadcrumb-item"><a href="/admin/eventos">Listagem</a></li>
-<li class="breadcrumb-item"><a href="/admin/ofertas/choose">Escolher Produto</a></li>
-<li class="breadcrumb-item"><a href="/admin/ofertas/produto/{{ $produto->id }}/create">Adicionar Oferta</a></li>
+<li class="breadcrumb-item"><a href="/franqueado/eventos">Listagem</a></li>
+<li class="breadcrumb-item"><a href="/franqueado/ofertas/choose">Escolher Produto</a></li>
+<li class="breadcrumb-item"><a href="/franqueado/ofertas/produto/{{ $produto->id }}/create">Adicionar Oferta</a></li>
 @endsection
 @section('content')
 <script type="text/javascript">
@@ -13,13 +13,12 @@
         $('#preco').mask('#.##0,00', {reverse: true, placeholder: "0,00"});
     });
 </script>
-<a href="/admin/ofertas/choose" class="btn btn-secondary shadow mb-3"><i class="fas fa-arrow-left mr-2"></i>Voltar</a>
+<a href="/franqueado/ofertas/choose" class="btn btn-secondary shadow mb-3"><i class="fas fa-arrow-left mr-2"></i>Voltar</a>
 <div class="card shadow">
     <div class="card-body">
-        <form method="POST" action="/admin/ofertas">
+        <form method="POST" action="/franqueado/ofertas">
             @csrf
             <input type="hidden" name="produto_id" value="{{ $produto->id }}">
-            <input type="hidden" name="cidade" value="{{ $produto->cidade->id }}">
             <small class="form-text text-muted">*Campos não obrigatórios</small>
             <br/>
             <div class="row">
@@ -32,10 +31,6 @@
                     <div class="form-group ">
                         <label for="nome" class="mb-1">Nome</label>
                         <h5>{{ $produto->nome }}</h5>
-                    </div>
-                    <div class="form-group">
-                        <label for="data" class="mb-1">Cidade</label>
-                        <h5>{{ $produto->cidade->nome . '-' . $produto->cidade->uf }}</h5>
                     </div>
                     <div class="form-group">
                         <label for="descricao" class="mb-1">Descrição</label>

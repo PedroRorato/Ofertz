@@ -81,7 +81,7 @@
             <div class="col-lg-6">
                 <div class="form-group">
                     <label for="password">Senha</label>
-                    <input type="password" class="form-control{{ $errors->has('password') ? ' is-invalid' : '' }}" id="password" name="password" placeholder="Digite a senha..." required>
+                    <input type="password" class="form-control{{ $errors->has('password') ? ' is-invalid' : '' }}" id="password" name="password" placeholder="Digite a senha..." >
                     @if ($errors->has('password'))
                         <span class="invalid-feedback" role="alert">
                             <strong>{{ $errors->first('password') }}</strong>
@@ -92,7 +92,7 @@
             <div class="col-lg-6">
                 <div class="form-group">
                     <label for="password-confirm">Confirmar senha</label>
-                    <input type="password" class="form-control" id="password-confirm" name="password_confirmation" placeholder="Confirme a senha..." required>
+                    <input type="password" class="form-control" id="password-confirm" name="password_confirmation" placeholder="Confirme a senha..." >
                 </div>
             </div>
             <div class="col-lg-4">

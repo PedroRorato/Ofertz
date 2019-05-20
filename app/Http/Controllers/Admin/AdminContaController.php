@@ -49,7 +49,7 @@ class AdminContaController extends Controller
                 'foto' => ['image', 'mimes:jpeg,jpg,png', 'dimensions:min_width=300,min_height=300', 'max:10000'],
                 'nome' => ['required', 'string', 'min:2', 'max:100'],
                 'sobrenome' => ['required', 'string', 'min:2', 'max:100'],
-                'email' => ['required', 'email', 'min:3', 'max:255'],
+                'email' => ['required', 'email', 'min:3', 'max:255', 'unique:admins,email,'.auth()->id()],
             ]);
             
             //cropS3
@@ -70,7 +70,7 @@ class AdminContaController extends Controller
             request()->validate([
                 'nome' => ['required', 'string', 'min:2', 'max:100'],
                 'sobrenome' => ['required', 'string', 'min:2', 'max:100'],
-                'email' => ['required', 'email', 'min:3', 'max:255'],
+                'email' => ['required', 'email', 'min:3', 'max:255', 'unique:admins,email,'.auth()->id()],
             ]);
 
             //Update

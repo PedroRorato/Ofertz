@@ -66,6 +66,7 @@
                       <th scope="col">Empresa</th>
                       <th scope="col">Responsável</th>
                       <th scope="col">Cidade</th>
+                      <th scope="col">Status</th>
                       <th scope="col" class="table-actions">Ações</th>
                     </tr>
                 </thead>
@@ -76,6 +77,7 @@
                             <td>{{ $empresa->empresa }}</td>
                             <td>{{ $empresa->nome.' '.$empresa->sobrenome }}</td>
                             <td>{{ $empresa->cidade->nome.'-'.$empresa->cidade->uf }}</td>
+                            <td>{{ $empresa->status }}</td>
                             <td>
                                 <a href="/admin/empresas/{{ $empresa->id }}" class="btn btn-primary shadow" data-toggle="tooltip" title="Editar">
                                     <i class="fas fa-edit"></i>
@@ -87,24 +89,32 @@
                             <td>{{ $empresa->empresa }}</td>
                             <td>{{ $empresa->nome.' '.$empresa->sobrenome }}</td>
                             <td>{{ $empresa->cidade->nome.'-'.$empresa->cidade->uf }}</td>
+                            <td>{{ $empresa->status }}</td>
                             <td>
                                 <a href="/admin/empresas/{{ $empresa->id }}" class="btn btn-primary shadow" data-toggle="tooltip" title="Editar">
                                     <i class="fas fa-edit"></i>
                                 </a>
+                                <button type="button" class="btn btn-success shadow" data-toggle="modal" title="Tornar ATIVO" data-target="#modalAtivar{{ $empresa->id }}"> 
+                                    <i class="fas fa-thumbs-up"></i>
+                                </button>
                                 <button type="button" class="btn btn-danger shadow" data-toggle="modal" title="Excluir" data-target="#modalDelete{{ $empresa->id }}"> 
                                     <i class="fas fa-trash-alt"></i>
                                 </button>
                             </td>
                         </tr>
                         @elseif($empresa->status == 'PENDENTE')
-                        <tr class="table-primary">
+                        <tr class="bg-warning">
                             <td>{{ $empresa->empresa }}</td>
                             <td>{{ $empresa->nome.' '.$empresa->sobrenome }}</td>
                             <td>{{ $empresa->cidade->nome.'-'.$empresa->cidade->uf }}</td>
+                            <td>{{ $empresa->status }}</td>
                             <td>
                                 <a href="/admin/empresas/{{ $empresa->id }}" class="btn btn-primary shadow" data-toggle="tooltip" title="Editar">
                                     <i class="fas fa-edit"></i>
                                 </a>
+                                <button type="button" class="btn btn-success shadow" data-toggle="modal" title="Aceitar" data-target="#modalAceitar{{ $empresa->id }}"> 
+                                    <i class="fas fa-check"></i>
+                                </button>
                                 <button type="button" class="btn btn-danger shadow" data-toggle="modal" title="Excluir" data-target="#modalDelete{{ $empresa->id }}"> 
                                     <i class="fas fa-trash-alt"></i>
                                 </button>
@@ -115,10 +125,14 @@
                             <td>{{ $empresa->empresa }}</td>
                             <td>{{ $empresa->nome.' '.$empresa->sobrenome }}</td>
                             <td>{{ $empresa->cidade->nome.'-'.$empresa->cidade->uf }}</td>
+                            <td>{{ $empresa->status }}</td>
                             <td>
                                 <a href="/admin/empresas/{{ $empresa->id }}" class="btn btn-primary shadow" data-toggle="tooltip" title="Editar">
                                     <i class="fas fa-edit"></i>
                                 </a>
+                                <button type="button" class="btn btn-dark shadow" data-toggle="modal" title="Tornar INATIVO" data-target="#modalInativar{{ $empresa->id }}"> 
+                                    <i class="fas fa-thumbs-down"></i>
+                                </button>
                                 <button type="button" class="btn btn-danger shadow" data-toggle="modal" title="Excluir" data-target="#modalDelete{{ $empresa->id }}"> 
                                     <i class="fas fa-trash-alt"></i>
                                 </button>
@@ -144,7 +158,6 @@
 </div>
 @foreach($empresas as $empresa)
     @if($empresa->status != 'EXCLUIDO')
-        <!-- Modal DELETE -->
         <div class="modal fade" id="modalDelete{{$empresa->id}}" tabindex="-1" role="dialog" aria-hidden="true">
             <div class="modal-dialog" role="document">
                 <div class="modal-content">
@@ -163,6 +176,84 @@
                         <div class="modal-footer">
                             <button type="button" class="btn btn-secondary" data-dismiss="modal">Fechar</button>
                             <button type="submit" class="btn btn-danger shadow"><i class="fas fa-trash-alt mr-2"></i>Excluir</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    @endif
+    @if($empresa->status == 'INATIVO')
+        <div class="modal fade" id="modalAtivar{{$empresa->id}}" tabindex="-1" role="dialog" aria-hidden="true">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title">Tornar status ATIVO</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <form method="POST" action="/admin/empresas/{{ $empresa->id }}">
+                        @csrf
+                        @method('PATCH')
+                        <input type="hidden" name="ativo" value="1">
+                        <div class="modal-body">
+                            <h5>Ao tornar o status ATIVO, a empresa poderá voltar a postar EVENTOS e OFERTAS. Tem certeza que deseja tornar o status da Empresa ATIVO?</h5>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Fechar</button>
+                            <button type="submit" class="btn btn-success shadow"><i class="fas fa-thumbs-up mr-2"></i>Tornar status ATIVO</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    @endif
+    @if($empresa->status == 'ATIVO')
+        <div class="modal fade" id="modalInativar{{$empresa->id}}" tabindex="-1" role="dialog" aria-hidden="true">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title">Tornar status INATIVO</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <form method="POST" action="/admin/empresas/{{ $empresa->id }}">
+                        @csrf
+                        @method('PATCH')
+                        <input type="hidden" name="inativo" value="1">
+                        <div class="modal-body">
+                            <h5>Ao tornar o status INATIVO, a empresa NÃO poderá postar EVENTOS e OFERTAS. Tem certeza que deseja tornar o status da Empresa INATIVO?</h5>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Fechar</button>
+                            <button type="submit" class="btn btn-dark shadow"><i class="fas fa-thumbs-down mr-2"></i>Tornar status INATIVO</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    @endif
+    @if($empresa->status == 'PENDENTE')
+        <div class="modal fade" id="modalAceitar{{$empresa->id}}" tabindex="-1" role="dialog" aria-hidden="true">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title">Aceitar Empresa</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <form method="POST" action="/admin/empresas/{{ $empresa->id }}">
+                        @csrf
+                        @method('PATCH')
+                        <input type="hidden" name="aceitar" value="1">
+                        <div class="modal-body">
+                            <h5>Tem certeza que deseja aceitar a Empresa?</h5>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Fechar</button>
+                            <button type="submit" class="btn btn-success shadow"><i class="fas fa-check mr-2"></i>Aceitar</button>
                         </div>
                     </form>
                 </div>

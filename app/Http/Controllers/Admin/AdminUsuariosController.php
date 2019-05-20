@@ -10,6 +10,7 @@ use App\User;
 use Illuminate\Support\Facades\Storage;
 use Auth;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Validation\Rule;
 
 class AdminUsuariosController extends Controller
 {
@@ -72,21 +73,27 @@ class AdminUsuariosController extends Controller
                 return redirect()->back()->withInput()->with('data', 'Há algo errado com a data');
             }
         }
+        
 
         //Validation
         request()->validate([
-            'foto' => ['required', 'image', 'mimes:jpeg,jpg,png', 'dimensions:min_width=300,min_height=300', 'max:10000'],
+            'foto' => ['image', 'mimes:jpeg,jpg,png', 'dimensions:min_width=300,min_height=300', 'max:10000'],
             'cidade' => ['integer', 'max:255'],
             'nome' => ['required', 'string', 'min:2', 'max:100'],
             'sobrenome' => ['required', 'string', 'min:2', 'max:100'],
-            'email' => ['required', 'email', 'min:3', 'max:255', 'unique:users'],
+            'email' => ['required', 'email', 'min:3', 'max:255', Rule::unique('users')->where(function ($query) {
+                return $query->where('status', 'ATIVO')->orWhere('status', 'INATIVO');
+            })],
             'password' => ['required', 'string', 'min:5', 'confirmed'],
             'genero' => ['required', 'alpha', 'max:6'],
         ]);
 
         //cropS3
-        $filename = $auxiliar->cropS3($request->file('foto'), request('points'), 'ofertz/usuarios/', 300, 300);
-
+        $filename = NULL;
+        if($request->hasFile('foto')){
+            $filename = $auxiliar->cropS3($request->file('foto'), request('points'), 'ofertz/usuarios/', 300, 300);
+        }
+        
         //Create
         User::create([
             'foto' => $filename,
@@ -144,59 +151,42 @@ class AdminUsuariosController extends Controller
 
             //Redirect
             return redirect('/admin/usuarios/'.$id)->withMessage("Senha alterada com sucesso!");
-        } elseif($request->hasFile('foto')) {
-            //Validation
-            request()->validate([
-                'foto' => ['image', 'mimes:jpeg,jpg,png', 'dimensions:min_width=300,min_height=300', 'max:10000'],
-                'cidade' => ['integer', 'max:255'],
-                'nome' => ['required', 'string', 'min:2', 'max:100'],
-                'sobrenome' => ['required', 'string', 'min:2', 'max:100'],
-                'email' => ['required', 'email', 'min:3', 'max:255'],
-                'genero' => ['required', 'alpha', 'max:6'],
-                'status' => ['required', 'alpha', 'min:3', 'max:20'],
-            ]);
-            
+        } 
+
+        //Validation
+        request()->validate([
+            'foto' => ['image', 'mimes:jpeg,jpg,png', 'dimensions:min_width=300,min_height=300', 'max:10000'],
+            'cidade' => ['integer', 'max:255'],
+            'nome' => ['required', 'string', 'min:2', 'max:100'],
+            'sobrenome' => ['required', 'string', 'min:2', 'max:100'],
+            'email' => ['required', 'email', 'min:3', 'max:255', Rule::unique('users')->ignore($id)->where(function ($query) {
+                return $query->where('status', 'ATIVO')->orWhere('status', 'INATIVO');
+            })],
+            'genero' => ['required', 'alpha', 'max:6'],
+            'status' => ['required', 'alpha', 'min:3', 'max:20'],
+        ]);
+
+        //Tem foto
+        if($request->hasFile('foto')) {
             //cropS3
             $auxiliar = new AuxiliarController;
             $filename = $auxiliar->cropS3($request->file('foto'), request('points'), 'ofertz/usuarios/', 300, 300);
-
             //Update
             $usuario->foto = $filename;
-            $usuario->cidade_id = request('cidade');
-            $usuario->nome = request('nome');
-            $usuario->sobrenome = request('sobrenome');
-            $usuario->email = request('email');
-            $usuario->genero = request('genero');
-            $usuario->nascimento = $data;
-            $usuario->status = request('status');
-            $usuario->save();
-
-            //Redirect
-            return redirect('/admin/usuarios/'.$id)->withMessage("Edição realizada com sucesso!");
-        }else{
-            //Validation
-            request()->validate([
-                'cidade' => ['integer', 'max:255'],
-                'nome' => ['required', 'string', 'min:2', 'max:100'],
-                'sobrenome' => ['required', 'string', 'min:2', 'max:100'],
-                'email' => ['required', 'email', 'min:3', 'max:255'],
-                'genero' => ['required', 'alpha', 'max:6'],
-                'status' => ['required', 'alpha', 'min:3', 'max:20'],
-            ]);
-
-            //Update
-            $usuario->cidade_id = request('cidade');
-            $usuario->nome = request('nome');
-            $usuario->sobrenome = request('sobrenome');
-            $usuario->email = request('email');
-            $usuario->genero = request('genero');
-            $usuario->nascimento = $data;
-            $usuario->status = request('status');
-            $usuario->save();
-
-            //Redirect
-            return redirect('/admin/usuarios/'.$id)->withMessage("Edição realizada com sucesso!");
         }
+
+        //Update
+        $usuario->cidade_id = request('cidade');
+        $usuario->nome = request('nome');
+        $usuario->sobrenome = request('sobrenome');
+        $usuario->email = request('email');
+        $usuario->genero = request('genero');
+        $usuario->nascimento = $data;
+        $usuario->status = request('status');
+        $usuario->save();
+
+        //Redirect
+        return redirect('/admin/usuarios/'.$id)->withMessage("Edição realizada com sucesso!");
     }
 
 
